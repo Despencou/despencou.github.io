@@ -3,36 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Redirecionando...</title>
-
-  <script>
-    setTimeout(() => {
-      window.location.replace("https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt");
-    }, 1500);
-  </script>
+  <title>Despencou</title>
 
   <style>
     body {
       margin: 0;
-      height: 100vh;
+      background: #ffffff;
+      font-family: Arial, sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: Arial, sans-serif;
-      background: #ffffff;
-      color: #111;
+      height: 100vh;
       text-align: center;
+      color: #111;
       padding: 20px;
     }
 
     .box {
-      max-width: 320px;
+      max-width: 340px;
+    }
+
+    img {
+      width: 90px;
+      border-radius: 50%;
+      margin-bottom: 20px;
     }
 
     h1 {
-      font-size: 1.4rem;
-      margin-bottom: 12px;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
     }
 
     p {
@@ -41,13 +40,13 @@
     }
 
     .loader {
-      margin: 24px auto 0;
-      width: 38px;
-      height: 38px;
+      width: 42px;
+      height: 42px;
       border: 4px solid #ddd;
       border-top: 4px solid #25D366;
       border-radius: 50%;
       animation: spin 1s linear infinite;
+      margin: 24px auto 0;
     }
 
     @keyframes spin {
@@ -59,14 +58,24 @@
 </head>
 
 <body>
+
   <div class="box">
-    <h1>Redirecionando...</h1>
+    <img src="/logo.png" alt="Despencou">
+
+    <h1>Entrando no grupo...</h1>
 
     <p>
-      Você está sendo encaminhado para o grupo oficial de promoções.
+      Aguarde alguns segundos enquanto conectamos você às promoções exclusivas.
     </p>
 
     <div class="loader"></div>
   </div>
+
+  <script>
+    setTimeout(function () {
+      window.location.href = "https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt";
+    }, 4000);
+  </script>
+
 </body>
 </html>
