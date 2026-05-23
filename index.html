@@ -501,6 +501,21 @@
     .hero p.sub            { animation-delay: .3s; }
     .hero-btns             { animation-delay: .4s; }
     .hero-tip              { animation-delay: .5s; }
+
+    @keyframes pulseWpp {
+      0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,0.35); transform: scale(1);    opacity: 1; }
+      50%       { box-shadow: 0 6px 36px rgba(37,211,102,0.70); transform: scale(1.04); opacity: 0.82; }
+    }
+    @keyframes pulseTele {
+      0%, 100% { box-shadow: 0 4px 20px rgba(34,158,217,0.35); transform: scale(1);    opacity: 1; }
+      50%       { box-shadow: 0 6px 36px rgba(34,158,217,0.70); transform: scale(1.04); opacity: 0.82; }
+    }
+
+    .btn-wpp  { animation: pulseWpp  0.9s ease-in-out infinite; }
+    .btn-tele { animation: pulseTele 0.9s ease-in-out infinite; animation-delay: .25s; }
+
+    .btn-wpp:hover  { animation: none; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,0.55); opacity: 1; }
+    .btn-tele:hover { animation: none; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(34,158,217,0.55); opacity: 1; }
   </style>
 </head>
 <body>
