@@ -170,26 +170,26 @@
 
     .carousel-track-wrap {
       width: 100%;
-      overflow-x: scroll;
-      overflow-y: hidden;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
+      overflow: hidden;
       cursor: grab;
+      user-select: none;
+      touch-action: pan-y;
     }
     .carousel-track-wrap:active { cursor: grabbing; }
-    .carousel-track-wrap::-webkit-scrollbar { display: none; }
 
     .carousel-track {
       display: flex;
-      gap: 16px;
-      padding: 0 calc(50% - min(320px, 44vw));
+      gap: 20px;
+      /* padding lateral para centralizar o slide ativo */
+      padding: 0;
       width: max-content;
+      will-change: transform;
+      /* transição aplicada via JS */
     }
 
     .carousel-slide {
-      flex: 0 0 min(340px, 88vw);
-      scroll-snap-align: center;
+      /* mobile: 84vw  |  desktop: até 520px */
+      flex: 0 0 clamp(280px, 84vw, 520px);
     }
 
     .carousel-slide img {
@@ -483,6 +483,13 @@
         <div class="btn-sub">+50.000 pessoas economizando</div>
       </div>
     </a>
+    <a href="https://t.me/despencoupromos" class="btn-tele">
+      <svg class="btn-icon" viewBox="0 0 24 24" fill="#fff"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      <div class="btn-text-group">
+        <div class="btn-label">Entrar no grupo do Telegram</div>
+        <div class="btn-sub">Alertas em tempo real</div>
+      </div>
+    </a>
   </div>
 
   <p class="hero-tip">
@@ -672,12 +679,13 @@
   const total    = slides.length;
   let current    = 0;
   let autoTimer  = null;
+  let isAnimating = false;
 
   /* ─── Dots ─── */
   slides.forEach((_, i) => {
     const d = document.createElement('div');
     d.className = 'dot' + (i === 0 ? ' active' : '');
-    d.addEventListener('click', () => { resetAuto(); goTo(i); });
+    d.addEventListener('click', () => { if (!isAnimating) { resetAuto(); goTo(i); } });
     dotsWrap.appendChild(d);
   });
 
@@ -686,47 +694,88 @@
       d.classList.toggle('active', i === current));
   }
 
-  function slideLeft(index) {
-    /* posição scroll para centralizar o slide index */
+  /* Calcula o translateX para centralizar o slide index */
+  function getTranslate(index) {
     const slideW = slides[0].offsetWidth;
-    const gap    = 16;
+    const gap    = 20;
     const step   = slideW + gap;
     const viewW  = wrap.offsetWidth;
-    return index * step - (viewW / 2) + (slideW / 2);
+    /* offset inicial para centralizar o slide 0, depois subtraindo steps */
+    const initialOffset = (viewW - slideW) / 2;
+    return initialOffset - index * step;
   }
 
-  function goTo(index) {
-    current = ((index % total) + total) % total;
-    wrap.scrollTo({ left: slideLeft(current), behavior: 'smooth' });
+  function applyTranslate(index, animate) {
+    track.style.transition = animate ? 'transform 0.45s cubic-bezier(0.25,0.8,0.25,1)' : 'none';
+    track.style.transform  = `translateX(${getTranslate(index)}px)`;
+  }
+
+  function goTo(index, animate = true) {
+    if (isAnimating && animate) return;
+    current     = ((index % total) + total) % total;
+    isAnimating = animate;
+    applyTranslate(current, animate);
     updateDots();
+    if (animate) {
+      setTimeout(() => { isAnimating = false; }, 460);
+    }
   }
 
   /* ─── Auto ─── */
-  function startAuto() { autoTimer = setInterval(() => goTo(current + 1), 3500); }
-  function resetAuto()  { clearInterval(autoTimer); startAuto(); }
+  function startAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(() => { if (!isAnimating) goTo(current + 1); }, 3500);
+  }
+  function resetAuto() { startAuto(); }
 
-  /* Atualiza dot quando usuário arrasta manualmente */
-  let scrollTimer;
-  wrap.addEventListener('scroll', () => {
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => {
-      const slideW = slides[0].offsetWidth;
-      const gap    = 16;
-      const step   = slideW + gap;
-      const viewW  = wrap.offsetWidth;
-      const idx    = Math.round((wrap.scrollLeft - (viewW / 2) + (slideW / 2)) / step);
-      current = Math.max(0, Math.min(total - 1, idx));
-      updateDots();
-      resetAuto();
-    }, 80);
-  }, { passive: true });
+  /* ─── Drag / Swipe ─── */
+  let isDragging = false;
+  let startX     = 0;
+  let dragDelta  = 0;
+  const THRESHOLD = 50;
+
+  function dragStart(x) {
+    if (isAnimating) return;
+    isDragging = true;
+    startX     = x;
+    dragDelta  = 0;
+    track.style.transition = 'none';
+    clearInterval(autoTimer);
+  }
+
+  function dragMove(x) {
+    if (!isDragging) return;
+    dragDelta = x - startX;
+    track.style.transform = `translateX(${getTranslate(current) + dragDelta}px)`;
+  }
+
+  function dragEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    if      (dragDelta < -THRESHOLD) goTo(current + 1);
+    else if (dragDelta >  THRESHOLD) goTo(current - 1);
+    else                             applyTranslate(current, true);
+    startAuto();
+  }
+
+  /* Mouse */
+  wrap.addEventListener('mousedown',  e => dragStart(e.clientX));
+  wrap.addEventListener('mousemove',  e => dragMove(e.clientX));
+  wrap.addEventListener('mouseup',    dragEnd);
+  wrap.addEventListener('mouseleave', dragEnd);
+
+  /* Touch */
+  wrap.addEventListener('touchstart', e => dragStart(e.touches[0].clientX), { passive: true });
+  wrap.addEventListener('touchmove',  e => dragMove(e.touches[0].clientX),  { passive: true });
+  wrap.addEventListener('touchend',   dragEnd);
 
   /* ─── Init ─── */
-  /* Aguarda layout para calcular corretamente */
   window.addEventListener('load', () => {
-    wrap.scrollLeft = slideLeft(0);
+    applyTranslate(0, false);
     startAuto();
   });
+  /* Recalcula se janela redimensionar */
+  window.addEventListener('resize', () => applyTranslate(current, false));
 </script>
 
 </body>
