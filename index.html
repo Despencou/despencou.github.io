@@ -50,7 +50,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 90px; /* Mantém a faixa no tamanho que você gostou */
+      height: 90px;
       padding: 0;
       width: 100%;
       overflow: hidden;
@@ -60,7 +60,7 @@
       width: auto;
       display: block;
       object-fit: contain;
-      transform: scale(1.35); /* Dá o zoom na logo */
+      transform: scale(1.35);
       transform-origin: center center;
     }
 
@@ -149,7 +149,11 @@
       transition: transform .15s ease, box-shadow .15s ease;
     }
     .btn:hover { transform: translateY(-2px); }
-    .btn-wpp { background: var(--verde); box-shadow: 0 8px 20px rgba(37,211,102,0.28); }
+    .btn-wpp { 
+      background: var(--verde); 
+      box-shadow: 0 8px 20px rgba(37,211,102,0.28); 
+      animation: pulsar 2s infinite ease-in-out;
+    }
     .btn-tele { background: var(--azul-tele); box-shadow: 0 8px 20px rgba(34,158,217,0.28); }
 
     .btn-icon { width: 21px; height: 21px; flex-shrink: 0; }
@@ -180,25 +184,25 @@
     }
 
     .vitrine-script {
-  font-family: 'Caveat', cursive;
-  font-weight: 700;
-  font-size: clamp(42px, 11vw, 58px);
-  color: var(--vermelho);
-  line-height: 0.95;
-  margin: 0 0 22px;
-  transform: rotate(-3deg);
-  transform-origin: left center;
-}
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+      font-size: clamp(42px, 11vw, 58px);
+      color: var(--vermelho);
+      line-height: 0.95;
+      margin: 0 0 22px;
+      transform: rotate(-3deg);
+      transform-origin: left center;
+    }
 
     .vitrine-title {
-  font-family: 'Fredoka', sans-serif;
-  font-weight: 600;
-  font-size: clamp(25px, 6.4vw, 34px);
-  color: var(--tinta);
-  line-height: 1.12;
-  max-width: 500px;
-  margin: 0 0 46px;
-}
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      font-size: clamp(25px, 6.4vw, 34px);
+      color: var(--tinta);
+      line-height: 1.12;
+      max-width: 500px;
+      margin: 0 0 46px;
+    }
 
     .phone-stage {
       position: relative;
@@ -209,14 +213,14 @@
     }
 
     .seta-mao {
-  position: absolute;
-  left: -10px;
-  bottom: 18%;
-  width: clamp(105px, 30vw, 150px);
-  height: auto;
-  z-index: 2;
-  transform: rotate(-4deg);
-}
+      position: absolute;
+      left: -10px;
+      bottom: 18%;
+      width: clamp(105px, 30vw, 150px);
+      height: auto;
+      z-index: 2;
+      transform: rotate(-4deg);
+    }
 
     .telefone {
       width: min(280px, 74vw);
@@ -270,94 +274,94 @@
     .tela-nome { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px; }
 
     .tela-body {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  padding: 14px 9px 8px;
-}
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 14px 9px 8px;
+    }
 
-.tela-body .carousel-track-wrap {
-  flex: 1;
-  min-height: 0;
-  width: 100%;
-  overflow: hidden;
-}
+    .tela-body .carousel-track-wrap {
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      overflow: hidden;
+    }
 
-.tela-body .carousel-track {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  gap: 12px;
-}
+    .tela-body .carousel-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      gap: 12px;
+    }
 
-.tela-body .carousel-slide {
-  flex: 0 0 100%;
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-}
+    .tela-body .carousel-slide {
+      flex: 0 0 100%;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+    }
 
-.carousel-slide img {
-  pointer-events: none;
-  -webkit-user-drag: none;
-  display: block;
-}
+    .carousel-slide img {
+      pointer-events: none;
+      -webkit-user-drag: none;
+      display: block;
+    }
 
-.tela-body .carousel-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  border-radius: 14px;
-  border: none;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.16);
-}
+    .tela-body .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      border-radius: 14px;
+      border: none;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.16);
+    }
 
-.tela-body .carousel-dots {
-  flex: 0 0 auto;
-  margin-top: 14px;
-}
+    .tela-body .carousel-dots {
+      flex: 0 0 auto;
+      margin-top: 14px;
+    }
 
-.tela-input {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px 16px;
-  background: #E9E2D6;
-}
+    .tela-input {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px 16px;
+      background: #E9E2D6;
+    }
 
-.tela-input .input-fake {
-  flex: 1;
-  height: 30px;
-  background: #fff;
-  border-radius: 100px;
-}
+    .tela-input .input-fake {
+      flex: 1;
+      height: 30px;
+      background: #fff;
+      border-radius: 100px;
+    }
 
-.tela-input .icone {
-  font-size: 16px;
-  opacity: 0.7;
-}
+    .tela-input .icone {
+      font-size: 16px;
+      opacity: 0.7;
+    }
 
-.carousel-track-wrap {
-  width: 100%;
-  overflow: hidden;
-  cursor: grab;
-  user-select: none;
-  touch-action: pan-y;
-}
+    .carousel-track-wrap {
+      width: 100%;
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+      touch-action: pan-y;
+    }
 
-.carousel-track-wrap:active {
-  cursor: grabbing;
-}
+    .carousel-track-wrap:active {
+      cursor: grabbing;
+    }
 
-.carousel-track {
-  display: flex;
-  gap: 12px;
-  width: 100%;
-  will-change: transform;
-}
+    .carousel-track {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      will-change: transform;
+    }
 
     .carousel-dots {
       display: flex;
@@ -507,6 +511,22 @@
     .hero p.sub      { animation-delay: .3s; }
     .hero-btns       { animation-delay: .4s; }
     .hero-tip        { animation-delay: .5s; }
+
+    /* ── PULSAR BOTÃO WHATSAPP ── */
+    @keyframes pulsar {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+      }
+      50% {
+        transform: scale(1.04);
+        box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+      }
+    }
   </style>
 </head>
 <body>
@@ -552,28 +572,29 @@ src="https://www.facebook.com/tr?id=2083004892284023&ev=PageView&noscript=1"
 
   <div class="hero-btns">
     <a onclick="fbq('track','Lead')"
-   href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt"
-   class="btn btn-wpp">
+       href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt"
+       class="btn btn-wpp">
 
-  <svg class="btn-icon" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-  </svg>
+      <svg class="btn-icon" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
 
-  <div class="btn-label-solo">Quero entrar no grupo</div>
-</a>
+      <div class="btn-label-solo">Quero entrar no grupo</div>
+    </a>
   </div>
+</section>
 
 <!-- ══ VITRINE ══ -->
 <section class="vitrine">
   <div class="wrap">
-  <p class="vitrine-script">enquanto você<br>tá aí de bobeira</p>
+    <p class="vitrine-script">enquanto você<br>tá aí de bobeira</p>
 
-  <h2 class="vitrine-title">
-    essas são as promos<br>
-    que a gente tá<br>
-    enviando no grupo
-  </h2>
-</div>
+    <h2 class="vitrine-title">
+      essas são as promos<br>
+      que a gente tá<br>
+      enviando no grupo
+    </h2>
+  </div>
 
   <div class="phone-stage">
     <svg class="seta-mao" viewBox="0 0 140 150" fill="none" xmlns="http://www.w3.org/2000/svg">
