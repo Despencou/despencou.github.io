@@ -50,14 +50,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px 20px;
+      height: 60px; /* Faixa mais fina */
+      padding: 0;
       width: 100%;
+      overflow: hidden; /* Corta as sobras da imagem que passarem da faixa */
     }
     header.topo img {
-      height: 140px;
+      height: 80px; /* Mantém a logo grande */
       width: auto;
-      border-radius: 0;
       display: block;
+      object-fit: contain;
+      transform: scale(1.15); /* Dá um leve zoom para preencher bem */
     }
 
     /* ── HERO ── */
