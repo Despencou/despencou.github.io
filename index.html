@@ -50,17 +50,18 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 110px; /* Aumenta a altura da faixa */
-      padding: 0 20px;
+      height: 60px; /* Mantém a altura da sua faixa */
+      padding: 0;
       width: 100%;
-      overflow: hidden;
+      overflow: hidden; /* Garante que a imagem não vaze para fora da faixa */
     }
     header.topo img {
-      height: 95px; /* Aumenta o tamanho da logo */
+      height: 100%;
       width: auto;
-      max-height: 100%;
       display: block;
       object-fit: contain;
+      transform: scale(1.4); /* Aumenta o tamanho da logo */
+      transform-origin: center center;
     }
 
     /* ── HERO ── */
