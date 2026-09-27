@@ -540,57 +540,74 @@ fbq('init', '2083004892284023');
 fbq('track', 'PageView');
 
 // ==========================================
-// RASTREAMENTO DO PAINEL DESPENCOU
+// RASTREAMENTO DO PAINEL DESPENCOU (COLETOR OFICIAL)
 // ==========================================
 const MONITOR_API = "https://painel.despencou.com/coletar.php";
 
-function obterDadosTrafego(tipoAcao) {
+function obterOuCriarVisitorId() {
+  let id = localStorage.getItem("dp_visitor_id");
+  if (!id || !/^[a-f0-9-]{20,64}$/i.test(id)) {
+    id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+    localStorage.setItem("dp_visitor_id", id);
+  }
+  return id;
+}
+
+function obterDadosPayload(nomeEvento) {
   const params = new URLSearchParams(window.location.search);
-  const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+  const ua = navigator.userAgent;
+  let device = "Desktop";
+  if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+    device = "Tablet";
+  } else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/i.test(ua)) {
+    device = "Mobile";
+  }
+
   return {
-    tipo: tipoAcao || "visita",
-    pagina: window.location.pathname,
-    utm_source: params.get("utm_source") || "direto",
+    event: nomeEvento, // "view" ou "click"
+    visitor: obterOuCriarVisitorId(),
+    device: device,
+    utm_source: params.get("utm_source") || "",
     utm_campaign: params.get("utm_campaign") || "",
     utm_medium: params.get("utm_medium") || "",
-    utm_content: params.get("utm_content") || "",
-    utm_term: params.get("utm_term") || "",
-    dispositivo: isMobile ? "Celular" : "Computador"
+    fbclid: params.get("fbclid") || "",
+    gclid: params.get("gclid") || "",
+    referrer: document.referrer || ""
   };
 }
 
-// 1. Registra a visita assim que a página carrega
+// 1. Registra a visualização (view) assim que a página carrega
 (function registrarVisitaInicial() {
   try {
     fetch(MONITOR_API, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(obterDadosTrafego("visita")),
+      body: JSON.stringify(obterDadosPayload("view")),
       keepalive: true
     }).catch(function() {});
   } catch(e) {}
 })();
 
-// 2. Função de clique no botão (dispara Meta Lead + métrica interna)
+// 2. Dispara o clique no botão (click + Meta Lead)
 function enviarLead(event, url) {
   event.preventDefault();
 
-  // Envio ao coletor interno de cliques
   try {
     fetch(MONITOR_API, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(obterDadosTrafego("clique")),
+      body: JSON.stringify(obterDadosPayload("click")),
       keepalive: true
     }).catch(function() {});
   } catch(e) {}
 
-  // Disparo do Meta Pixel oficial com parâmetros exigidos
   if (typeof fbq === 'function') {
     fbq('track', 'Lead', { currency: 'BRL', value: 0.00 });
   }
 
-  // Redirecionamento seguro para o grupo
   setTimeout(function() {
     window.location.href = url;
   }, 250);
