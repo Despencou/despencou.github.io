@@ -539,12 +539,55 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 fbq('init', '2083004892284023');
 fbq('track', 'PageView');
 
-// Função de envio de evento Lead
+// ==========================================
+// RASTREAMENTO INTERNO PARA O PAINEL PROMOZILLA
+// ==========================================
+const MONITOR_API = "http://167.234.252.111:10004/api";
+
+function obterDadosTrafego() {
+  const params = new URLSearchParams(window.location.search);
+  const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+  return {
+    pagina: window.location.pathname,
+    utm_source: params.get("utm_source") || "direto",
+    utm_campaign: params.get("utm_campaign") || null,
+    utm_medium: params.get("utm_medium") || null,
+    dispositivo: isMobile ? "Celular" : "Computador"
+  };
+}
+
+// 1. Registra a visita assim que a página carrega
+(function registrarVisitaInicial() {
+  try {
+    fetch(`${MONITOR_API}/visita`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(obterDadosTrafego()),
+      keepalive: true
+    }).catch(function() {});
+  } catch(e) {}
+})();
+
+// 2. Função de clique no botão (dispara Meta Lead + métrica interna)
 function enviarLead(event, url) {
   event.preventDefault();
+
+  // Envio ao coletor interno de cliques
+  try {
+    fetch(`${MONITOR_API}/clique`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(obterDadosTrafego()),
+      keepalive: true
+    }).catch(function() {});
+  } catch(e) {}
+
+  // Disparo do Meta Pixel oficial com parâmetros exigidos
   if (typeof fbq === 'function') {
     fbq('track', 'Lead', { currency: 'BRL', value: 0.00 });
   }
+
+  // Redirecionamento seguro para o grupo
   setTimeout(function() {
     window.location.href = url;
   }, 250);
