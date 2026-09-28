@@ -149,9 +149,7 @@
     }
     .hero-tip strong { color: var(--laranja); }
 
-    /* ══════════════════════════════
-       CARROSSEL
-    ══════════════════════════════ */
+    /* ── CARROSSEL ── */
     .carousel-section {
       background: #0a0a0a;
       padding: 48px 0 44px;
@@ -199,7 +197,6 @@
       -webkit-user-drag: none;
     }
 
-    /* Dots */
     .carousel-dots {
       display: flex;
       justify-content: center;
@@ -437,7 +434,7 @@
   </style>
 </head>
 <body>
-  
+
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -450,22 +447,75 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '2083004892284023');
 fbq('track', 'PageView');
-
-// Função de envio seguro do evento Lead
-function enviarLead(event, url) {
-  event.preventDefault();
-  if (typeof fbq === 'function') {
-    fbq('track', 'Lead', { currency: 'BRL', value: 0.00 });
-  }
-  setTimeout(function() {
-    window.location.href = url;
-  }, 250);
-}
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=2083004892284023&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
+
+<!-- RASTREADOR DO PAINEL DESPENCOU -->
+<script>
+(function() {
+  const PAINEL_URL = 'https://painel.despencou.com/coletar.php';
+
+  function getVisitorId() {
+    let vid = localStorage.getItem('dsp_vid');
+    if (!vid) {
+      vid = 'v_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+      localStorage.setItem('dsp_vid', vid);
+    }
+    return vid;
+  }
+
+  function getDevice() {
+    return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'mobile' : 'desktop';
+  }
+
+  window.registrarPainel = function(tipoEvento) {
+    const payload = JSON.stringify({
+      event: tipoEvento,
+      visitor: getVisitorId(),
+      device: getDevice(),
+      url: window.location.href,
+      referrer: document.referrer || ''
+    });
+
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(PAINEL_URL, new Blob([payload], { type: 'application/json' }));
+    } else {
+      fetch(PAINEL_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload,
+        keepalive: true
+      }).catch(function() {});
+    }
+  };
+
+  // Registra a visualização de página automaticamente no carregamento
+  window.registrarPainel('view');
+})();
+
+// Função unificada para envio seguro do evento Lead (Meta Pixel + Painel)
+function enviarLead(event, url) {
+  event.preventDefault();
+
+  // 1. Registra o clique no painel da Despencou
+  if (typeof window.registrarPainel === 'function') {
+    window.registrarPainel('click');
+  }
+
+  // 2. Registra o evento de conversão no Meta Pixel
+  if (typeof fbq === 'function') {
+    fbq('track', 'Lead', { currency: 'BRL', value: 0.00 });
+  }
+
+  // 3. Redireciona com pequeno atraso para entrega segura das requisições
+  setTimeout(function() {
+    window.location.href = url;
+  }, 250);
+}
+</script>
 
 <!-- ══ HERO ══ -->
 <section class="hero">
@@ -664,7 +714,6 @@ src="https://www.facebook.com/tr?id=2083004892284023&ev=PageView&noscript=1"
       d.classList.toggle('active', i === current));
   }
 
-  /* Calcula o translateX para centralizar o slide index */
   function getTranslate(index) {
     const slideW = slides[0].offsetWidth;
     const gap    = 20;
@@ -690,14 +739,12 @@ src="https://www.facebook.com/tr?id=2083004892284023&ev=PageView&noscript=1"
     }
   }
 
-  /* ─── Auto ─── */
   function startAuto() {
     clearInterval(autoTimer);
     autoTimer = setInterval(() => { if (!isAnimating) goTo(current + 1); }, 3500);
   }
   function resetAuto() { startAuto(); }
 
-  /* ─── Drag / Swipe ─── */
   let isDragging = false;
   let startX     = 0;
   let dragDelta  = 0;
@@ -727,18 +774,15 @@ src="https://www.facebook.com/tr?id=2083004892284023&ev=PageView&noscript=1"
     startAuto();
   }
 
-  /* Mouse */
   wrap.addEventListener('mousedown',  e => dragStart(e.clientX));
   wrap.addEventListener('mousemove',  e => dragMove(e.clientX));
   wrap.addEventListener('mouseup',    dragEnd);
   wrap.addEventListener('mouseleave', dragEnd);
 
-  /* Touch */
   wrap.addEventListener('touchstart', e => dragStart(e.touches[0].clientX), { passive: true });
   wrap.addEventListener('touchmove',  e => dragMove(e.touches[0].clientX),  { passive: true });
   wrap.addEventListener('touchend',   dragEnd);
 
-  /* ─── Init ─── */
   window.addEventListener('load', () => {
     applyTranslate(0, false);
     startAuto();
