@@ -536,8 +536,12 @@ n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '2083004892284023');
-fbq('track', 'PageView');
+// Só rastreia no domínio oficial (evita dados de github.io, cópias e testes locais)
+const IS_PROD = /^(www\.)?despencou\.com$/.test(location.hostname);
+if (IS_PROD) {
+  fbq('init', '2083004892284023', { external_id: obterOuCriarVisitorId() });
+  fbq('track', 'PageView');
+}
 
 // ==========================================
 // RASTREAMENTO DO PAINEL DESPENCOU (COLETOR OFICIAL)
@@ -596,6 +600,7 @@ function obterDadosPayload(nomeEvento) {
 
 // 1. Registra a visualização (view) assim que a página carrega
 (function registrarVisitaInicial() {
+  if (!IS_PROD) return;
   try {
     fetch(MONITOR_API, {
       method: "POST",
@@ -609,6 +614,9 @@ function obterDadosPayload(nomeEvento) {
 // 2. Dispara o clique no botão com desduplicação sincronizada (Pixel + CAPI)
 function enviarLead(event, url) {
   event.preventDefault();
+
+  // Fora do domínio oficial: só redireciona, sem rastrear
+  if (!IS_PROD) { window.location.href = url; return; }
 
   // Gera o identificador único do evento para sincronizar Pixel e Servidor
   const eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
