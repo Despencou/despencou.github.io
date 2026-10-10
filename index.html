@@ -591,27 +591,36 @@ function obterDadosPayload(nomeEvento) {
   } catch(e) {}
 })();
 
-// 2. Dispara o clique no botão (click + Meta Lead)
+// 2. Dispara o clique no botão com desduplicação sincronizada (Pixel + CAPI)
 function enviarLead(event, url) {
   event.preventDefault();
 
+  // Gera o identificador único do evento para sincronizar Pixel e Servidor
+  const eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+
+  // 1. Envia ao servidor coletar.php repassando o event_id
   try {
+    const payload = obterDadosPayload("click");
+    payload.event_id = eventId;
+
     fetch(MONITOR_API, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(obterDadosPayload("click")),
+      body: JSON.stringify(payload),
       keepalive: true
     }).catch(function() {});
   } catch(e) {}
 
+  // 2. Dispara o Pixel no navegador compartilhando o mesmo eventID
   if (typeof fbq === 'function') {
-    fbq('track', 'Lead', { currency: 'BRL', value: 0.00 });
+    fbq('track', 'Lead', { currency: 'BRL', value: 0.00 }, { eventID: eventId });
   }
 
   setTimeout(function() {
     window.location.href = url;
   }, 250);
 }
+
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=2083004892284023&ev=PageView&noscript=1"
