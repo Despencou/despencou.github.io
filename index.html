@@ -241,6 +241,15 @@
     }
 
     .hero-new .hero-group-note { font-size: clamp(12px, 3.2vw, 17px); line-height: 1.4; font-weight: 800; color: var(--tinta); text-align: center; }
+
+    .vitrine-title { text-align: center; margin: 0 auto 36px; }
+    .seta-mao { left: calc(50% - min(140px, 37vw) - 108px); top: 43%; bottom: auto; width: 130px; transform: none; }
+    .phone-stage.phone-reveal-ready .telefone { opacity: 0; transform: translateY(26px); transition: opacity .9s ease, transform .9s ease; }
+    .phone-stage.phone-reveal-ready .seta-mao { opacity: 0; transform: translateX(-22px); transition: opacity .75s ease .22s, transform .75s ease .22s; }
+    .phone-stage.phone-revealed .telefone, .phone-stage.phone-revealed .seta-mao { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .phone-stage.phone-reveal-ready .telefone, .phone-stage.phone-reveal-ready .seta-mao { opacity: 1; transform: none; transition: none; }
+    }
   </style>
 </head>
 <body>
@@ -466,10 +475,10 @@ window.addEventListener('pageshow', function() {
   </div>
 
   <div class="phone-stage">
-    <svg class="seta-mao" viewBox="0 0 140 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M14,132 C18,84 34,46 78,24"
+    <svg class="seta-mao" viewBox="0 0 160 100" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6,24 C40,30 65,101 112,58 C126,46 136,33 149,25"
             stroke="var(--vermelho)" stroke-width="9" stroke-linecap="round"/>
-      <path d="M56,16 L82,22 L70,46"
+      <path d="M111,26 C124,23 136,23 149,25 L138,63"
             stroke="var(--vermelho)" stroke-width="9" fill="none"
             stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
@@ -845,6 +854,23 @@ window.addEventListener('pageshow', function() {
 })();
 </script>
 
+<script>
+(() => {
+  const stage = document.querySelector('.phone-stage');
+  if (!stage || !('IntersectionObserver' in window) ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const reveal = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        stage.classList.add('phone-revealed');
+        reveal.disconnect();
+      }
+    }
+  }, { threshold: 0.12 });
+  stage.classList.add('phone-reveal-ready');
+  reveal.observe(stage);
+})();
+</script>
 </body>
 </html>
 
