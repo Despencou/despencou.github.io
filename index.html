@@ -201,7 +201,7 @@
     .hero-new h1 span { display: block; padding: 0; white-space: normal; }
     .hero-new h1 .hero-as { display: flex; align-items: center; justify-content: center; gap: 20px; font-size: clamp(28px, 6.8vw, 49px); line-height: 1.2; margin-bottom: 12px; }
     .hero-as::before, .hero-as::after { content: ''; flex: 1; height: 3px; border-radius: 4px; background: #19160f; }
-    .hero-new h1 .hero-highlight { position: relative; isolation: isolate; white-space: nowrap; font-size: clamp(19px, 6vw, 43px); line-height: 1.5; transform: rotate(-3deg); margin: 0 -3px 18px; }
+    .hero-new h1 .hero-highlight { position: relative; isolation: isolate; white-space: nowrap; font-size: clamp(23px, 7.4vw, 53px); line-height: 1.5; transform: rotate(-3deg); margin: 0 -3px 18px; }
     .hero-highlight::before { content: ''; position: absolute; inset: 3px -3px; background: #ffdf35; z-index: -1; border-radius: 40% 18% 25% 12% / 45% 25% 35% 20%; }
     .hero-rays { position: absolute; width: 26px; height: 58px; top: 50%; transform: translateY(-50%); overflow: visible; }
     .hero-rays-left { left: -29px; }
@@ -218,12 +218,17 @@
     .hero-brand + .hero-brand { border-left: 1px solid #d3d0c3; }
     .hero-new .hero-brands img { width: 100%; height: clamp(27px, 7vw, 50px); object-fit: contain; }
     .hero-new .mascote-hero { width: clamp(210px, 46vw, 330px); margin: clamp(22px, 6vw, 44px) auto 8px; animation: none; }
-    .hero-new .hero-bobeira { position: relative; font-family: 'Caveat', cursive; font-size: clamp(43px, 11.5vw, 83px); font-weight: 700; line-height: .94; letter-spacing: -.025em; color: #e50914; transform: rotate(-4deg); margin: 0 -18px 18px; }
+    .hero-new .hero-bobeira { position: relative; font-family: 'Caveat', cursive; font-size: clamp(56px, 15.3vw, 110px); font-weight: 700; line-height: .94; letter-spacing: -.025em; color: #e50914; transform: rotate(-4deg); margin: 0 -18px 18px; }
     .hero-bobeira::after { content: ''; position: absolute; width: 75%; height: 8px; border-top: 5px solid #e50914; border-radius: 50%; bottom: -18px; right: 0; transform: rotate(-5deg); }
     .vitrine { background: var(--creme); border-top: 0; padding-top: 18px; }
     @media (max-width: 360px) {
       .hero-new .btn-label-solo { font-size: 16px; }
       .hero-new .btn { gap: 10px; }
+    }
+
+    @media (max-width: 600px) {
+      .hero-new .hero-intro { display: flex; flex-direction: column; min-height: calc(100svh - clamp(76px, 19.4vw, 140px) - clamp(14px, 3vw, 22px) - 50px); }
+      .hero-new .mascote-hero { margin-top: auto; margin-bottom: auto; padding-top: 22px; padding-bottom: 12px; }
     }
   </style>
 </head>
@@ -409,6 +414,7 @@ window.addEventListener('pageshow', function() {
 
 <!-- HERO -->
 <section class="hero hero-new">
+  <div class="hero-intro">
   <h1>
     <span class="hero-as">As</span>
     <span class="hero-highlight">Melhores promoções
@@ -432,6 +438,7 @@ window.addEventListener('pageshow', function() {
   </div>
 
   <img class="mascote-hero" src="/mascote.png" alt="Mascote Despencou acenando" width="225" />
+  </div>
   <p class="hero-bobeira">enquanto você<br>tá aí de bobeira</p>
 </section>
 
