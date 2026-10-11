@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Despencou - Promoções Exclusivas</title>
   <meta name="description" content="Receba as melhores promoções e cupons da Amazon, Shopee, Mercado Livre e mais, direto no WhatsApp." />
-  <link rel="canonical" href="https://despencou.com/entrar/" />
+  <link rel="canonical" href="https://despencou.com/" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -22,7 +22,7 @@
     header.topo { background: var(--vermelho); display: flex; align-items: center; justify-content: center; height: 90px; padding: 0; width: 100%; overflow: hidden; }
     header.topo img { height: 100%; width: auto; display: block; object-fit: contain; transform: scale(1.35); transform-origin: center center; }
 
-    .hero { text-align: center; padding: 18px 20px 40px; position: relative; }
+    .hero { text-align: center; padding: 18px 20px 12px; position: relative; }
     .hero .badge { display: inline-block; background: var(--amarelo-claro); color: #6b4a00; font-size: 12px; font-weight: 800; letter-spacing: 0.5px; padding: 7px 16px; border-radius: 100px; margin-bottom: 20px; }
     .mascote-hero { width: 190px; margin: 0 auto 8px; animation: acenar 3.5s ease-in-out infinite; transform-origin: bottom center; }
     @keyframes acenar {
@@ -33,7 +33,7 @@
     .hero h1 span { color: var(--tinta); position: relative; white-space: nowrap; display: inline-block; padding: 0 4px; }
     .hero h1 span .circulo { position: absolute; left: -8%; top: -22%; width: 116%; height: 148%; overflow: visible; pointer-events: none; z-index: -1; }
     .hero p.sub { font-size: clamp(15px, 3.5vw, 17px); color: var(--tinta-suave); max-width: 460px; margin: 0 auto 30px; line-height: 1.6; }
-    .hero-btns { display: flex; flex-direction: column; gap: 12px; align-items: center; margin-bottom: 18px; }
+    .hero-btns { display: flex; flex-direction: column; gap: 12px; align-items: center; margin-bottom: 8px; }
     .btn { display: flex; align-items: center; justify-content: center; gap: 12px; color: #fff; text-decoration: none; padding: 20px 30px; border-radius: 18px; width: 100%; max-width: 380px; transition: transform .15s ease, box-shadow .15s ease; }
     .btn:hover { transform: translateY(-2px); }
     .btn-wpp { background: var(--verde); box-shadow: 0 10px 26px rgba(37,211,102,0.38); animation: pulsar 1.6s infinite ease-in-out; }
@@ -46,7 +46,7 @@
     .hero-tip { font-size: 12.5px; color: var(--tinta-suave); max-width: 320px; margin: 0 auto; line-height: 1.6; }
     .hero-tip strong { color: var(--vermelho); }
 
-    .vitrine { background: var(--branco); padding: 54px 20px 60px; border-top: 1px solid var(--linha); border-bottom: 1px solid var(--linha); text-align: left; overflow: hidden; }
+    .vitrine { background: var(--branco); padding: 16px 20px 44px; border-top: 1px solid var(--linha); border-bottom: 1px solid var(--linha); text-align: left; overflow: hidden; }
     .vitrine-script { font-family: 'Caveat', cursive; font-weight: 700; font-size: clamp(42px, 11vw, 58px); color: var(--vermelho); line-height: 0.95; margin: 0 0 22px; transform: rotate(-3deg); transform-origin: left center; }
     .vitrine-title { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: clamp(25px, 6.4vw, 34px); color: var(--tinta); line-height: 1.12; max-width: 500px; margin: 0 0 46px; }
     .phone-stage { position: relative; display: flex; justify-content: center; align-items: center; min-height: 0; }
@@ -164,6 +164,29 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .popup-grupo, .btn-wpp, .hero > * { animation: none; }
+    }
+
+    /* Aproxima a chamada das ofertas do primeiro botão no celular. */
+    .hero p.sub strong { font-weight: 900; color: var(--tinta); }
+    .popup-numero { transition: opacity .28s ease; font-variant-numeric: tabular-nums; }
+    .popup-numero.esmaecendo { opacity: 0; }
+    .popup-demo { display: block; color: #6e6558; font-size: 11px; line-height: 1.4; margin: -6px 0 14px; }
+    .popup-grupo .popup-status { font-size: 11px; white-space: nowrap; }
+    @media (max-width: 480px) {
+      header.topo { height: 76px; }
+      .hero { padding-top: 12px; }
+      .hero .badge { margin-bottom: 12px; }
+      .mascote-hero { width: 135px; }
+      .hero h1 { font-size: clamp(27px, 7.2vw, 34px); }
+      .hero p.sub { margin-bottom: 22px; line-height: 1.45; }
+      .hero .btn { padding: 18px 18px; }
+      .hero .btn-label-solo { font-size: 18px; }
+      .vitrine { padding-top: 14px; }
+      .vitrine .wrap { padding: 0 8px; }
+      .vitrine-script { margin-bottom: 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .popup-numero { transition: none; }
     }
   </style>
 </head>
@@ -362,7 +385,7 @@ window.addEventListener('pageshow', function() {
   </span><br>chegam até você no whats!</h1>
 
   <p class="sub">
-    A gente garimpa ofertas de sites confiáveis como Amazon, Shopee, Mercado Livre e Magalu, e te avisa na hora. Sem pagar nada.
+    Encontre as melhores ofertas e cupons de sites confiáveis. <strong>TODOS OS DIAS.</strong>
   </p>
 
   <div class="hero-btns">
@@ -372,7 +395,7 @@ window.addEventListener('pageshow', function() {
       <svg class="btn-icon" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
         <use href="#icone-wpp"/>
       </svg>
-      <div class="btn-label-solo">Quero entrar no grupo</div>
+      <div class="btn-label-solo">Quero entrar no grupo VIP</div>
     </a>
   </div>
 </section>
@@ -661,14 +684,8 @@ window.addEventListener('pageshow', function() {
   <div class="popup-destaque">100% GRÁTIS</div>
 
   <div class="popup-info">
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <use href="#icone-wpp"/>
-    </svg>
-    <div>
-      <strong>Grupo Despencou</strong>
-      <small>Promoções e cupons</small>
-    </div>
-    <span class="popup-status">participe</span>
+    <span aria-hidden="true">📱</span>
+    <strong id="popupNumero" class="popup-numero">+55 11 9****-1958</strong>
   </div>
 
   <a class="popup-entrar"
@@ -679,46 +696,98 @@ window.addEventListener('pageshow', function() {
 </aside>
 
 <script>
+
 (function configurarPopup() {
   const popup = document.getElementById('popupGrupo');
   const fechar = document.getElementById('popupFechar');
-  let timer = null;
+  const celular = document.querySelector('.phone-stage');
+  const numero = document.getElementById('popupNumero');
+  const reduzirMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Dados fictícios para uma demonstração visual, identificada no próprio popup.
+  const numeros = [
+    '+55 11 9****-1958', '+55 21 9****-4826', '+55 31 9****-7304',
+    '+55 41 9****-2619', '+55 51 9****-8642', '+55 61 9****-3570',
+    '+55 71 9****-9183', '+55 81 9****-6407', '+55 85 9****-3948',
+    '+55 19 9****-5721', '+55 27 9****-8064', '+55 47 9****-1295',
+    '+55 62 9****-4538', '+55 65 9****-7820', '+55 67 9****-2164',
+    '+55 79 9****-9352', '+55 83 9****-6081', '+55 92 9****-3476',
+    '+55 98 9****-8249', '+55 48 9****-5613'
+  ];
+
+  let indice = 0;
+  let timerTroca = null;
+  let timerFade = null;
+  let frame = null;
   let encerrado = false;
+  let exibido = false;
+  let rolouParaBaixo = false;
+  let ultimaPosicao = window.scrollY;
+
+  function agendarNumero() {
+    timerTroca = setTimeout(function() {
+      if (encerrado || popup.hidden) return;
+      numero.classList.add('esmaecendo');
+      timerFade = setTimeout(function() {
+        if (encerrado) return;
+        indice = (indice + 1) % numeros.length;
+        numero.textContent = numeros[indice];
+        numero.classList.remove('esmaecendo');
+        agendarNumero();
+      }, reduzirMovimento ? 0 : 280);
+    }, 3000 + Math.floor(Math.random() * 2001));
+  }
+
+  function removerObservacao() {
+    window.removeEventListener('scroll', aoRolar);
+    window.removeEventListener('resize', solicitarVerificacao);
+    if (frame !== null) cancelAnimationFrame(frame);
+    frame = null;
+  }
 
   function fecharPopup() {
     encerrado = true;
-    clearTimeout(timer);
-    if (popup.contains(document.activeElement)) {
-      document.activeElement.blur();
-    }
+    clearTimeout(timerTroca);
+    clearTimeout(timerFade);
+    removerObservacao();
+    if (popup.contains(document.activeElement)) document.activeElement.blur();
     popup.hidden = true;
   }
 
-  function abrirPopup() {
-    if (encerrado || leadEmAndamento) return;
-    popup.hidden = false;
-    enviarEventoPainel('popup_view');
+  function verificarPosicao() {
+    frame = null;
+    if (encerrado || exibido || !rolouParaBaixo || leadEmAndamento) return;
+
+    // Abre somente depois de rolar até revelar o final do celular com as ofertas.
+    if (celular.getBoundingClientRect().bottom <= window.innerHeight - 24) {
+      exibido = true;
+      popup.hidden = false;
+      removerObservacao();
+      enviarEventoPainel('popup_view');
+      agendarNumero();
+    }
   }
 
-  function iniciarPopup() {
-    timer = setTimeout(abrirPopup, 5000);
+  function solicitarVerificacao() {
+    if (frame === null && !encerrado && !exibido) {
+      frame = requestAnimationFrame(verificarPosicao);
+    }
+  }
+
+  function aoRolar() {
+    const atual = window.scrollY;
+    if (atual > ultimaPosicao && atual > 10) rolouParaBaixo = true;
+    ultimaPosicao = atual;
+    solicitarVerificacao();
   }
 
   fechar.addEventListener('click', fecharPopup);
-
   document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape' && !popup.hidden) {
-      fecharPopup();
-    }
+    if (event.key === 'Escape' && !popup.hidden) fecharPopup();
   });
-
   window.addEventListener('despencou:lead', fecharPopup);
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', iniciarPopup, { once: true });
-  } else {
-    iniciarPopup();
-  }
+  window.addEventListener('scroll', aoRolar, { passive: true });
+  window.addEventListener('resize', solicitarVerificacao);
 })();
 </script>
 
