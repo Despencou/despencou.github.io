@@ -435,87 +435,134 @@
 </head>
 <body>
 
-<!-- Meta Pixel Code -->
+<!-- META PIXEL + COLETOR COM DEDUPLICAÇÃO -->
 <script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '2083004892284023');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=2083004892284023&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
 
-<!-- RASTREADOR DO PAINEL DESPENCOU -->
-<script>
-(function() {
-  const PAINEL_URL = 'https://painel.despencou.com/coletar.php';
 
-  function getVisitorId() {
-    let vid = localStorage.getItem('dsp_vid');
-    if (!vid) {
-      vid = 'v_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
-      localStorage.setItem('dsp_vid', vid);
-    }
-    return vid;
+const IS_PROD = /^(www\.)?despencou\.com$/.test(location.hostname);
+const MONITOR_API = "https://painel.despencou.com/coletar.php";
+let visitorIdMemoria = null;
+let leadEmAndamento = false;
+
+function criarId() {
+  if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+    return window.crypto.randomUUID();
   }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 3 | 8)).toString(16);
+  });
+}
 
-  function getDevice() {
-    return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'mobile' : 'desktop';
+function obterOuCriarVisitorId() {
+  if (visitorIdMemoria) return visitorIdMemoria;
+  let id = null;
+  try { id = localStorage.getItem('dp_visitor_id'); } catch(e) {}
+  if (!id || !/^[a-f0-9-]{20,64}$/i.test(id)) {
+    id = criarId();
+    try { localStorage.setItem('dp_visitor_id', id); } catch(e) {}
   }
+  visitorIdMemoria = id.toLowerCase();
+  return visitorIdMemoria;
+}
 
-  window.registrarPainel = function(tipoEvento) {
-    const payload = JSON.stringify({
-      event: tipoEvento,
-      visitor: getVisitorId(),
-      device: getDevice(),
-      url: window.location.href,
-      referrer: document.referrer || ''
-    });
+function getCookie(nome) {
+  const cookie = document.cookie.split('; ').find(function(item) {
+    return item.startsWith(nome + '=');
+  });
+  if (!cookie) return '';
+  const valor = cookie.slice(nome.length + 1);
+  try { return decodeURIComponent(valor); } catch(e) { return valor; }
+}
 
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(PAINEL_URL, new Blob([payload], { type: 'application/json' }));
-    } else {
-      fetch(PAINEL_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: payload,
-        keepalive: true
-      }).catch(function() {});
-    }
+const paramsEntrada = new URLSearchParams(location.search);
+const fbclidEntrada = paramsEntrada.get('fbclid') || '';
+const fbcEntrada = fbclidEntrada ? 'fb.1.' + Date.now() + '.' + fbclidEntrada : '';
+
+function obterDadosPayload(nomeEvento) {
+  const ua = navigator.userAgent;
+  let device = 'Desktop';
+  if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+    device = 'Tablet';
+  } else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/i.test(ua)) {
+    device = 'Mobile';
+  }
+  return {
+    event: nomeEvento,
+    visitor: obterOuCriarVisitorId(),
+    device: device,
+    utm_source: paramsEntrada.get('utm_source') || '',
+    utm_campaign: paramsEntrada.get('utm_campaign') || '',
+    utm_medium: paramsEntrada.get('utm_medium') || '',
+    fbclid: fbclidEntrada,
+    gclid: paramsEntrada.get('gclid') || '',
+    referrer: document.referrer || '',
+    fbp: getCookie('_fbp'),
+    fbc: fbcEntrada || getCookie('_fbc'),
+    page_url: location.href.split('#')[0]
   };
+}
 
-  // Registra a visualização de página automaticamente no carregamento
-  window.registrarPainel('view');
-})();
+function enviarEventoPainel(nomeEvento, eventId) {
+  if (!IS_PROD) return Promise.resolve();
+  try {
+    const payload = obterDadosPayload(nomeEvento);
+    if (eventId) payload.event_id = eventId;
+    return fetch(MONITOR_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      keepalive: true
+    }).catch(function() {});
+  } catch(e) { return Promise.resolve(); }
+}
 
-// Função unificada para envio seguro do evento Lead (Meta Pixel + Painel)
+if (IS_PROD) {
+  !function(f,b,e,v,n,t,s) {
+    if(f.fbq)return;
+    n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];
+    t=b.createElement(e);t.async=!0;t.src=v;
+    s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s);
+  }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2083004892284023', { external_id: obterOuCriarVisitorId() });
+  fbq('track', 'PageView');
+  enviarEventoPainel('view');
+}
+
 function enviarLead(event, url) {
   event.preventDefault();
+  if (leadEmAndamento) return;
+  leadEmAndamento = true;
 
-  // 1. Registra o clique no painel da Despencou
-  if (typeof window.registrarPainel === 'function') {
-    window.registrarPainel('click');
-  }
-
-  // 2. Registra o evento de conversão no Meta Pixel
-  if (typeof fbq === 'function') {
-    fbq('track', 'Lead', { currency: 'BRL', value: 0.00 });
-  }
-
-  // 3. Redireciona com pequeno atraso para entrega segura das requisições
-  setTimeout(function() {
+  if (!IS_PROD) {
     window.location.href = url;
-  }, 250);
+    return;
+  }
+
+  // Um único identificador para o Lead no Pixel e na CAPI.
+  const eventId = 'lead_' + criarId();
+  const envio = enviarEventoPainel('click', eventId);
+
+  try {
+    if (typeof fbq === 'function') {
+      fbq('track', 'Lead', { currency: 'BRL', value: 0.00 }, { eventID: eventId });
+    }
+  } catch(e) {}
+
+  // Aguarda o coletor, limitado a 900 ms para não prender a navegação.
+  Promise.race([
+    envio,
+    new Promise(function(resolve) { setTimeout(resolve, 900); })
+  ]).then(function() {
+    setTimeout(function() { window.location.href = url; }, 150);
+  });
 }
+
+window.addEventListener('pageshow', function() { leadEmAndamento = false; });
 </script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2083004892284023&ev=PageView&noscript=1" /></noscript>
 
 <!-- ══ HERO ══ -->
 <section class="hero">
