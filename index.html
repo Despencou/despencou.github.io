@@ -8,7 +8,7 @@
   <link rel="canonical" href="https://despencou.com/" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Knewave&family=Caveat:wght@700&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root { --creme: #FFF8EC; --creme2: #FFF1D9; --branco: #FFFFFF; --vermelho: #E50914; --vermelho-escuro: #C31F14; --amarelo: #FFCE00; --amarelo-claro: #FFE270; --tinta: #241E15; --tinta-suave: #6E6558; --linha: #F0E4CC; --card: #FFFFFF; --verde: #25D366; --azul-tele: #229ED9; --sombra: 0 10px 30px rgba(36, 30, 21, 0.08); }
@@ -191,6 +191,39 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .popup-numero { transition: none; }
+    }
+
+    /* Topo inspirado na referência enviada. */
+    header.topo { height: clamp(76px, 19.4vw, 140px); }
+    .hero.hero-new { max-width: 720px; margin: 0 auto; padding: clamp(14px, 3vw, 22px) clamp(24px, 9.5vw, 68px) 28px; }
+    .hero-new > * { animation: none; }
+    .hero-new h1 { font-family: 'Knewave', 'Fredoka', cursive; font-weight: 400; text-transform: uppercase; color: #100e09; margin: 0 0 clamp(16px, 3vw, 24px); letter-spacing: -.02em; }
+    .hero-new h1 span { display: block; padding: 0; white-space: normal; }
+    .hero-new h1 .hero-as { display: flex; align-items: center; justify-content: center; gap: 20px; font-size: clamp(28px, 6.8vw, 49px); line-height: 1.2; margin-bottom: 12px; }
+    .hero-as::before, .hero-as::after { content: ''; flex: 1; height: 3px; border-radius: 4px; background: #19160f; }
+    .hero-new h1 .hero-highlight { position: relative; isolation: isolate; white-space: nowrap; font-size: clamp(19px, 6vw, 43px); line-height: 1.5; transform: rotate(-3deg); margin: 0 -3px 18px; }
+    .hero-highlight::before { content: ''; position: absolute; inset: 3px -3px; background: #ffdf35; z-index: -1; border-radius: 40% 18% 25% 12% / 45% 25% 35% 20%; }
+    .hero-rays { position: absolute; width: 26px; height: 58px; top: 50%; transform: translateY(-50%); overflow: visible; }
+    .hero-rays-left { left: -29px; }
+    .hero-rays-right { right: -29px; transform: translateY(-50%) scaleX(-1); }
+    .hero-new h1 .hero-main-line { font-size: clamp(28px, 7.6vw, 55px); line-height: 1.14; }
+    .hero-new .hero-btns { margin-bottom: clamp(28px, 7.5vw, 54px); }
+    .hero-new .btn { max-width: none; padding: clamp(14px, 3vw, 24px) 15px; gap: clamp(12px, 3vw, 24px); border-radius: clamp(19px, 4.4vw, 32px); background: #08ba5b; box-shadow: none; animation: none; }
+    .hero-new .btn-icon { width: clamp(32px, 8vw, 58px); height: clamp(32px, 8vw, 58px); }
+    .hero-new .btn-label-solo { font-family: 'Nunito', sans-serif; font-size: clamp(18px, 4.8vw, 35px); font-weight: 900; font-style: italic; white-space: nowrap; }
+    .hero-new .hero-brands { display: grid; grid-template-columns: .9fr 1.15fr 1.25fr; gap: 0; max-width: none; margin: 0 -4px; }
+    .hero-brand { min-width: 0; padding: 0 clamp(10px, 3vw, 22px); }
+    .hero-brand:first-child { padding-left: 0; }
+    .hero-brand:last-child { padding-right: 0; }
+    .hero-brand + .hero-brand { border-left: 1px solid #d3d0c3; }
+    .hero-new .hero-brands img { width: 100%; height: clamp(27px, 7vw, 50px); object-fit: contain; }
+    .hero-new .mascote-hero { width: clamp(145px, 31vw, 225px); margin: clamp(22px, 6vw, 44px) auto 8px; animation: none; }
+    .hero-new .hero-bobeira { position: relative; font-family: 'Caveat', cursive; font-size: clamp(43px, 11.5vw, 83px); font-weight: 700; line-height: .94; letter-spacing: -.025em; color: #e50914; transform: rotate(-4deg); margin: 0 -18px 18px; }
+    .hero-bobeira::after { content: ''; position: absolute; width: 75%; height: 8px; border-top: 5px solid #e50914; border-radius: 50%; bottom: -18px; right: 0; transform: rotate(-5deg); }
+    .vitrine { background: var(--creme); border-top: 0; padding-top: 18px; }
+    @media (max-width: 360px) {
+      .hero-new .btn-label-solo { font-size: 16px; }
+      .hero-new .btn { gap: 10px; }
     }
   </style>
 </head>
@@ -375,46 +408,36 @@ window.addEventListener('pageshow', function() {
 </header>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="badge">100% grátis · sem spam</div>
-
-  <img class="mascote-hero" src="/mascote.png" alt="Mascote Despencou acenando" />
-
-  <h1>As <span>melhores promoções
-    <svg class="circulo" viewBox="0 0 320 110" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M58,18 C130,-4 250,-2 296,32 C322,52 316,78 278,94 C218,119 96,116 38,94 C8,82 6,54 24,36"
-            stroke="var(--vermelho)" stroke-width="7" fill="none"
-            stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </span><br>chegam até você no whats!</h1>
-
-  <p class="sub">
-    Encontre as melhores ofertas e cupons de sites confiáveis. <strong>TODOS OS DIAS.</strong>
-  </p>
-
-  <div class="hero-brands" aria-label="Sites onde encontramos ofertas">
-    <img src="/assets/logos/mercado-livre-completo.webp" alt="Mercado Livre" width="268" height="68" />
-    <img src="/assets/logos/amazon.svg" alt="Amazon" width="399" height="133" />
-    <img src="/assets/logos/shopee.svg" alt="Shopee" width="1000" height="320" />
-    <img src="/assets/logos/magalu.svg" alt="Magalu" width="490" height="140" />
-  </div>
+<section class="hero hero-new">
+  <h1>
+    <span class="hero-as">As</span>
+    <span class="hero-highlight">Melhores promoções
+      <svg class="hero-rays hero-rays-left" viewBox="0 0 26 58" fill="none" aria-hidden="true"><path d="M5 7l13 8M2 30h15M5 52l13-10" stroke="#e50914" stroke-width="6" stroke-linecap="round"/></svg>
+      <svg class="hero-rays hero-rays-right" viewBox="0 0 26 58" fill="none" aria-hidden="true"><path d="M5 7l13 8M2 30h15M5 52l13-10" stroke="#e50914" stroke-width="6" stroke-linecap="round"/></svg>
+    </span>
+    <span class="hero-main-line">Chegam até vc<br>no whats!</span>
+  </h1>
 
   <div class="hero-btns">
-    <a onclick="enviarLead(event, WPP_URL)"
-       href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt"
-       class="btn btn-wpp">
-      <svg class="btn-icon" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
-        <use href="#icone-wpp"/>
-      </svg>
-      <div class="btn-label-solo">Quero entrar no grupo VIP</div>
+    <a onclick="enviarLead(event, WPP_URL)" href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt" class="btn btn-wpp">
+      <svg class="btn-icon" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><use href="#icone-wpp"/></svg>
+      <span class="btn-label-solo">Quero entrar no grupo</span>
     </a>
   </div>
+
+  <div class="hero-brands" aria-label="Sites onde encontramos ofertas">
+    <div class="hero-brand"><img src="/assets/logos/amazon.svg" alt="Amazon" width="399" height="133" /></div>
+    <div class="hero-brand"><img src="/assets/logos/shopee.svg" alt="Shopee" width="1000" height="320" /></div>
+    <div class="hero-brand"><img src="/assets/logos/mercado-livre-completo.webp" alt="Mercado Livre" width="268" height="68" /></div>
+  </div>
+
+  <img class="mascote-hero" src="/mascote.png" alt="Mascote Despencou acenando" width="225" />
+  <p class="hero-bobeira">enquanto você<br>tá aí de bobeira</p>
 </section>
 
 <!-- VITRINE -->
 <section class="vitrine">
   <div class="wrap">
-    <p class="vitrine-script">enquanto você<br>tá aí de bobeira</p>
 
     <h2 class="vitrine-title">
       essas são as promos<br>
@@ -805,4 +828,5 @@ window.addEventListener('pageshow', function() {
 
 </body>
 </html>
+
 
