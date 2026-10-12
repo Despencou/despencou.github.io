@@ -117,6 +117,34 @@ h1,h2,h3,.logo{font-family:"Baloo 2","DM Sans",system-ui,sans-serif;line-height:
 .hero{margin:24px 22px 20px;border:1px solid var(--line);border-radius:22px;box-shadow:0 8px 24px rgba(23,18,15,.06)}
 .search{background:var(--card)}
 @media(max-width:640px){.hero{margin:18px 12px 16px;border-radius:18px}}
+
+/* Rodapé institucional compartilhado. */
+.foot.institutional-footer{display:block;position:relative;isolation:isolate;background:#17120f;color:#eee2c8;padding:42px 22px 0;font-size:14px;line-height:1.6}
+.institutional-footer::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:#17120f;z-index:-1}
+.footer-columns{display:grid;grid-template-columns:1.65fr 1fr 1fr;gap:42px;padding-bottom:34px}
+.footer-brand{display:inline-block;font-family:'Baloo 2',sans-serif;font-size:29px;line-height:1.2;font-weight:800;text-transform:none;color:#ffc928;text-decoration:none;margin-bottom:12px}
+.footer-about p{margin:0;max-width:47ch;color:#cdbf9e}
+.institutional-footer nav h2{font:700 13px/1.4 'DM Sans',sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#ffc928;margin:4px 0 17px}
+.institutional-footer nav a{display:block;width:fit-content;color:#eee2c8;text-decoration:none;margin:0 0 9px}
+.institutional-footer a:hover{color:#fff;text-decoration:underline}
+.institutional-footer a:focus-visible{outline:2px solid #ffc928;outline-offset:4px;border-radius:2px}
+.footer-bottom{padding:19px 0 22px;border-top:1px solid #4a3d29;text-align:center;font-size:13px;color:#ae9b6c}
+.institutional-site{display:flex;flex-direction:column}
+.institution-page{flex:1;max-width:800px;width:100%;margin:0 auto;padding:38px 24px 54px}
+.breadcrumb{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;font-size:13px;color:var(--mut)}
+.breadcrumb a{color:var(--red);text-decoration:none}.breadcrumb a:hover{text-decoration:underline}
+.institution-page h1{font-size:clamp(30px,5vw,42px);margin-bottom:14px}
+.page-lead{font-size:18px;color:var(--mut);line-height:1.65;margin:0 0 28px}
+.page-meta{font-size:13px;color:var(--mut);margin:0 0 28px}
+.institution-page h2{font:800 24px/1.2 'Baloo 2',sans-serif;margin:30px 0 10px}
+.institution-page p,.institution-page li{line-height:1.75}
+.institution-page a{color:var(--red);text-underline-offset:3px}
+.institution-page .btn{color:#fff}.institution-page .cta{margin:24px 0}
+.institution-page details{border-bottom:1px solid var(--line);padding:18px 0}
+.institution-page summary{font-weight:700;font-size:17px;cursor:pointer;line-height:1.5}
+.institution-page details p{margin:12px 0 0;color:var(--mut)}
+.contact-links{display:flex;gap:10px;flex-wrap:wrap}
+@media(max-width:640px){.footer-columns{grid-template-columns:1fr 1fr;gap:28px 20px}.footer-about{grid-column:1/-1}.foot.institutional-footer{padding:32px 16px 0}.footer-bottom{padding-bottom:90px}.institution-page{padding:28px 18px 40px}}
 </style></head><body><div class="site">
     <div class="top">
       <a class="logo header-brand" href="#ofertas" aria-label="Despencou — ofertas"><img src="/logofundotransparente.png" alt="DESPENCOU" width="116" height="48"></a>
@@ -148,5 +176,5 @@ h1,h2,h3,.logo{font-family:"Baloo 2","DM Sans",system-ui,sans-serif;line-height:
 </main>
 <section id="coupon-view" class="view-panel" hidden><h1>Cupons disponíveis</h1><p class="muted">Cupons publicados recentemente no nosso Telegram. Confira as condições e a validade na loja.</p><div class="stores" id="coupon-filters"><button class="chip on" data-coupon-store="all">Todos</button><button class="chip" data-coupon-store="Shopee">Shopee</button><button class="chip" data-coupon-store="Mercado Livre">Mercado Livre</button><button class="chip" data-coupon-store="Amazon">Amazon</button></div><div class="cps" id="coupon-list"></div></section>
 <section id="blog-view" class="view-panel" hidden><h1>Dicas do blog</h1><p class="muted">Em breve, dicas para escolher produtos e aproveitar descontos.</p><div class="blog"><article class="post"><div class="img">🎧</div><div class="b"><h3>Como escolher um fone bluetooth bom e barato</h3><p class="t">Em breve</p></div></article><article class="post"><div class="img">🍳</div><div class="b"><h3>Air fryer: o que olhar antes de comprar</h3><p class="t">Em breve</p></div></article><article class="post"><div class="img">📉</div><div class="b"><h3>Como saber se o desconto é real</h3><p class="t">Em breve</p></div></article></div></section>
-    <div class="foot"><div class="logo" style="color:var(--yel);font-size:22px">Despencou.com</div><span>Ao comprar pelos links do site, podemos ganhar comissão de afiliado sem custo extra para você. Preços e estoque podem mudar a qualquer momento. Sem vínculo oficial com as lojas.</span></div>
+    <footer class="foot institutional-footer"><div class="footer-columns"><div class="footer-about"><a class="footer-brand" href="/teste/">despencou.com</a><p>Ao comprar pelos links do site, podemos ganhar comissão de afiliado sem custo extra para você. Preços e estoque podem mudar a qualquer momento. Sem vínculo oficial com as lojas.</p></div><nav aria-label="Institucional"><h2>Institucional</h2><a href="/teste/sobre/">Sobre nós</a><a href="/teste/faq/">FAQ</a><a href="/teste/contato/">Contato</a><a href="/teste/privacidade/">Política de Privacidade</a><a href="/teste/termos/">Termos de Uso</a></nav><nav aria-label="Redes sociais"><h2>Redes sociais</h2><a href="https://www.instagram.com/despencou_promos/" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://x.com/despencoupromos" target="_blank" rel="noopener noreferrer">X (Twitter)</a><a href="https://www.tiktok.com/@despencoupromos" target="_blank" rel="noopener noreferrer">TikTok</a><a href="https://t.me/despencou" target="_blank" rel="noopener noreferrer">Telegram</a></nav></div><div class="footer-bottom">© 2026 despencou.com · Todos os direitos reservados.</div></footer>
 </div><div class="sticky"><a class="btn wa" href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt" target="_blank" rel="noopener">WhatsApp</a><a class="btn tg" href="https://t.me/despencou" target="_blank" rel="noopener">Telegram</a></div><dialog id="deal-dialog"><button class="dialog-close" type="button" aria-label="Fechar detalhes">×</button><h2>Detalhes da publicação</h2><pre id="deal-description"></pre><a id="dialog-offer" class="btn wa" target="_blank" rel="noopener">Ver na loja</a></dialog><script src="./app.js"></script></body></html>
