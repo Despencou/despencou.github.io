@@ -16,6 +16,7 @@
     return minutes < 1 ? 'agora' : minutes < 60 ? `há ${minutes} min` : minutes < 1440 ? `há ${Math.floor(minutes/60)} h` : `há ${Math.floor(minutes/1440)} dia(s)`;
   }
   function details(item) {
+    if(item.kind==='offer' && DespencouCoupons.parse(item).hasCoupon){location.href='/teste/oferta/?id='+encodeURIComponent(item.id);return;}
     $('#deal-description').textContent=item.description;
     $('#dialog-offer').href=item.url;
     $('#deal-dialog').showModal();
@@ -29,7 +30,8 @@
     if(item.discount>0&&item.discount<100)photo.append(element('span','off',`-${item.discount}%`));
     photo.append(element('span','st',item.store));card.append(photo,element('h3',null,item.title));
     const prices=element('div');prices.append(element('span','old',item.old_price?money(item.old_price):''),element('div','pr',money(item.price)));card.append(prices);
-    card.append(link('Ver oferta',item.url,'btn offer-link'));
+    const coupon=DespencouCoupons.parse(item);
+    if(coupon.hasCoupon){const a=element('a','btn offer-link','Ver oferta e cupom');a.href='/teste/oferta/?id='+encodeURIComponent(item.id);card.append(a);}else card.append(link('Ver oferta',item.url,'btn offer-link'));
     const button=element('button','details','Detalhes e condições');button.type='button';button.addEventListener('click',()=>details(item));card.append(button,element('span','t',age(item.published_at)));
     return card;
   }
@@ -85,3 +87,4 @@
   $('.dialog-close').addEventListener('click',()=>$('#deal-dialog').close());
   window.addEventListener('hashchange',route);route();loadFeed();setInterval(()=>{if(!document.hidden)loadFeed();},60000);
 })();
+
