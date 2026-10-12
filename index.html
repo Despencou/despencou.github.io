@@ -258,6 +258,12 @@
       .phone-stage.phone-revealed .seta-mao { animation: none; }
     }
     .popup-timer-finalizado { font-size: 20px; line-height: 1.3; }
+
+    .benefits-summary { list-style: none; padding: 0; margin: 0; }
+    .benefits-summary li { display: flex; align-items: flex-start; gap: 14px; padding: 18px 0; border-bottom: 1px solid var(--linha); }
+    .benefits-summary li:last-child { border-bottom: 0; }
+    .benefits-summary li > span { font-size: 26px; line-height: 1.4; flex: 0 0 32px; text-align: center; }
+    .benefits-summary p { font-size: 17px; line-height: 1.55; font-weight: 700; color: var(--tinta); margin: 0; }
   </style>
 </head>
 <body>
@@ -539,41 +545,12 @@ window.addEventListener('pageshow', function() {
   <div class="section-tag">O que você encontra</div>
   <h2 class="section-title">Tudo isso te espera no Despencou</h2>
 
-  <div class="feature-card">
-    <h3><span class="icon">🔥</span>Promoções</h3>
-    <p>Todos os dias, novas promoções de sites oficiais direto no seu WhatsApp.</p>
-    <ul class="feature-list">
-      <li>Anúncios apenas de grandes marcas como Mercado Livre, Magalu, Shopee, Aliexpress e Carrefour</li>
-      <li>Perfeito pra economizar sem precisar ficar garimpando sozinho</li>
-      <li>Apenas lojas verificadas e confiáveis — sem golpes, sem risco</li>
-    </ul>
-    <a onclick="enviarLead(event, WPP_URL)"
-       href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt"
-       class="btn-card-wpp">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
-        <use href="#icone-wpp"/>
-      </svg>
-      Quero participar
-    </a>
-  </div>
-
-  <div class="feature-card">
-    <h3><span class="icon">🎟️</span>Cupons</h3>
-    <p>Sabe aquele cupom que você tanto procura? A gente encontra pra você e posta no grupo!</p>
-    <ul class="feature-list">
-      <li>Cupons diários que as plataformas liberam em primeira mão, antes de expirar</li>
-      <li>Códigos exclusivos que você não encontra facilmente por aí — direto pra você</li>
-      <li>Sem encher o celular de mensagens — só o que realmente vale a pena</li>
-    </ul>
-    <a onclick="enviarLead(event, WPP_URL)"
-       href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt"
-       class="btn-card-wpp">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
-        <use href="#icone-wpp"/>
-      </svg>
-      Quero participar
-    </a>
-  </div>
+  <ul class="benefits-summary">
+    <li><span aria-hidden="true">🎟️</span><p>Cupons diários que as plataformas liberam em primeira mão.</p></li>
+    <li><span aria-hidden="true">🔥</span><p>Todos os dias, novas promoções de sites oficiais direto no seu WhatsApp.</p></li>
+    <li><span aria-hidden="true">🛍️</span><p>Ofertas de grandes marcas como Amazon, Shopee, Mercado Livre e Magalu.</p></li>
+    <li><span aria-hidden="true">💸</span><p>Economize sem precisar garimpar ofertas por conta própria.</p></li>
+  </ul>
 </section>
 
 <!-- DEPOIMENTOS -->
