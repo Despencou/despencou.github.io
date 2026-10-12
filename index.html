@@ -264,6 +264,15 @@
     .benefits-summary li:last-child { border-bottom: 0; }
     .benefits-summary li > span { font-size: 26px; line-height: 1.4; flex: 0 0 32px; text-align: center; }
     .benefits-summary p { font-size: 17px; line-height: 1.55; font-weight: 700; color: var(--tinta); margin: 0; }
+
+    .reviews-viewport { overflow: hidden; border-radius: 20px; }
+    .reviews-track { display: flex; align-items: stretch; transition: transform .55s ease; }
+    .reviews-track .depo-card { flex: 0 0 100%; min-width: 0; margin: 0; box-shadow: none; display: flex; flex-direction: column; }
+    .reviews-track .depo-author { margin-top: auto; }
+    .reviews-controls { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 16px; }
+    .reviews-controls button { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--linha); background: white; color: var(--tinta); font-size: 27px; cursor: pointer; }
+    .reviews-count { font-size: 13px; font-weight: 800; color: var(--tinta-suave); }
+    @media (prefers-reduced-motion: reduce) { .reviews-track { transition: none; } }
   </style>
 </head>
 <body>
@@ -558,7 +567,8 @@ window.addEventListener('pageshow', function() {
   <div class="section-tag">Quem já usa</div>
   <h2 class="section-title">Opinião de quem usa o Despencou</h2>
 
-  <div class="depo-card">
+  <div class="reviews-carousel" aria-roledescription="carrossel" aria-label="Depoimentos">
+    <div class="reviews-viewport"><div class="reviews-track">  <div class="depo-card">
     <p class="depo-text">"As promoções que vocês postam são muito boas. Comecei a seguir porque queria comprar uma TV nova e fui esperando o preço baixar — mas já comprei um tênis e um fone que estavam imperdíveis. Recomendo pra todo mundo!"</p>
     <div class="depo-author">
       <div class="depo-avatar">G</div>
@@ -577,6 +587,17 @@ window.addEventListener('pageshow', function() {
         <div class="depo-name">Rafael M.</div>
         <div class="depo-role">Usuário do grupo do WhatsApp</div>
       </div>
+    </div>
+  </div>
+  <div class="depo-card"><p class="depo-text">"Grupo sensacional! É barato mesmo. Eu achava que era zoeira, mas comprei uma vez e chegou direitinho. Agora compro sempre!"</p><div class="depo-author"><div class="depo-avatar">P</div><div><div class="depo-name">Pamella S.</div><div class="depo-role">Membro do grupo</div></div></div></div>
+  <div class="depo-card"><p class="depo-text">"Na época da Copa comprei muita figurinha barata lá hahaha o grupo é top!"</p><div class="depo-author"><div class="depo-avatar">T</div><div><div class="depo-name">Thiago B.</div><div class="depo-role">Membro do grupo</div></div></div></div>
+  <div class="depo-card"><p class="depo-text">"Dica: tem que ficar atento, viu? Já perdi algumas coisas em segundos, porque demorei pra comprar. Tem promo relâmpago demais"</p><div class="depo-author"><div class="depo-avatar">C</div><div><div class="depo-name">Caio M.</div><div class="depo-role">Membro do grupo</div></div></div></div>
+  <div class="depo-card"><p class="depo-text">"Sempre pego coisas pra academia lá no grupo, preço imbatível. O último foi um Whey e creatina num preço TOP"</p><div class="depo-author"><div class="depo-avatar">V</div><div><div class="depo-name">Vinicius G.</div><div class="depo-role">Membro do grupo</div></div></div></div>
+  <div class="depo-card"><p class="depo-text">"É muito bom ver que vocês sempre postam produtos excelentes, tipo Cerave, Cetaphil Nivea..."</p><div class="depo-author"><div class="depo-avatar">M</div><div><div class="depo-name">Monica G.</div><div class="depo-role">Membro do grupo</div></div></div></div></div></div>
+    <div class="reviews-controls">
+      <button type="button" class="reviews-prev" aria-label="Comentário anterior">‹</button>
+      <span class="reviews-count">1 / 7</span>
+      <button type="button" class="reviews-next" aria-label="Próximo comentário">›</button>
     </div>
   </div>
 </section>
@@ -877,6 +898,30 @@ window.addEventListener('pageshow', function() {
   }, { threshold: 0.12 });
   stage.classList.add('phone-reveal-ready');
   reveal.observe(stage);
+})();
+</script>
+<script>
+(() => {
+  const carousel = document.querySelector('.reviews-carousel');
+  const track = carousel.querySelector('.reviews-track');
+  const cards = Array.from(track.children);
+  const count = carousel.querySelector('.reviews-count');
+  let index = 0;
+  let hovered = false;
+  function show(next) {
+    index = (next + cards.length) % cards.length;
+    track.style.transform = 'translateX(-' + index * 100 + '%)';
+    count.textContent = (index + 1) + ' / ' + cards.length;
+    cards.forEach((card, i) => card.setAttribute('aria-hidden', i !== index));
+  }
+  carousel.querySelector('.reviews-prev').addEventListener('click', () => show(index - 1));
+  carousel.querySelector('.reviews-next').addEventListener('click', () => show(index + 1));
+  carousel.addEventListener('mouseenter', () => { hovered = true; });
+  carousel.addEventListener('mouseleave', () => { hovered = false; });
+  show(0);
+  setInterval(() => {
+    if (!document.hidden && !hovered && !carousel.contains(document.activeElement)) show(index + 1);
+  }, 5000);
 })();
 </script>
 </body>
