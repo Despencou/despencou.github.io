@@ -436,6 +436,7 @@
 <body>
 
 <!-- META PIXEL + COLETOR COM DEDUPLICAÇÃO -->
+<script src="/whatsapp/abrir.js"></script>
 <script>
 
 
@@ -551,14 +552,13 @@ function enviarLead(event, url) {
     }
   } catch(e) {}
 
-  // Aguarda o coletor, limitado a 900 ms para não prender a navegação.
-  Promise.race([
-    envio,
-    new Promise(function(resolve) { setTimeout(resolve, 900); })
-  ]).then(function() {
-    setTimeout(function() { window.location.href = url; }, 150);
-  });
+  // O coletor usa keepalive; mantém o mesmo event_id sem atrasar a abertura.
+  DespencouWhatsApp.abrir(url);
 }
+
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') leadEmAndamento = false;
+});
 
 window.addEventListener('pageshow', function() { leadEmAndamento = false; });
 </script>
