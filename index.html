@@ -277,12 +277,12 @@
 </head>
 <body>
 
-<script src="/whatsapp/abrir.js"></script>
+<script src="/whatsapp/abrir.js?v=convite-https"></script>
 <!-- META PIXEL + COLETOR -->
 <script>
 const IS_PROD = /^(www\.)?despencou\.com$/.test(location.hostname);
 const MONITOR_API = "https://painel.despencou.com/coletar.php";
-const WPP_URL = "https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt";
+const WPP_URL = "https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof";
 let visitorIdMemoria = null;
 let leadEmAndamento = false;
 
@@ -391,14 +391,15 @@ if (IS_PROD) {
 }
 
 function enviarLead(event, url, origem) {
-  event.preventDefault();
+  const conviteDireto = DespencouWhatsApp.cliqueDireto(event, url);
+  if (!conviteDireto) event.preventDefault();
 
-  if (leadEmAndamento) return;
+  if (leadEmAndamento) { if (!conviteDireto) event.preventDefault(); return; }
   leadEmAndamento = true;
   window.dispatchEvent(new Event('despencou:lead'));
 
   if (!IS_PROD) {
-    window.location.href = url;
+    if (!conviteDireto) DespencouWhatsApp.abrir(url);
     return;
   }
 
@@ -423,7 +424,7 @@ function enviarLead(event, url, origem) {
   } catch(e) {}
 
   // O coletor usa keepalive; mantém o mesmo event_id sem atrasar a abertura.
-  DespencouWhatsApp.abrir(url);
+  if (!conviteDireto) DespencouWhatsApp.abrir(url);
 }
 
 document.addEventListener('visibilitychange', function() {
@@ -468,7 +469,7 @@ window.addEventListener('pageshow', function() {
   </div>
 
   <div class="hero-btns">
-    <a onclick="enviarLead(event, WPP_URL)" href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt" class="btn btn-wpp">
+    <a onclick="enviarLead(event, WPP_URL)" href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof" class="btn btn-wpp">
       <svg class="btn-icon" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><use href="#icone-wpp"/></svg>
       <span class="btn-label-solo">Quero entrar no grupo</span>
     </a>
@@ -536,7 +537,7 @@ window.addEventListener('pageshow', function() {
 <!-- CTA MEIO -->
 <div class="cta-meio">
   <a onclick="enviarLead(event, WPP_URL)"
-     href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt"
+     href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof"
      class="btn btn-wpp">
     <svg class="btn-icon" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
       <use href="#icone-wpp"/>
@@ -606,7 +607,7 @@ window.addEventListener('pageshow', function() {
   <p>É gratuito, sem compromisso. Saia quando quiser.</p>
   <div class="cta-btns">
     <a onclick="enviarLead(event, WPP_URL)"
-       href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt"
+       href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof"
        class="btn btn-wpp">
       <div class="btn-label-solo">Quero garantir a minha vaga no grupo</div>
     </a>
@@ -752,7 +753,7 @@ window.addEventListener('pageshow', function() {
   </div>
 
   <a class="popup-entrar"
-     href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt"
+     href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof"
      onclick="enviarLead(event, WPP_URL, 'popup')">
     Entrar no WhatsApp
   </a>
