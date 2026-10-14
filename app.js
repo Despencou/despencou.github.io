@@ -2,6 +2,7 @@
 (() => {
   const API = 'https://midia.despencou.com';
   const WPP = 'https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt';
+  let pageMap={};
   let items = [], store = 'all', couponStore = 'all', order = 'recent', limit = 16, loaded = false;
   const $ = s => document.querySelector(s);
   const normalize = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -25,7 +26,8 @@
     photo.append(element('span','st',item.store));card.append(photo,element('h3',null,item.title));
     const prices=element('div');prices.append(element('span','old',item.old_price?money(item.old_price):''),element('div','pr',money(item.price)));card.append(prices);
     const coupon=DespencouCoupons.parse(item);
-    if(coupon.hasCoupon){const a=element('a','btn offer-link','Ver oferta e cupom');a.href='/oferta/?id='+encodeURIComponent(item.id);card.append(a);}else card.append(link('Ver oferta',item.url,'btn offer-link'));
+    if(coupon.hasCoupon){const a=element('a','btn offer-link','Ver oferta e cupom');a.href=pageMap[item.id]==='/oferta/'+item.id+'/'?pageMap[item.id]:'/oferta/?id='+encodeURIComponent(item.id);card.append(a);}else card.append(link('Ver oferta',item.url,'btn offer-link'));
+    if(!coupon.hasCoupon){const details=element('a','details','Detalhes do produto');details.href=pageMap[item.id]==='/oferta/'+item.id+'/'?pageMap[item.id]:'/oferta/?id='+encodeURIComponent(item.id);card.append(details);}
     card.append(element('span','t',age(item.published_at)));
     return card;
   }
@@ -78,6 +80,9 @@
   document.querySelectorAll('[data-sort]').forEach(b=>b.addEventListener('click',()=>{order=b.dataset.sort;document.querySelectorAll('[data-sort]').forEach(x=>x.classList.toggle('on',x===b));renderOffers();}));
   document.querySelectorAll('[data-coupon-store]').forEach(b=>b.addEventListener('click',()=>{couponStore=b.dataset.couponStore;document.querySelectorAll('[data-coupon-store]').forEach(x=>x.classList.toggle('on',x===b));renderCoupons();}));
   $('#product-search').addEventListener('input',()=>{limit=16;renderOffers();});$('#load-more').addEventListener('click',()=>{limit+=16;renderOffers();});
-  window.addEventListener('hashchange',route);route();loadFeed();setInterval(()=>{if(!document.hidden)loadFeed();},60000);
+  async function loadPages(){try{pageMap=await(await fetch('/site-page-map.json')).json();if(loaded)renderOffers();}catch{}}
+  async function loadBlog(){try{const posts=await(await fetch('/blog-posts.json')).json();if(!Array.isArray(posts)||!posts.length)return;for(const selector of ['#home-blog','#blog-list']){const target=$(selector);if(!target)continue;target.replaceChildren();for(const p of posts){if(!/^\/blog\/[a-z0-9-]+\/$/.test(p.url))continue;const card=element('article','post'),body=element('div','b'),heading=element('h3'),a=element('a',null,p.title);a.href=p.url;heading.append(a);body.append(heading,element('p','t',p.description));card.append(body);target.append(card);}}}catch{}}
+  window.addEventListener('hashchange',route);route();loadPages();loadBlog();loadFeed();setInterval(()=>{if(!document.hidden)loadFeed();},60000);
 })();
+
 
