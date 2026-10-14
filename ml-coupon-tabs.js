@@ -19,6 +19,11 @@
       (tab==='today'?(imported(i)?i.valid_from===today:day(i.published_at)===today):
        imported(i)&&(tab!=='expires'||i.valid_until===today)));
   }
+  function storeSection(items,store,tab,today=day()){
+    if(store==='Mercado Livre')return section(items,tab,today);
+    if(!['Shopee','Amazon'].includes(store))return [];
+    return items.filter(i=>i.kind==='coupon'&&i.store===store&&(tab!=='today'||day(i.published_at)===today));
+  }
   function order(items,mode){
     const missing=(value,fallback)=>Number.isFinite(value)?value:fallback;
     return [...items].sort((a,b)=>{
@@ -28,6 +33,7 @@
       return String(b.valid_from||b.published_at||'').localeCompare(String(a.valid_from||a.published_at||''));
     });
   }
-  const api={destination,day,imported,telegram,removed,section,order};
+  const api={destination,day,imported,telegram,removed,section,storeSection,order};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.DespencouMLCoupons=api;
 })(typeof window!=='undefined'?window:globalThis);
+
