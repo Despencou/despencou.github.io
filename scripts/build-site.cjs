@@ -2,6 +2,7 @@
 // Build permanent HTML from the public archive; never reads bot credentials.
 const fs=require('node:fs/promises'),path=require('node:path');
 const coupons=require('../coupon-parser.js');
+const payments=require('../payment-parser.js');
 const BASE='https://despencou.com',API='https://midia.despencou.com';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(n);
@@ -10,7 +11,7 @@ const jsonScript=d=>JSON.stringify(d).replace(/</g,'\\u003c');
 const arg=(key,def)=>{const n=process.argv.indexOf(key);return n<0?def:process.argv[n+1];};
 async function source(file,url){if(file)return JSON.parse(await fs.readFile(file,'utf8'));const r=await fetch(url,{signal:AbortSignal.timeout(30000)});if(!r.ok)throw Error('Public feed unavailable: '+r.status);return r.json();}
 function offerBody(item){
- const coupon=coupons.parse(item),ended=!!item.ended;
+ const coupon=coupons.parse(item),ended=!!item.ended,payment=payments.label(item);
  const photo=/^\/site-images\/tg-\d+\.jpg$/.test(item.image||'')?`<img src="${API+item.image}" alt="${esc(item.title)}">`:'<span>🛍️</span>';
  let box='';
  if(coupon.hasCoupon){box=`<section class="offer-coupons" aria-label="Cupons e instruções"><h2>${ended?'Cupom da publicação (confira a validade)':'Cupom da oferta'}</h2>`;
@@ -18,7 +19,7 @@ function offerBody(item){
  for(const text of coupon.instructions)box+=`<p class="offer-coupon-instruction">${esc(text)}</p>`;
  if(coupon.redeemUrl)box+=`<a class="btn redeem-coupon" href="${esc(coupon.redeemUrl)}" target="_blank" rel="sponsored noopener noreferrer">Resgatar cupom</a>`;
  box+='</section>';}
- return `<article class="offer-detail-card"><h1>${esc(item.title)}</h1><p class="offer-state ${ended?'ended':''}">${ended?'Oferta encerrada':'Oferta publicada recentemente'}</p>${ended?'<p class="muted">Esta oferta saiu do catálogo recente. Mantivemos os detalhes como histórico; o preço e o cupom abaixo podem não estar mais disponíveis. Confira a situação atual na loja.</p>':''}<div class="offer-detail-photo">${photo}</div>${box}<a class="btn wa offer-store-button" href="${esc(coupon.productUrl)}" target="_blank" rel="sponsored noopener noreferrer">${ended?'Ver produto na loja':'Ir à loja'}</a><div class="offer-detail-prices"><span class="muted">Preço da publicação</span>${item.old_price?`<span class="old">${money(item.old_price)}</span>`:''}<strong class="offer-detail-price">${money(item.price)}</strong></div><p class="offer-detail-store">Loja: ${esc(item.store)}</p><p class="muted">Publicado em ${date(item.published_at)}. Preços, estoque e cupons podem mudar. Confira as condições na loja antes de comprar.</p><a href="/">Ver ofertas recentes</a></article>`;
+ return `<article class="offer-detail-card"><h1>${esc(item.title)}</h1><p class="offer-state ${ended?'ended':''}">${ended?'Oferta encerrada':'Oferta publicada recentemente'}</p>${ended?'<p class="muted">Esta oferta saiu do catálogo recente. Mantivemos os detalhes como histórico; o preço e o cupom abaixo podem não estar mais disponíveis. Confira a situação atual na loja.</p>':''}<div class="offer-detail-photo">${photo}</div>${box}<a class="btn wa offer-store-button" href="${esc(coupon.productUrl)}" target="_blank" rel="sponsored noopener noreferrer">${ended?'Ver produto na loja':'Ir à loja'}</a><div class="offer-detail-prices"><span class="muted">Preço da publicação</span>${item.old_price?`<span class="old">${money(item.old_price)}</span>`:''}<strong class="offer-detail-price">${money(item.price)}</strong>${payment?`<span class="muted">${esc(payment)}</span>`:''}</div><p class="offer-detail-store">Loja: ${esc(item.store)}</p><p class="muted">Publicado em ${date(item.published_at)}. Preços, estoque e cupons podem mudar. Confira as condições na loja antes de comprar.</p><a href="/">Ver ofertas recentes</a></article>`;
 }
 function shell(template,title,description,url,body,extra='',index=true){
  return template.replace(/<title>.*?<\/title>/,`<title>${esc(title)} | Despencou</title>`)
@@ -70,3 +71,4 @@ async function build(root,output,archive,feed,generatedOnly=false){
 }
 module.exports={build,offerBody};
 if(require.main===module)(async()=>{const root=path.resolve(__dirname,'..'),out=path.resolve(arg('--output',path.join(root,'_site')));await build(root,out,await source(arg('--archive',null),API+'/site-offers'),await source(arg('--feed',null),API+'/site-feed'),process.argv.includes('--generated-only'));})().catch(e=>{console.error(e.message);process.exit(1);});
+

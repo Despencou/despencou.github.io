@@ -41,6 +41,7 @@
     }
     card.append(retailerLink(item.ended?'Ver produto na loja':'Ir à loja',coupon.productUrl,'btn wa offer-store-button'));
     const prices=el('div','offer-detail-prices');prices.append(el('span','muted','Preço da publicação'));if(item.old_price)prices.append(el('span','old',money(item.old_price)));prices.append(el('strong','offer-detail-price',money(item.price)));card.append(prices);
+    const payment=window.DespencouPayments?.label(item);if(payment)prices.append(el('span','muted',payment));
     card.append(el('p','offer-detail-store','Loja: '+item.store));
     card.append(el('p','muted','Publicado em '+new Date(item.published_at).toLocaleDateString('pt-BR',{timeZone:'America/Sao_Paulo'})+'. Preços, estoque e cupons podem mudar. Confira as condições na loja antes de comprar.'));
     const recent=el('a',null,'Ver ofertas recentes');recent.href='/';card.append(recent);
@@ -48,5 +49,6 @@
   }catch{if(!staticPage)unavailable('Não foi possível carregar esta oferta agora. Tente novamente em instantes.');}
   finally{clearTimeout(timer);}
 })();
+
 
 

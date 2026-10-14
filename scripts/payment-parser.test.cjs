@@ -1,0 +1,31 @@
+const {test}=require('node:test'),assert=require('node:assert/strict');
+const {label}=require('../payment-parser.js');
+const check=(description,price,expected)=>assert.equal(label({description,price}),expected,description);
+test('Payment conditions follow the advertised price, including manual Telegram captions',()=>{
+ check('De R$ 379 por R$ 201 no Pix\nUse o Cupom: MODA1410',201,'No Pix');
+ check('por 187,34 em 6x sem juros',187.34,'Em 6x sem juros');
+ check('R$ 1.529 em 10x sem juros',1529,'Em 10x sem juros');
+ check('Por: R$368 em 6x',368,'Em 6x');
+ check('R$ 100 em até 10x com juros',100,'Até 10x com juros');
+ check('por R$ 45 na recorrência em 2x',45,'Em 2x · na recorrência');
+ check('Preço: 99,90\nem 3x sem juros',99.9,'Em 3x sem juros');
+ check('No Pix: R$ 100',100,'No Pix');
+ check('R$ 100 à vista',100,'À vista');
+ check('R$ 100 parcelado sem juros',100,'Parcelado sem juros');
+ check('R$ 100 no cartão',100,'No cartão');
+ check('R$ 100 no Pix ou em 2x',100,'No Pix ou em 2x');
+ check('R$ 100 no Pix ou R$ 120 em 6x',100,'No Pix');
+ check('R$ 100 no Pix ou R$ 120 em 6x',120,'Em 6x');
+});
+test('Do not invent payment terms from kits, URLs, coupon instructions, or a different price',()=>{
+ check('Kit com 3x Creatina\npor R$ 96\nhttps://meli.la/1syE13x',96,'');
+ check('R$ 96 - kit com 3x Creatina',96,'');
+ check('De R$ 100 em 3x por R$ 80 no Pix',80,'No Pix');
+ check('De R$ 100 no Pix por R$ 80',80,'');
+ check('Produto\nR$ 80\nUse o Cupom: PIX10 + Selecione Pix',80,'');
+ check('Produto\nR$ 80\nCupom válido por 10 dias',80,'');
+ check('R$ 100 no Pix',80,'');
+ check('por R$ 100 em 1x',100,'');
+ check('por R$ 100 em 99x',100,'');
+ check('Produto sem preço ou forma de pagamento',100,'');
+});

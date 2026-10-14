@@ -25,6 +25,7 @@
     if(item.discount>0&&item.discount<100)photo.append(element('span','off',`-${item.discount}%`));
     photo.append(element('span','st',item.store));card.append(photo,element('h3',null,item.title));
     const prices=element('div');prices.append(element('span','old',item.old_price?money(item.old_price):''),element('div','pr',money(item.price)));card.append(prices);
+    const payment=window.DespencouPayments?.label(item);if(payment)prices.append(element('div','t',payment));
     const coupon=DespencouCoupons.parse(item);
     if(coupon.hasCoupon){const a=element('a','btn offer-link','Ver oferta e cupom');a.href=pageMap[item.id]==='/oferta/'+item.id+'/'?pageMap[item.id]:'/oferta/?id='+encodeURIComponent(item.id);card.append(a);}else card.append(link('Ver oferta',item.url,'btn offer-link'));
     if(!coupon.hasCoupon){const details=element('a','details','Detalhes do produto');details.href=pageMap[item.id]==='/oferta/'+item.id+'/'?pageMap[item.id]:'/oferta/?id='+encodeURIComponent(item.id);card.append(details);}
@@ -84,5 +85,6 @@
   async function loadBlog(){try{const posts=await(await fetch('/blog-posts.json')).json();if(!Array.isArray(posts)||!posts.length)return;for(const selector of ['#home-blog','#blog-list']){const target=$(selector);if(!target)continue;target.replaceChildren();for(const p of posts){if(!/^\/blog\/[a-z0-9-]+\/$/.test(p.url))continue;const card=element('article','post'),body=element('div','b'),heading=element('h3'),a=element('a',null,p.title);a.href=p.url;heading.append(a);body.append(heading,element('p','t',p.description));card.append(body);target.append(card);}}}catch{}}
   window.addEventListener('hashchange',route);route();loadPages();loadBlog();loadFeed();setInterval(()=>{if(!document.hidden)loadFeed();},60000);
 })();
+
 
 
