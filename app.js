@@ -4,8 +4,9 @@
   const WPP = 'https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt';
   const ML=window.DespencouMLCoupons;
   let mlTab='today',mlOrder='recent';
+  const shopCouponTabs={Shopee:'today',Amazon:'today'};
   let pageMap={};
-  let items = [], store = 'all', couponStore = 'all', order = 'recent', limit = 16, loaded = false;
+  let items = [], store = 'all', couponStore = 'Mercado Livre', order = 'recent', limit = 16, loaded = false;
   const $ = s => document.querySelector(s);
   const normalize = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const money = n => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(n);
@@ -79,14 +80,19 @@
   function renderCoupons() {
     const coupons=items.filter(i=>i.kind==='coupon'&&!ML.removed(i));
     const ml=couponStore==='Mercado Livre';
-    $('#ml-coupon-controls').hidden=!ml;$('#ml-coupon-order').hidden=!ml||mlTab!=='all';
-    const shown=ml?ML.order(ML.section(coupons,mlTab),mlTab==='all'?mlOrder:'recent'):coupons.filter(i=>!ML.telegram(i)&&(couponStore==='all'||i.store===couponStore));
-    $('#ml-coupon-status').textContent=ml?`${shown.length} cupom(ns) · ${mlTab==='today'?'Lançados hoje e publicados hoje no Telegram.':mlTab==='expires'?'Com validade até hoje.':'Cupons da página monitorada.'}`:'';
+    const shop=couponStore==='Shopee'||couponStore==='Amazon';
+    const activeTab=ml?mlTab:(shopCouponTabs[couponStore]||'all');
+    $('#shopee-coupon-highlights').hidden=couponStore!=='Shopee';
+    $('#ml-coupon-controls').hidden=!ml&&!shop;$('#ml-coupon-order').hidden=!ml||mlTab!=='all';
+    document.querySelector('.ml-coupon-tabs').setAttribute('aria-label','Categorias de cupons: '+couponStore);
+    document.querySelector('[data-ml-coupon-tab="expires"]').hidden=!ml;
+    const shown=ml?ML.order(ML.section(coupons,mlTab),mlTab==='all'?mlOrder:'recent'):coupons.filter(i=>!ML.telegram(i)&&(couponStore==='all'||i.store===couponStore)&&(!shop||activeTab==='all'||ML.day(i.published_at)===ML.day()));
+    $('#ml-coupon-status').textContent=ml?`${shown.length} cupom(ns) · ${mlTab==='today'?'Lançados hoje e publicados hoje no Telegram.':mlTab==='expires'?'Com validade até hoje.':'Cupons da página monitorada.'}`:shop?`${shown.length} cupom(ns) · ${activeTab==='today'?'Publicados hoje no Telegram.':'Cupons disponíveis da '+couponStore+'.'}`:'';
     $('#ml-sort-note').hidden=!ml||mlTab!=='all'||mlOrder!=='discount';
-    document.querySelectorAll('[data-ml-coupon-tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.mlCouponTab===mlTab?'true':'false'));
+    document.querySelectorAll('[data-ml-coupon-tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.mlCouponTab===activeTab?'true':'false'));
     for(const [selector,data] of [['#home-coupons',coupons.filter(i=>!ML.telegram(i)).slice(0,3)],['#coupon-list',shown]]){
       const target=$(selector);target.replaceChildren(...data.map(couponCard));
-      if(loaded&&!data.length)target.append(element('p','empty',ml?'Nenhum cupom disponível nesta aba agora.':'Ainda não há cupons recentes para esta loja. Acompanhe as novidades no Telegram.'));
+      if(loaded&&!data.length)target.append(element('p','empty',ml||shop?'Nenhum cupom disponível nesta aba agora.':'Ainda não há cupons recentes para esta loja. Acompanhe as novidades no Telegram.'));
     }
   }
   async function loadFeed() {
@@ -108,13 +114,14 @@
   document.querySelectorAll('[data-store]').forEach(b=>b.addEventListener('click',()=>{store=b.dataset.store;limit=16;document.querySelectorAll('[data-store]').forEach(x=>x.classList.toggle('on',x===b));renderOffers();}));
   document.querySelectorAll('[data-sort]').forEach(b=>b.addEventListener('click',()=>{order=b.dataset.sort;document.querySelectorAll('[data-sort]').forEach(x=>x.classList.toggle('on',x===b));renderOffers();}));
   document.querySelectorAll('[data-coupon-store]').forEach(b=>b.addEventListener('click',()=>{couponStore=b.dataset.couponStore;document.querySelectorAll('[data-coupon-store]').forEach(x=>x.classList.toggle('on',x===b));renderCoupons();}));
-  document.querySelectorAll('[data-ml-coupon-tab]').forEach(b=>b.addEventListener('click',()=>{mlTab=b.dataset.mlCouponTab;renderCoupons();}));
+  document.querySelectorAll('[data-ml-coupon-tab]').forEach(b=>b.addEventListener('click',()=>{if(couponStore==='Mercado Livre')mlTab=b.dataset.mlCouponTab;else shopCouponTabs[couponStore]=b.dataset.mlCouponTab;renderCoupons();}));
   $('#ml-coupon-sort').addEventListener('change',e=>{mlOrder=e.target.value;renderCoupons();});
   $('#product-search').addEventListener('input',()=>{limit=16;renderOffers();});$('#load-more').addEventListener('click',()=>{limit+=16;renderOffers();});
   async function loadPages(){try{pageMap=await(await fetch('/site-page-map.json')).json();if(loaded)renderOffers();}catch{}}
   async function loadBlog(){try{const posts=await(await fetch('/blog-posts.json')).json();if(!Array.isArray(posts)||!posts.length)return;for(const selector of ['#home-blog','#blog-list']){const target=$(selector);if(!target)continue;target.replaceChildren();for(const p of posts){if(!/^\/blog\/[a-z0-9-]+\/$/.test(p.url))continue;const card=element('article','post'),body=element('div','b'),heading=element('h3'),a=element('a',null,p.title);a.href=p.url;heading.append(a);body.append(heading,element('p','t',p.description));card.append(body);target.append(card);}}}catch{}}
   window.addEventListener('hashchange',route);route();loadPages();loadBlog();loadFeed();setInterval(()=>{if(!document.hidden)loadFeed();},60000);
 })();
+
 
 
 
