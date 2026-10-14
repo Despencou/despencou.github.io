@@ -21,3 +21,23 @@ O servidor preserva os produtos em `site-data/offers/`, fora do limite do catál
 Para o blog, preencha `content/articles.json` com objetos contendo `slug`, `title`, `description`, `author`, `published_at` (ISO), `paragraphs` (lista de textos) e `published: true` somente após a revisão. Rascunhos e artigos futuros não são gerados nem entram no sitemap. Sem artigos publicados, `/blog/` usa noindex. Os artigos publicados são indexáveis e aparecem na aba Blog.
 
 Home e institucionais ficam indexáveis; `/teste/` mantém noindex e não entra no sitemap. O robots.txt permite a leitura da tag noindex. A indexação final depende do Google; envie `https://despencou.com/sitemap.xml` ao Search Console. LP `/entrar/`, Pixel e CAPI não foram alterados neste ajuste.
+
+
+## Excluir uma oferta manualmente
+
+No servidor, dentro de `/home/ubuntu/shopee-radar`, execute:
+
+```bash
+venv/bin/python manage_site_offer.py remove tg-14918
+```
+
+Troque `tg-14918` pelo identificador do link da oferta. O comando bloqueia a importação futura, retira o item do catálogo e da API imediatamente e guarda uma cópia para recuperação. Não exclui a mensagem do Telegram. As páginas estáticas e o sitemap são removidos na publicação automática seguinte (a cada 30 minutos, sujeito à fila do GitHub). Para antecipar, abra Actions → Publish permanent offers and sitemap → Run workflow.
+
+Para desfazer:
+
+```bash
+venv/bin/python manage_site_offer.py restore tg-14918
+```
+
+Páginas antigas em cache mostram indisponibilidade ao consultar a API após a remoção.
+

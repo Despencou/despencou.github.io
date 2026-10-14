@@ -15,6 +15,7 @@
   try{
     if(!staticPage){try{const map=await (await fetch('/site-page-map.json',{signal:controller.signal})).json();if(map[id]==='/oferta/'+id+'/'){location.replace(map[id]);return;}}catch{}}
     const response=await fetch(API+'/site-offers/'+encodeURIComponent(id),{signal:controller.signal});
+    if(response.status===404){document.title='Oferta indisponível | Despencou';const robots=document.querySelector('meta[name="robots"]');if(robots)robots.content='noindex,follow';unavailable('Esta oferta não está disponível no site. Confira as ofertas recentes.');return;}
     if(!response.ok)throw Error('feed');
     const item=await response.json();
     if(!item||item.id!==id||item.kind!=='offer'||!Number.isFinite(item.price)||item.price<=0||!DespencouCoupons.safeRetailer(item.url))throw Error('Invalid offer');
@@ -49,6 +50,7 @@
   }catch{if(!staticPage)unavailable('Não foi possível carregar esta oferta agora. Tente novamente em instantes.');}
   finally{clearTimeout(timer);}
 })();
+
 
 
 
