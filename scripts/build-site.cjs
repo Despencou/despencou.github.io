@@ -31,10 +31,10 @@ function shell(template,title,description,url,body,extra='',index=true){
 async function build(root,output,archive,feed,generatedOnly=false){
  if(!Array.isArray(archive.items)||!Array.isArray(feed.items))throw Error('Invalid feed; keep last deployment');
  await fs.mkdir(output,{recursive:true});
- if(!generatedOnly){await fs.cp(root,output,{recursive:true,filter:src=>{
-   const rel=path.relative(root,src);if(!rel)return true;
-   return !['.git','.github','scripts','content','_site'].includes(rel.split(path.sep)[0]);
- }});}
+ if(!generatedOnly){for(const name of await fs.readdir(root)){
+   if(['.git','.github','scripts','content','_site'].includes(name)||path.join(root,name)===output)continue;
+   await fs.cp(path.join(root,name),path.join(output,name),{recursive:true});
+ }}
  const template=await fs.readFile(path.join(root,'oferta/index.html'),'utf8');
  const links=['/','/sobre/','/faq/','/contato/','/privacidade/','/termos/'];
  const map={};

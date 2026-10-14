@@ -8,7 +8,7 @@ test('Permanent HTML preserves ended offers, safe coupons, and excludes draft bl
   await fs.writeFile(path.join(root,'content/articles.json'),JSON.stringify([{published:false,slug:'rascunho',title:'Draft',paragraphs:['Not ready']} ]));
   const ended={id:'tg-1',kind:'offer',title:'Produto <teste>',price:10,store:'Amazon',url:'https://amzn.to/a',description:'Use o cupom: VALEMAIS',published_at:'2020-01-01T00:00:00+00:00',image:'/site-images/tg-1.jpg'};
   const active={...ended,id:'tg-2',title:'Ativo'},bad={...ended,id:'tg-3',url:'https://amazon.com.br.evil.test/a'};
-  const result=await build(root,out,{items:[ended,active,bad]},{items:[active]},true);
+  const result=await build(root,out,{items:[ended,active,bad]},{items:[active]},false);
   const html=await fs.readFile(path.join(out,'oferta/tg-1/index.html'),'utf8');
   assert.match(html,/Oferta encerrada/);assert.match(html,/VALEMAIS/);assert.match(html,/Preço da publicação/);assert.match(html,/Produto &lt;teste&gt;/);assert.match(html,/content="index,follow"/);assert.match(html,/https:\/\/despencou.com\/oferta\/tg-1\//);assert.doesNotMatch(html,/@type":"Offer"|Condições da publicação/);
   assert.equal(result.map['tg-3'],undefined);
