@@ -51,16 +51,30 @@
   function couponCard(item) {
     const card=element('article','cp');
     const value=item.title.match(/\d+\s*%|R\$\s*[\d.,]+/);card.append(element('b',null,value?value[0]:'Cupom'));
-    const body=element('div');body.append(element('strong',null,item.store),element('p','coupon-title',item.title));
+    const body=element('div');body.append(element('strong',null,item.store),element('p','coupon-title',item.title.replace(/Seleção Vendedores/gi,'Produtos Selecionados')));
     const imported=item.source==='ml-coupon-page';
     if(imported){
       const terms=[];if(Number.isFinite(item.min_purchase)&&item.min_purchase>0)terms.push('Compra mínima: '+money(item.min_purchase));if(Number.isFinite(item.max_discount)&&item.max_discount>0)terms.push('Desconto máximo: '+money(item.max_discount));
       if(/^\d{4}-\d{2}-\d{2}$/.test(item.valid_until||''))terms.push('Válido até '+item.valid_until.split('-').reverse().join('/'));
       body.append(element('small',null,terms.join(' · ')),element('small',null,'Pode esgotar antes da validade. Confira as condições na loja.'));
-    }else body.append(element('small',null,'Publicado '+age(item.published_at)+' · Confira a validade na loja'));
+    }else body.append(element('small',null,'Publicado '+age(item.published_at)+' · 🔥 Acaba rápido'));
     const code=element('div','code');
-    if(item.code){code.append(element('span',null,item.code));const btn=element('button',null,'Copiar');btn.type='button';btn.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(item.code);btn.textContent='Copiado!';setTimeout(()=>btn.textContent='Copiar',2000);}catch{btn.textContent='Selecione o código';}});code.append(btn);}else code.append(element('span',null,imported?'Sem código · confira na loja':'Cupom no link'));
-    code.append(link('Pegar',item.store==='Mercado Livre'?ML.destination:item.url,''));body.append(code);card.append(body);return card;
+    const codeValue=element('span',null,item.code||(imported?'Sem código · confira na loja':'Cupom no link'));code.append(codeValue);
+    const action=element('button','coupon-combined',item.code?'Copiar e ir pra loja':'Ir pra loja');action.type='button';
+    const destination=item.store==='Mercado Livre'?ML.destination:item.url;
+    const status=element('small');status.setAttribute('role','status');let manualCopy=false;
+    action.addEventListener('click',async()=>{
+      action.disabled=true;
+      if(item.code&&!manualCopy){
+        try{await navigator.clipboard.writeText(item.code);}catch{
+          const field=element('textarea');field.value=item.code;field.readOnly=true;field.style.position='fixed';field.style.opacity='0';document.body.append(field);field.select();
+          let copied=false;try{copied=document.execCommand('copy');}catch{}finally{field.remove();}
+          if(!copied){manualCopy=true;codeValue.style.userSelect='all';status.textContent='Selecione e copie o código acima. Depois, clique para ir à loja.';action.textContent='Ir pra loja';action.disabled=false;return;}
+        }
+      }
+      window.location.assign(destination);
+    });
+    code.append(action);body.append(code,status);card.append(body);return card;
   }
   function renderCoupons() {
     const coupons=items.filter(i=>i.kind==='coupon'&&!ML.removed(i));
@@ -101,6 +115,7 @@
   async function loadBlog(){try{const posts=await(await fetch('/blog-posts.json')).json();if(!Array.isArray(posts)||!posts.length)return;for(const selector of ['#home-blog','#blog-list']){const target=$(selector);if(!target)continue;target.replaceChildren();for(const p of posts){if(!/^\/blog\/[a-z0-9-]+\/$/.test(p.url))continue;const card=element('article','post'),body=element('div','b'),heading=element('h3'),a=element('a',null,p.title);a.href=p.url;heading.append(a);body.append(heading,element('p','t',p.description));card.append(body);target.append(card);}}}catch{}}
   window.addEventListener('hashchange',route);route();loadPages();loadBlog();loadFeed();setInterval(()=>{if(!document.hidden)loadFeed();},60000);
 })();
+
 
 
 
