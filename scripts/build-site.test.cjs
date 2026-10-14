@@ -1,6 +1,7 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),os=require('node:os'),path=require('node:path');
 const {build,offerBody}=require('./build-site.cjs');
 require('./payment-parser.test.cjs');
+require('./ml-coupon-tabs.test.cjs');
 test('Static product HTML includes only payment terms present in the post',()=>{
  const item={title:'Produto',price:187.34,store:'Mercado Livre',url:'https://meli.la/a',published_at:'2026-10-14',description:'por 187,34 em 6x sem juros'};
  assert.match(offerBody(item),/Em 6x sem juros/);
@@ -33,4 +34,5 @@ test('Product-page instruction and Shopee redemption URL stay distinct from prod
  const instruction=offerBody({...item,store:'Amazon',url:'https://amzn.to/a',description:'🎟️Resgate o cupom na página do produto (próximo ao preço), desconto na finalização.'});
  assert.match(instruction,/próximo ao preço/);assert.doesNotMatch(instruction,/data-copy-coupon/);
 });
+
 
