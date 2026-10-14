@@ -1,194 +1,841 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><title>Despencou – Ofertas, cupons e dicas</title><meta name="description" content="Ofertas da Shopee, Mercado Livre e Amazon, cupons e dicas do Despencou."><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap"><style>
-:root{--bg:#f6f4ef;--card:#fff;--ink:#17120f;--mut:#6b625b;--line:#e6e1d8;--red:#e11d2e;--yel:#ffc928;--wa:#1faa59;--tg:#2a9fd8;--soft:#fff4cf;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15120f;--card:#201b17;--ink:#f5efe6;--mut:#a89e92;--line:#342e28;--soft:#3a3010}}
-:root[data-theme="dark"]{--bg:#15120f;--card:#201b17;--ink:#f5efe6;--mut:#a89e92;--line:#342e28;--soft:#3a3010}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 "DM Sans",system-ui,sans-serif}
-h1,h2,h3,.logo{font-family:"Baloo 2","DM Sans",system-ui,sans-serif;line-height:1.05;margin:0}
-.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 60px}
-.intro{margin-bottom:22px}.intro h1{font-size:30px}.intro p{color:var(--mut);max-width:62ch;margin:6px 0 0}
-.label{font-weight:700;margin:34px 0 10px;font-size:15px;color:var(--mut)}
-.frame{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.scroll{overflow-x:auto}
-.site{min-width:880px}
-/* header */
-.top{display:flex;align-items:center;gap:22px;padding:12px 22px;border-bottom:1px solid var(--line)}
-.logo{font-size:26px;font-weight:800;color:var(--red)}.logo i{font-style:normal;background:var(--yel);color:var(--ink);padding:0 6px;border-radius:6px;margin-left:2px}
-.nav{display:flex;gap:6px;flex:1}
-.nav a{padding:7px 14px;border-radius:99px;font-weight:700;color:var(--ink);text-decoration:none}
-.nav a.on{background:var(--ink);color:var(--bg)}
-.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:99px;font:700 15px "DM Sans",sans-serif;padding:10px 18px;cursor:pointer;text-decoration:none;color:#fff}
-.btn:focus-visible{outline:3px solid var(--yel);outline-offset:2px}
-.wa{background:var(--wa)}.tg{background:var(--tg)}.big{padding:14px 26px;font-size:17px}
-.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
-/* hero */
-.hero{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:center;padding:30px 34px;background:var(--soft)}
-.hero h2{font-size:44px;font-weight:800}
-.hero h2 span{position:relative;white-space:nowrap}
-.hero h2 svg{position:absolute;left:-10px;top:-8px;width:calc(100% + 20px);height:calc(100% + 16px);pointer-events:none}
-.hero p{margin:12px 0 18px;color:var(--mut);max-width:44ch}
-.cta{display:flex;gap:10px;flex-wrap:wrap}
-.proof{margin-top:10px;font-size:13px;color:var(--mut)}
-.mascot{justify-self:center;width:190px;height:190px;border-radius:50%;background:var(--yel);display:grid;place-items:center;font-size:84px;border:4px solid var(--ink);box-shadow:8px 8px 0 var(--red)}
-.stores{display:flex;gap:8px;padding:16px 22px 4px;flex-wrap:wrap;align-items:center}
-.chip{padding:6px 14px;border-radius:99px;border:1.5px solid var(--line);font-weight:700;font-size:14px;background:var(--card)}
-.chip.on{border-color:var(--ink);background:var(--ink);color:var(--bg)}
-.sort{display:flex;gap:18px;padding:8px 22px 0;border-bottom:1px solid var(--line);font-weight:700}
-.sort span{padding:8px 0;color:var(--mut)}.sort .on{color:var(--ink);border-bottom:3px solid var(--red)}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:18px 22px}
-.p{border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;background:var(--card)}
-.img{aspect-ratio:1;background:var(--bg);border-radius:8px;display:grid;place-items:center;font-size:44px;position:relative}
-.off{position:absolute;top:6px;left:6px;background:var(--red);color:#fff;font:800 13px "Baloo 2",sans-serif;padding:1px 8px;border-radius:99px}
-.st{position:absolute;bottom:6px;right:6px;font-size:11px;font-weight:700;background:var(--card);border:1px solid var(--line);padding:0 7px;border-radius:99px}
-.p h3{font:700 14px/1.3 "DM Sans",sans-serif}
-.old{font-size:12px;color:var(--mut);text-decoration:line-through}
-.pr{font:800 22px "Baloo 2",sans-serif;color:var(--red)}
-.p .btn{background:var(--ink);color:var(--bg);justify-content:center;padding:8px}
-.t{font-size:12px;color:var(--mut)}
-.feedcta{grid-column:span 2;background:var(--ink);color:var(--bg);border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:center;gap:10px}
-.feedcta h3{font-size:24px;color:var(--yel)}
-.sec{padding:8px 22px 22px}
-.sec h2{font-size:24px;margin:14px 0 10px;display:flex;justify-content:space-between;align-items:baseline}
-.sec h2 a{font:700 14px "DM Sans",sans-serif;color:var(--red)}
-.cps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.cp{display:flex;border:2px dashed var(--ink);border-radius:12px;background:var(--card);overflow:hidden}
-.cp b{background:var(--yel);color:#17120f;padding:12px;font:800 22px "Baloo 2",sans-serif;display:grid;place-items:center;min-width:76px;text-align:center;line-height:1}
-.cp div{padding:10px 12px;flex:1}.cp small{color:var(--mut);display:block}
-.code{display:flex;justify-content:space-between;align-items:center;margin-top:6px;background:var(--bg);border-radius:8px;padding:4px 4px 4px 10px;font-weight:700}
-.code em{font-style:normal;background:var(--ink);color:var(--bg);padding:3px 10px;border-radius:6px;font-size:12px}
-.blog{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.post{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
-.post .img{border-radius:0;aspect-ratio:16/9;font-size:34px}
-.post div.b{padding:10px 12px}.post h3{font:700 15px/1.3 "DM Sans",sans-serif}
-.foot{background:var(--ink);color:var(--bg);padding:18px 22px;font-size:12px;display:flex;justify-content:space-between;gap:20px}
-.foot span{opacity:.75;max-width:60ch}
-/* secondary frames */
-.row{display:grid;grid-template-columns:minmax(0,330px) minmax(0,1fr);gap:20px;align-items:start}
-.phone{width:100%;max-width:330px;border:8px solid var(--ink);border-radius:30px;overflow:hidden;background:var(--card);position:relative}
-.phone .top{padding:10px 12px}.phone .logo{font-size:21px}.phone .nav{display:none}
-.burger{margin-left:auto;font-size:22px}
-.phone .hero{grid-template-columns:1fr;padding:18px 14px;gap:10px}.phone .hero h2{font-size:27px}
-.phone .mascot{display:none}.phone .btn.big{width:100%;justify-content:center}
-.phone .stores{padding:10px 12px 0;flex-wrap:nowrap;overflow-x:auto}
-.phone .grid{grid-template-columns:1fr 1fr;padding:12px;gap:10px}
-.sticky{position:sticky;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:8px 10px;display:flex;gap:8px}
-.sticky .btn{flex:1;justify-content:center;padding:10px}
-.notes{display:grid;gap:12px}
-.notes .frame{padding:16px}.notes h3{font-size:19px;margin-bottom:6px}
-.notes ul{margin:0;padding-left:18px;color:var(--mut)}.notes li{margin:3px 0}
-.pg{padding:16px 18px}.pg h2{font-size:26px;margin-bottom:10px}
-.cps2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.feat{display:grid;grid-template-columns:1.3fr 1fr;gap:12px;margin-bottom:12px}
-.feat .img{aspect-ratio:16/9;font-size:56px;border-radius:12px}
-@media (max-width:760px){.row{grid-template-columns:1fr}.phone{margin:0 auto}.hero h2{font-size:34px}}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Despencou - Promoções Exclusivas</title>
+  <meta name="description" content="Receba as melhores promoções e cupons da Amazon, Shopee, Mercado Livre e mais, direto no WhatsApp e Telegram." />
+  <link rel="canonical" href="https://despencou.com/teste/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --laranja: #FF6B00;
+      --laranja-escuro: #E05A00;
+      --laranja-claro: #FF8C33;
+      --vermelho: #D93B00;
+      --fundo: #0F0F0F;
+      --fundo2: #1A1A1A;
+      --fundo3: #222222;
+      --texto: #FFFFFF;
+      --texto-muted: #AAAAAA;
+      --verde: #25D366;
+      --azul-tele: #229ED9;
+      --card-bg: #1E1E1E;
+      --borda: #333333;
+    }
 
-/* Site real responsivo a partir do esboço aprovado. */
-.site{min-width:0;max-width:1100px;margin:0 auto;background:var(--card);min-height:100vh}
-.top{flex-wrap:wrap;gap:12px}.logo{text-decoration:none}.nav{min-width:210px}.top>.btn{font-size:13px;padding:10px 14px}
-.mascot{width:250px;height:auto;max-width:100%;border:0;box-shadow:none;background:none;border-radius:0;object-fit:contain}
-.hero{grid-template-columns:1.5fr 1fr}.hero h2{font-size:42px}
-.chip{cursor:pointer;font-family:inherit;color:var(--ink)}.stores{gap:8px}
-.catalog-tools{padding:16px 22px 0;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-.search{display:flex;align-items:center;gap:8px;flex:1;min-width:220px;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:10px 16px}.search>span{font-size:23px;line-height:1}.search input{width:100%;background:none;color:var(--ink);border:0;outline:none;font:inherit}.search:focus-within{outline:2px solid var(--red)}
-.sort{padding:0;gap:18px}.sort button{font:700 14px 'DM Sans',sans-serif;background:none;border:0;color:var(--mut);padding:8px 0;cursor:pointer}.sort button.on{color:var(--ink);border-bottom:3px solid var(--red)}
-.feed-status{margin:10px 22px 0;color:var(--mut);font-size:13px}.img img{width:100%;height:100%;object-fit:contain;position:absolute;inset:0}.img .off,.img .st{z-index:1}.p h3{min-height:36px}.p .offer-link{margin-top:auto}.p .details{font:500 12px 'DM Sans';color:var(--mut);background:none;border:0;text-decoration:underline;cursor:pointer;align-self:flex-start;padding:0}.p .pr{min-height:33px}.p .old{min-height:18px;display:block}
-.empty{grid-column:1/-1;padding:25px 0;color:var(--mut)}.load-more{text-align:center;padding:0 20px 24px}.muted{color:var(--mut)}
-.cp{min-width:0}.cp>div{min-width:0}.cp strong{display:block}.cp .coupon-title{font-size:13px;margin:4px 0;line-height:1.4}.cp .code{gap:6px;flex-wrap:wrap;word-break:break-word}.code button,.code a{border:0;font:700 12px 'DM Sans';background:var(--ink);color:var(--bg);padding:5px 10px;border-radius:6px;cursor:pointer;text-decoration:none}.cp b{font-size:20px;min-width:74px;max-width:84px}.view-panel{padding:26px 22px 50px}.view-panel h1{font-size:32px}.view-panel .stores{padding:0 0 20px}.view-panel .blog{margin-top:24px}.post .img{position:relative}
-.sticky{display:none}dialog{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:18px;max-width:540px;width:calc(100% - 32px);max-height:85vh;padding:24px}dialog::backdrop{background:#0008}.dialog-close{float:right;cursor:pointer;background:none;border:0;font-size:24px;color:var(--ink)}dialog pre{white-space:pre-wrap;font:400 15px/1.6 'DM Sans';overflow-wrap:anywhere}
-[hidden]{display:none!important}
-@media(max-width:980px){.grid{grid-template-columns:repeat(3,1fr)}.cps{grid-template-columns:1fr}.top{gap:10px}.hero h2{font-size:36px}}
-@media(max-width:640px){.top{padding:12px 14px}.top>.btn{display:none}.nav{flex:0 0 100%;min-width:0;justify-content:center}.hero{grid-template-columns:1fr;padding:24px 18px;gap:16px}.hero h2{font-size:32px}.hero .mascot{width:145px;grid-row:1;justify-self:end;margin-bottom:-45px;opacity:.95}.hero>div{position:relative;z-index:1}.hero h2{max-width:90%}.hero .mascot+*{margin:0}.cta .big{width:100%;justify-content:center;font-size:15px}.hero .mascot{display:none}.stores{padding:14px 12px 0;flex-wrap:nowrap;overflow-x:auto}.chip{white-space:nowrap;font-size:12px;padding:7px 12px}.catalog-tools{padding:14px 12px 0;gap:8px}.search{flex-basis:100%}.feed-status{margin:10px 12px 0}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:14px 12px}.p h3{font-size:13px;min-height:50px}.p .pr{font-size:22px}.feedcta{padding:16px}.feedcta h3{font-size:22px}.sec{padding:8px 12px 24px}.sec h2{font-size:23px;gap:8px}.blog{grid-template-columns:1fr}.view-panel{padding:24px 14px 40px}.foot{flex-direction:column;padding-bottom:88px}.sticky{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:20;padding-bottom:max(8px,env(safe-area-inset-bottom));box-shadow:0 -3px 15px #0001}.sticky .btn{font-size:14px}.cps{grid-template-columns:1fr}}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-@media(max-width:640px){.hero .mascot{display:block;grid-row:auto;justify-self:center;width:160px;margin:0}.hero h2{max-width:100%}}
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--fundo);
+      color: var(--texto);
+      overflow-x: hidden;
+    }
 
-.top{background:#E50914;border-bottom:0}
-.top .header-brand{display:flex;align-items:center;flex-shrink:0;width:150px;height:60px;overflow:visible}
-.top .header-brand img{display:block;width:100%;height:100%;object-fit:contain;transform:scale(2)}
-.top .nav a{color:#fff}
-.top .nav a.on{background:#fff;color:#E50914}
-.top .nav a:focus-visible{outline:3px solid #FFCE00;outline-offset:2px}
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(160deg, #1a0a00 0%, #0F0F0F 50%, #1a0500 100%);
+      text-align: center;
+      padding: 60px 20px 50px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(255,107,0,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
 
-/* Fundo contínuo e banner destacado. */
-.site{background:var(--bg)}
-.top{position:relative;isolation:isolate}
-.top::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:#E50914;z-index:-1}
-.hero{margin:24px 22px 20px;border:1px solid var(--line);border-radius:22px;box-shadow:0 8px 24px rgba(23,18,15,.06)}
-.search{background:var(--card)}
-@media(max-width:640px){.hero{margin:18px 12px 16px;border-radius:18px}}
+    .hero .badge {
+      display: inline-block;
+      background: rgba(255,107,0,0.15);
+      border: 1px solid rgba(255,107,0,0.4);
+      color: var(--laranja-claro);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
 
-/* Rodapé institucional compartilhado. */
-.foot.institutional-footer{display:block;position:relative;isolation:isolate;background:#17120f;color:#eee2c8;padding:42px 22px 0;font-size:14px;line-height:1.6}
-.institutional-footer::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:#17120f;z-index:-1}
-.footer-columns{display:grid;grid-template-columns:1.65fr 1fr 1fr;gap:42px;padding-bottom:34px}
-.footer-brand{display:inline-block;font-family:'Baloo 2',sans-serif;font-size:29px;line-height:1.2;font-weight:800;text-transform:none;color:#ffc928;text-decoration:none;margin-bottom:12px}
-.footer-about p{margin:0;max-width:47ch;color:#cdbf9e}
-.institutional-footer nav h2{font:700 13px/1.4 'DM Sans',sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#ffc928;margin:4px 0 17px}
-.institutional-footer nav a{display:block;width:fit-content;color:#eee2c8;text-decoration:none;margin:0 0 9px}
-.institutional-footer a:hover{color:#fff;text-decoration:underline}
-.institutional-footer a:focus-visible{outline:2px solid #ffc928;outline-offset:4px;border-radius:2px}
-.footer-bottom{padding:19px 0 22px;border-top:1px solid #4a3d29;text-align:center;font-size:13px;color:#ae9b6c}
-.institutional-site{display:flex;flex-direction:column}
-.institution-page{flex:1;max-width:800px;width:100%;margin:0 auto;padding:38px 24px 54px}
-.breadcrumb{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;font-size:13px;color:var(--mut)}
-.breadcrumb a{color:var(--red);text-decoration:none}.breadcrumb a:hover{text-decoration:underline}
-.institution-page h1{font-size:clamp(30px,5vw,42px);margin-bottom:14px}
-.page-lead{font-size:18px;color:var(--mut);line-height:1.65;margin:0 0 28px}
-.page-meta{font-size:13px;color:var(--mut);margin:0 0 28px}
-.institution-page h2{font:800 24px/1.2 'Baloo 2',sans-serif;margin:30px 0 10px}
-.institution-page p,.institution-page li{line-height:1.75}
-.institution-page a{color:var(--red);text-underline-offset:3px}
-.institution-page .btn{color:#fff}.institution-page .cta{margin:24px 0}
-.institution-page details{border-bottom:1px solid var(--line);padding:18px 0}
-.institution-page summary{font-weight:700;font-size:17px;cursor:pointer;line-height:1.5}
-.institution-page details p{margin:12px 0 0;color:var(--mut)}
-.contact-links{display:flex;gap:10px;flex-wrap:wrap}
-@media(max-width:640px){.footer-columns{grid-template-columns:1fr 1fr;gap:28px 20px}.footer-about{grid-column:1/-1}.foot.institutional-footer{padding:32px 16px 0}.footer-bottom{padding-bottom:90px}.institution-page{padding:28px 18px 40px}}
+    .hero-logo {
+      width: 130px;
+      margin: 0 auto 28px;
+      display: block;
+      filter: drop-shadow(0 0 20px rgba(255,107,0,0.5));
+    }
 
-/* Cabeçalho centralizado e banner compacto no celular. */
-@media(max-width:640px){
-.top{justify-content:center}
-.top .header-brand{margin-inline:auto}
-.hero{grid-template-columns:minmax(0,1fr) 88px;padding:18px 16px;gap:10px 12px;margin-top:14px}
-.hero>div{display:contents}
-.hero h2{grid-column:1/-1;font-size:clamp(25px,6.7vw,28px);line-height:1.12}
-.hero p{grid-column:1/-1;font-size:14px;line-height:1.45;margin:0 0 2px;max-width:none}
-.hero .cta{grid-column:1;flex-direction:column;gap:8px}
-.hero .cta .big{width:100%;font-size:13px;line-height:1.3;padding:11px 12px;text-align:center}
-.hero .mascot{grid-column:2;grid-row:auto;align-self:center;justify-self:center;width:88px;margin:0}
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(38px, 8vw, 62px);
+      line-height: 1.05;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .hero h1 span { color: var(--laranja); }
+
+    .hero p.sub {
+      font-size: clamp(15px, 3.5vw, 18px);
+      color: #CCCCCC;
+      max-width: 520px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+
+    .hero-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .btn-wpp {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--verde);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      text-decoration: none;
+      padding: 16px 32px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 360px;
+      transition: transform .15s, box-shadow .15s;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.35);
+    }
+    .btn-wpp:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,0.45); }
+
+    .btn-tele {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--azul-tele);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      text-decoration: none;
+      padding: 16px 32px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 360px;
+      transition: transform .15s, box-shadow .15s;
+      box-shadow: 0 4px 20px rgba(34,158,217,0.35);
+    }
+    .btn-tele:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(34,158,217,0.45); }
+
+    .btn-icon { width: 22px; height: 22px; flex-shrink: 0; }
+    .btn-sub { font-size: 12px; font-weight: 700; opacity: 0.9; margin-top: 2px; }
+    .btn-text-group { text-align: left; }
+    .btn-label { font-size: 15px; font-weight: 800; }
+
+    .hero-tip {
+      font-size: 12px;
+      color: var(--texto-muted);
+      max-width: 340px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .hero-tip strong { color: var(--laranja); }
+
+    /* ── CARROSSEL ── */
+    .carousel-section {
+      background: #0a0a0a;
+      padding: 48px 0 44px;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .carousel-label {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--laranja);
+      margin-bottom: 28px;
+      padding: 0 20px;
+    }
+
+    .carousel-track-wrap {
+      width: 100%;
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+      touch-action: pan-y;
+    }
+    .carousel-track-wrap:active { cursor: grabbing; }
+
+    .carousel-track {
+      display: flex;
+      gap: 20px;
+      padding: 0;
+      width: max-content;
+      will-change: transform;
+    }
+
+    .carousel-slide {
+      flex: 0 0 clamp(280px, 84vw, 520px);
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      display: block;
+      border-radius: 8px;
+      pointer-events: none;
+      -webkit-user-drag: none;
+    }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 20px;
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #333;
+      transition: background 0.3s, transform 0.3s;
+      cursor: pointer;
+    }
+    .dot.active {
+      background: var(--laranja);
+      transform: scale(1.35);
+    }
+
+    /* ── STATS ── */
+    .stats {
+      background: var(--laranja);
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+    }
+    .stat-item {
+      flex: 1;
+      max-width: 180px;
+      text-align: center;
+      padding: 8px 12px;
+      border-right: 1px solid rgba(255,255,255,0.25);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 30px;
+      color: #fff;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.85);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    /* ── LOJAS ── */
+    .lojas {
+      background: var(--fundo2);
+      padding: 28px 20px;
+      text-align: center;
+      border-bottom: 1px solid var(--borda);
+    }
+    .lojas-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--texto-muted);
+      margin-bottom: 16px;
+    }
+    .lojas-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .loja-pill {
+      background: var(--fundo3);
+      border: 1px solid var(--borda);
+      border-radius: 100px;
+      padding: 7px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ddd;
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      padding: 60px 20px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .section-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--laranja);
+      border-bottom: 2px solid var(--laranja);
+      padding-bottom: 3px;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(30px, 6vw, 44px);
+      line-height: 1.1;
+      margin-bottom: 36px;
+    }
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+      padding: 28px 24px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--laranja), var(--laranja-claro));
+    }
+    .feature-card h3 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .feature-card h3 .icon {
+      width: 36px; height: 36px;
+      background: rgba(255,107,0,0.15);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .feature-card p { color: #BBBBBB; font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
+    .feature-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .feature-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 14px; color: #CCCCCC; line-height: 1.5;
+    }
+    .feature-list li::before {
+      content: '✓';
+      display: flex; align-items: center; justify-content: center;
+      width: 20px; height: 20px;
+      background: rgba(255,107,0,0.2);
+      color: var(--laranja);
+      border-radius: 50%;
+      font-size: 11px; font-weight: 900;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .btn-card-wpp {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--verde); color: #fff;
+      font-size: 14px; font-weight: 800;
+      text-decoration: none; padding: 12px 22px;
+      border-radius: 10px; transition: transform .15s;
+    }
+    .btn-card-wpp:hover { transform: translateY(-1px); }
+
+    /* ── DEPOS ── */
+    .depos { padding: 60px 20px; max-width: 680px; margin: 0 auto; }
+    .depo-card {
+      background: var(--card-bg);
+      border: 1px solid var(--borda);
+      border-radius: 16px; padding: 24px; margin-bottom: 16px; position: relative;
+    }
+    .depo-card::before {
+      content: '"'; position: absolute; top: 12px; right: 20px;
+      font-size: 60px; font-family: 'Bebas Neue', sans-serif;
+      color: rgba(255,107,0,0.12); line-height: 1;
+    }
+    .depo-text { font-size: 14px; color: #CCCCCC; line-height: 1.7; margin-bottom: 16px; }
+    .depo-author { display: flex; align-items: center; gap: 10px; }
+    .depo-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--laranja), var(--vermelho));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 14px; color: #fff; flex-shrink: 0;
+    }
+    .depo-name { font-weight: 800; font-size: 14px; }
+    .depo-role { font-size: 12px; color: var(--texto-muted); }
+
+    /* ── CTA FINAL ── */
+    .cta-final {
+      background: linear-gradient(160deg, #1a0800 0%, #0a0a0a 100%);
+      padding: 70px 20px;
+      text-align: center;
+      border-top: 1px solid var(--borda);
+      position: relative; overflow: hidden;
+    }
+    .cta-final::before {
+      content: ''; position: absolute;
+      bottom: -60px; left: 50%; transform: translateX(-50%);
+      width: 500px; height: 300px;
+      background: radial-gradient(ellipse, rgba(255,107,0,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-final .section-title { margin-bottom: 12px; }
+    .cta-final p { font-size: 15px; color: #BBBBBB; margin-bottom: 36px; }
+    .cta-btns { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #080808; padding: 24px 20px;
+      text-align: center; font-size: 12px;
+      color: var(--texto-muted); border-top: 1px solid var(--borda);
+    }
+
+    /* ── ANIMAÇÕES ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero > * { animation: fadeUp .6s ease both; }
+    .hero .badge         { animation-delay: .05s; }
+    .hero-logo            { animation-delay: .1s; }
+    .hero h1              { animation-delay: .2s; }
+    .hero p.sub           { animation-delay: .3s; }
+    .hero-btns            { animation-delay: .4s; }
+    .hero-tip             { animation-delay: .5s; }
+
+    @keyframes pulseWpp {
+      0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,0.35); transform: scale(1);    opacity: 1; }
+      50%       { box-shadow: 0 6px 36px rgba(37,211,102,0.70); transform: scale(1.04); opacity: 0.82; }
+    }
+    @keyframes pulseTele {
+      0%, 100% { box-shadow: 0 4px 20px rgba(34,158,217,0.35); transform: scale(1);    opacity: 1; }
+      50%       { box-shadow: 0 6px 36px rgba(34,158,217,0.70); transform: scale(1.04); opacity: 0.82; }
+    }
+    .btn-wpp  { animation: pulseWpp  0.9s ease-in-out infinite; }
+    .btn-tele { animation: pulseTele 0.9s ease-in-out infinite; animation-delay: .25s; }
+    .btn-wpp:hover  { animation: none; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,0.55); opacity: 1; }
+    .btn-tele:hover { animation: none; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(34,158,217,0.55); opacity: 1; }
+  </style>
+<meta name="robots" content="noindex,nofollow"></head>
+<body>
+
+<!-- META PIXEL + COLETOR COM DEDUPLICAÇÃO -->
+<script src="/whatsapp/abrir.js?v=app-20261013"></script>
+<script>
+
+
+const IS_PROD = /^(www\.)?despencou\.com$/.test(location.hostname);
+const MONITOR_API = "https://painel.despencou.com/coletar.php";
+let visitorIdMemoria = null;
+let leadEmAndamento = false;
+
+function criarId() {
+  if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+    return window.crypto.randomUUID();
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 3 | 8)).toString(16);
+  });
 }
-</style></head><body><div class="site">
-    <div class="top">
-      <a class="logo header-brand" href="#ofertas" aria-label="Despencou — ofertas"><img src="/logofundotransparente.png" alt="DESPENCOU" width="116" height="48"></a>
-      <div class="nav"><a class="on" href="#ofertas" data-tab="ofertas">Ofertas</a><a href="#cupons" data-tab="cupons">Cupons</a><a href="#blog" data-tab="blog">Blog</a></div>
-      <a class="btn wa" href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt" target="_blank" rel="noopener">Entrar no grupo do WhatsApp</a>
-      <a class="btn tg" href="https://t.me/despencou" target="_blank" rel="noopener">Telegram</a>
-    </div>
-<main id="home-view">    <div class="hero">
-      <div>
-        <h2>As <span>melhores</span> promoções da Shopee, Mercado Livre e Amazon</h2>
-        <p>Ofertas verificadas todos os dias, e as mais quentes chegam primeiro no grupo. Grupo 100% gratuito.</p>
-        <div class="cta"><a class="btn wa big" href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt" target="_blank" rel="noopener">Quero entrar no grupo do WhatsApp</a></div>
-      </div>
-      <img class="mascot" src="/mascote.png" alt="Mascote do Despencou" width="250" height="250">
-    </div>
-    <div class="stores" aria-label="Filtrar por loja"><button type="button" class="chip on" data-store="all">Todas</button><button type="button" class="chip" data-store="Shopee">Shopee</button><button type="button" class="chip" data-store="Mercado Livre">Mercado Livre</button><button type="button" class="chip" data-store="Amazon">Amazon</button></div>
-    <div class="catalog-tools"><label class="search"><span aria-hidden="true">⌕</span><input type="search" id="product-search" placeholder="Pesquisar produtos" aria-label="Pesquisar produtos"></label><div class="sort"><button type="button" data-sort="recent" class="on">Recentes</button><button type="button" data-sort="price">Menor preço</button></div></div><p id="feed-status" class="feed-status" role="status">Carregando ofertas do Telegram…</p>
-    <div class="grid" id="g1"></div><div class="load-more"><button class="btn ghost" id="load-more" type="button" hidden>Carregar mais ofertas</button></div>
-    <div class="sec"><h2>Cupons de hoje <a href="#cupons">Ver todos</a></h2>
-      <div class="cps" id="home-coupons"></div>
-    </div>
-    <div class="sec"><h2>Dicas do blog <a href="#blog">Ver blog</a></h2>
-      <div class="blog">
-        <div class="post"><div class="img">🎧</div><div class="b"><h3>Como escolher um fone bluetooth bom e barato</h3><div class="t">Em breve</div></div></div>
-        <div class="post"><div class="img">🍳</div><div class="b"><h3>Air fryer: o que olhar antes de comprar</h3><div class="t">Em breve</div></div></div>
-        <div class="post"><div class="img">📉</div><div class="b"><h3>Como saber se o desconto é real</h3><div class="t">Em breve</div></div></div>
-      </div>
-    </div>
-</main>
-<section id="coupon-view" class="view-panel" hidden><h1>Cupons disponíveis</h1><p class="muted">Cupons publicados recentemente no nosso Telegram. Confira as condições e a validade na loja.</p><div class="stores" id="coupon-filters"><button class="chip on" data-coupon-store="all">Todos</button><button class="chip" data-coupon-store="Shopee">Shopee</button><button class="chip" data-coupon-store="Mercado Livre">Mercado Livre</button><button class="chip" data-coupon-store="Amazon">Amazon</button></div><div class="cps" id="coupon-list"></div></section>
-<section id="blog-view" class="view-panel" hidden><h1>Dicas do blog</h1><p class="muted">Em breve, dicas para escolher produtos e aproveitar descontos.</p><div class="blog"><article class="post"><div class="img">🎧</div><div class="b"><h3>Como escolher um fone bluetooth bom e barato</h3><p class="t">Em breve</p></div></article><article class="post"><div class="img">🍳</div><div class="b"><h3>Air fryer: o que olhar antes de comprar</h3><p class="t">Em breve</p></div></article><article class="post"><div class="img">📉</div><div class="b"><h3>Como saber se o desconto é real</h3><p class="t">Em breve</p></div></article></div></section>
-    <footer class="foot institutional-footer"><div class="footer-columns"><div class="footer-about"><a class="footer-brand" href="/teste/">despencou.com</a><p>Ao comprar pelos links do site, podemos ganhar comissão de afiliado sem custo extra para você. Preços e estoque podem mudar a qualquer momento. Sem vínculo oficial com as lojas.</p></div><nav aria-label="Institucional"><h2>Institucional</h2><a href="/teste/sobre/">Sobre nós</a><a href="/teste/faq/">FAQ</a><a href="/teste/contato/">Contato</a><a href="/teste/privacidade/">Política de Privacidade</a><a href="/teste/termos/">Termos de Uso</a></nav><nav aria-label="Redes sociais"><h2>Redes sociais</h2><a href="https://www.instagram.com/despencou_promos/" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://x.com/despencoupromos" target="_blank" rel="noopener noreferrer">X (Twitter)</a><a href="https://www.tiktok.com/@despencoupromos" target="_blank" rel="noopener noreferrer">TikTok</a><a href="https://t.me/despencou" target="_blank" rel="noopener noreferrer">Telegram</a></nav></div><div class="footer-bottom">© 2026 despencou.com · Todos os direitos reservados.</div></footer>
-</div><div class="sticky"><a class="btn wa" href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt" target="_blank" rel="noopener">WhatsApp</a><a class="btn tg" href="https://t.me/despencou" target="_blank" rel="noopener">Telegram</a></div><script src="./coupon-parser.js"></script><script src="./app.js?v=sem-condicoes-20261014"></script></body></html>
 
+function obterOuCriarVisitorId() {
+  if (visitorIdMemoria) return visitorIdMemoria;
+  let id = null;
+  try { id = localStorage.getItem('dp_visitor_id'); } catch(e) {}
+  if (!id || !/^[a-f0-9-]{20,64}$/i.test(id)) {
+    id = criarId();
+    try { localStorage.setItem('dp_visitor_id', id); } catch(e) {}
+  }
+  visitorIdMemoria = id.toLowerCase();
+  return visitorIdMemoria;
+}
+
+function getCookie(nome) {
+  const cookie = document.cookie.split('; ').find(function(item) {
+    return item.startsWith(nome + '=');
+  });
+  if (!cookie) return '';
+  const valor = cookie.slice(nome.length + 1);
+  try { return decodeURIComponent(valor); } catch(e) { return valor; }
+}
+
+const paramsEntrada = new URLSearchParams(location.search);
+const fbclidEntrada = paramsEntrada.get('fbclid') || '';
+const fbcEntrada = fbclidEntrada ? 'fb.1.' + Date.now() + '.' + fbclidEntrada : '';
+
+function obterDadosPayload(nomeEvento) {
+  const ua = navigator.userAgent;
+  let device = 'Desktop';
+  if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+    device = 'Tablet';
+  } else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/i.test(ua)) {
+    device = 'Mobile';
+  }
+  return {
+    event: nomeEvento,
+    visitor: obterOuCriarVisitorId(),
+    device: device,
+    utm_source: paramsEntrada.get('utm_source') || '',
+    utm_campaign: paramsEntrada.get('utm_campaign') || '',
+    utm_medium: paramsEntrada.get('utm_medium') || '',
+    fbclid: fbclidEntrada,
+    gclid: paramsEntrada.get('gclid') || '',
+    referrer: document.referrer || '',
+    fbp: getCookie('_fbp'),
+    fbc: fbcEntrada || getCookie('_fbc'),
+    page_url: location.href.split('#')[0]
+  };
+}
+
+function enviarEventoPainel(nomeEvento, eventId) {
+  if (!IS_PROD) return Promise.resolve();
+  try {
+    const payload = obterDadosPayload(nomeEvento);
+    if (eventId) payload.event_id = eventId;
+    return fetch(MONITOR_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      keepalive: true
+    }).catch(function() {});
+  } catch(e) { return Promise.resolve(); }
+}
+
+if (IS_PROD) {
+  !function(f,b,e,v,n,t,s) {
+    if(f.fbq)return;
+    n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];
+    t=b.createElement(e);t.async=!0;t.src=v;
+    s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s);
+  }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2083004892284023', { external_id: obterOuCriarVisitorId() });
+  fbq('track', 'PageView');
+  enviarEventoPainel('view');
+}
+
+function enviarLead(event, url) {
+  event.preventDefault();
+  if (leadEmAndamento) return;
+  leadEmAndamento = true;
+
+  if (!IS_PROD) {
+    window.location.href = url;
+    return;
+  }
+
+  // Um único identificador para o Lead no Pixel e na CAPI.
+  const eventId = 'lead_' + criarId();
+  const envio = enviarEventoPainel('click', eventId);
+
+  try {
+    if (typeof fbq === 'function') {
+      fbq('track', 'Lead', { currency: 'BRL', value: 0.00 }, { eventID: eventId });
+    }
+  } catch(e) {}
+
+  // O coletor usa keepalive; mantém o mesmo event_id sem atrasar a abertura.
+  DespencouWhatsApp.abrir(url);
+}
+
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') leadEmAndamento = false;
+});
+
+window.addEventListener('pageshow', function() { leadEmAndamento = false; });
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2083004892284023&ev=PageView&noscript=1" /></noscript>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="badge">100% Grátis · Sem spam</div>
+
+  <img class="hero-logo" src="/logo.png" alt="Despencou" />
+
+  <h1>Entre no grupo e tenha as<br><span>melhores promoções</span><br>e cupons da internet</h1>
+
+  <p class="sub">
+    Buscamos ofertas apenas de sites confiáveis como Amazon, Shopee, Mercado Livre, Magalu e muito mais. Você não paga nada — é 100% grátis!
+  </p>
+
+  <div class="hero-btns">
+    <a onclick="enviarLead(event, 'https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt')" 
+       href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt" 
+       class="btn-wpp">
+      <svg class="btn-icon" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <div class="btn-text-group">
+        <div class="btn-label">Entrar no grupo do WhatsApp</div>
+        <div class="btn-sub">+50.000 pessoas economizando</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ══ CARROSSEL ══ -->
+<div class="carousel-section">
+  <div class="carousel-label">Olha o que chega no grupo todo dia 👇</div>
+
+  <div class="carousel-track-wrap" id="carouselWrap">
+    <div class="carousel-track" id="carouselTrack">
+      <div class="carousel-slide active"><img src="/oferta1.png" alt="Oferta 1" /></div>
+      <div class="carousel-slide"><img src="/oferta2.png" alt="Oferta 2" /></div>
+      <div class="carousel-slide"><img src="/oferta3.png" alt="Oferta 3" /></div>
+      <div class="carousel-slide"><img src="/oferta4.png" alt="Oferta 4" /></div>
+      <div class="carousel-slide"><img src="/oferta5.png" alt="Oferta 5" /></div>
+      <div class="carousel-slide"><img src="/oferta6.png" alt="Oferta 6" /></div>
+      <div class="carousel-slide"><img src="/oferta7.png" alt="Oferta 7" /></div>
+    </div>
+  </div>
+
+  <div class="carousel-dots" id="dotsWrap"></div>
+</div>
+
+<!-- ══ STATS ══ -->
+<div class="stats">
+  <div class="stat-item">
+    <div class="stat-num">+50K</div>
+    <div class="stat-label">Membros</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">Diário</div>
+    <div class="stat-label">Novas ofertas</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">Gratuito</div>
+  </div>
+</div>
+
+<!-- ══ LOJAS ══ -->
+<div class="lojas">
+  <div class="lojas-label">Conexões diretas com as principais lojas</div>
+  <div class="lojas-grid">
+    <span class="loja-pill">Amazon</span>
+    <span class="loja-pill">Mercado Livre</span>
+    <span class="loja-pill">Shopee</span>
+    <span class="loja-pill">Magalu</span>
+    <span class="loja-pill">Aliexpress</span>
+    <span class="loja-pill">Carrefour</span>
+    <span class="loja-pill">Netshoes</span>
+    <span class="loja-pill">Centauro</span>
+  </div>
+</div>
+
+<!-- ══ FEATURES ══ -->
+<section class="features">
+  <div class="section-tag">O que você encontra</div>
+  <h2 class="section-title">Olha o que você encontrará no Despencou!</h2>
+
+  <div class="feature-card">
+    <h3><span class="icon">🔥</span>Promoções</h3>
+    <p>Todos os dias novas promoções e ofertas de sites oficiais nos canais do WhatsApp e Telegram.</p>
+    <ul class="feature-list">
+      <li>Anúncios apenas de grandes marcas do varejo como Mercado Livre, Magalu, Shopee, Aliexpress, Carrefour e muito mais</li>
+      <li>Perfeito para economizar e aproveitar as melhores ofertas sem precisar ficar garimpando</li>
+      <li>Apenas lojas verificadas e confiáveis — sem golpes, sem risco</li>
+    </ul>
+    <a onclick="enviarLead(event, 'https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt')" 
+       href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt" 
+       class="btn-card-wpp">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Quero participar
+    </a>
+  </div>
+
+  <div class="feature-card">
+    <h3><span class="icon">🎟️</span>Cupons</h3>
+    <p>Sabe aquele cupom que você tanto procura? A gente encontra pra você e posta no grupo!</p>
+    <ul class="feature-list">
+      <li>Cupons diários que as plataformas oferecem em primeira mão para você comprar antes de expirar</li>
+      <li>Códigos exclusivos que você não encontra facilmente por aí — direto pra você</li>
+      <li>Sem encher o celular de mensagens — só o que realmente vale a pena</li>
+    </ul>
+    <a onclick="enviarLead(event, 'https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt')" 
+       href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt" 
+       class="btn-card-wpp">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Quero participar
+    </a>
+  </div>
+</section>
+
+<!-- ══ DEPOIMENTOS ══ -->
+<section class="depos">
+  <div class="section-tag">Quem já usa</div>
+  <h2 class="section-title">Opinião de quem<br>usa o Despencou</h2>
+
+  <div class="depo-card">
+    <p class="depo-text">"As promoções que vocês postam são muito boas. Comecei a seguir porque queria comprar uma TV nova e fui esperando o preço baixar — mas já comprei um tênis e um fone que estavam imperdíveis. Recomendo pra todo mundo!"</p>
+    <div class="depo-author">
+      <div class="depo-avatar">G</div>
+      <div>
+        <div class="depo-name">Gustavo S.</div>
+        <div class="depo-role">Usuário do grupo do Telegram</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="depo-card">
+    <p class="depo-text">"Já testei vários grupos de promoção e o Despencou é o que filtra melhor. Sem spam, sem produto duvidoso — só coisa boa. Minha esposa também entrou depois que viu quantas vezes economizamos."</p>
+    <div class="depo-author">
+      <div class="depo-avatar">R</div>
+      <div>
+        <div class="depo-name">Rafael M.</div>
+        <div class="depo-role">Usuário do grupo do WhatsApp</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA FINAL ══ -->
+<section class="cta-final">
+  <div class="section-tag">Pronto pra economizar?</div>
+  <h2 class="section-title">Agora é só entrar<br>no grupo! 🚀</h2>
+  <p>É gratuito, sem compromisso. Saia quando quiser.</p>
+  <div class="cta-btns">
+    <a onclick="enviarLead(event, 'https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt')" 
+       href="https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt" 
+       class="btn-wpp">
+      <svg class="btn-icon" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <div class="btn-text-group">
+        <div class="btn-label">Entrar no grupo do WhatsApp</div>
+        <div class="btn-sub">+50.000 pessoas economizando</div>
+      </div>
+    </a>
+    <a onclick="enviarLead(event, 'https://t.me/despencou')" 
+       href="https://t.me/despencou" 
+       class="btn-tele">
+      <svg class="btn-icon" viewBox="0 0 24 24" fill="#fff"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      <div class="btn-text-group">
+        <div class="btn-label">Entrar no Telegram</div>
+        <div class="btn-sub">Alertas em tempo real</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  © 2025 Despencou · Todos os direitos reservados<br>
+  <span style="color:#555">Este canal não possui vínculo oficial com as marcas mencionadas.</span>
+</footer>
+
+<script>
+  const wrap     = document.getElementById('carouselWrap');
+  const track    = document.getElementById('carouselTrack');
+  const slides   = Array.from(track.querySelectorAll('.carousel-slide'));
+  const dotsWrap = document.getElementById('dotsWrap');
+  const total    = slides.length;
+  let current    = 0;
+  let autoTimer  = null;
+  let isAnimating = false;
+
+  /* ─── Dots ─── */
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => { if (!isAnimating) { resetAuto(); goTo(i); } });
+    dotsWrap.appendChild(d);
+  });
+
+  function updateDots() {
+    dotsWrap.querySelectorAll('.dot').forEach((d, i) =>
+      d.classList.toggle('active', i === current));
+  }
+
+  function getTranslate(index) {
+    const slideW = slides[0].offsetWidth;
+    const gap    = 20;
+    const step   = slideW + gap;
+    const viewW  = wrap.offsetWidth;
+    const initialOffset = (viewW - slideW) / 2;
+    return initialOffset - index * step;
+  }
+
+  function applyTranslate(index, animate) {
+    track.style.transition = animate ? 'transform 0.45s cubic-bezier(0.25,0.8,0.25,1)' : 'none';
+    track.style.transform  = `translateX(${getTranslate(index)}px)`;
+  }
+
+  function goTo(index, animate = true) {
+    if (isAnimating && animate) return;
+    current     = ((index % total) + total) % total;
+    isAnimating = animate;
+    applyTranslate(current, animate);
+    updateDots();
+    if (animate) {
+      setTimeout(() => { isAnimating = false; }, 460);
+    }
+  }
+
+  function startAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(() => { if (!isAnimating) goTo(current + 1); }, 3500);
+  }
+  function resetAuto() { startAuto(); }
+
+  let isDragging = false;
+  let startX     = 0;
+  let dragDelta  = 0;
+  const THRESHOLD = 50;
+
+  function dragStart(x) {
+    if (isAnimating) return;
+    isDragging = true;
+    startX     = x;
+    dragDelta  = 0;
+    track.style.transition = 'none';
+    clearInterval(autoTimer);
+  }
+
+  function dragMove(x) {
+    if (!isDragging) return;
+    dragDelta = x - startX;
+    track.style.transform = `translateX(${getTranslate(current) + dragDelta}px)`;
+  }
+
+  function dragEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    if      (dragDelta < -THRESHOLD) goTo(current + 1);
+    else if (dragDelta >  THRESHOLD) goTo(current - 1);
+    else                             applyTranslate(current, true);
+    startAuto();
+  }
+
+  wrap.addEventListener('mousedown',  e => dragStart(e.clientX));
+  wrap.addEventListener('mousemove',  e => dragMove(e.clientX));
+  wrap.addEventListener('mouseup',    dragEnd);
+  wrap.addEventListener('mouseleave', dragEnd);
+
+  wrap.addEventListener('touchstart', e => dragStart(e.touches[0].clientX), { passive: true });
+  wrap.addEventListener('touchmove',  e => dragMove(e.touches[0].clientX),  { passive: true });
+  wrap.addEventListener('touchend',   dragEnd);
+
+  window.addEventListener('load', () => {
+    applyTranslate(0, false);
+    startAuto();
+  });
+  window.addEventListener('resize', () => applyTranslate(current, false));
+</script>
+
+</body>
+</html>
