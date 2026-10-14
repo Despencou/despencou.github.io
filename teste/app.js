@@ -15,12 +15,6 @@
     const minutes = Math.max(0, Math.floor((Date.now()-new Date(stamp))/60000));
     return minutes < 1 ? 'agora' : minutes < 60 ? `há ${minutes} min` : minutes < 1440 ? `há ${Math.floor(minutes/60)} h` : `há ${Math.floor(minutes/1440)} dia(s)`;
   }
-  function details(item) {
-    if(item.kind==='offer' && DespencouCoupons.parse(item).hasCoupon){location.href='/teste/oferta/?id='+encodeURIComponent(item.id);return;}
-    $('#deal-description').textContent=item.description;
-    $('#dialog-offer').href=item.url;
-    $('#deal-dialog').showModal();
-  }
   function offerCard(item) {
     const card=element('article','p');
     const photo=element('div','img');
@@ -32,7 +26,7 @@
     const prices=element('div');prices.append(element('span','old',item.old_price?money(item.old_price):''),element('div','pr',money(item.price)));card.append(prices);
     const coupon=DespencouCoupons.parse(item);
     if(coupon.hasCoupon){const a=element('a','btn offer-link','Ver oferta e cupom');a.href='/teste/oferta/?id='+encodeURIComponent(item.id);card.append(a);}else card.append(link('Ver oferta',item.url,'btn offer-link'));
-    const button=element('button','details','Detalhes e condições');button.type='button';button.addEventListener('click',()=>details(item));card.append(button,element('span','t',age(item.published_at)));
+    card.append(element('span','t',age(item.published_at)));
     return card;
   }
   function groupCard() {
@@ -55,7 +49,7 @@
     const body=element('div');body.append(element('strong',null,item.store),element('p','coupon-title',item.title),element('small',null,'Publicado '+age(item.published_at)+' · Confira a validade na loja'));
     const code=element('div','code');
     if(item.code){code.append(element('span',null,item.code));const btn=element('button',null,'Copiar');btn.type='button';btn.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(item.code);btn.textContent='Copiado!';setTimeout(()=>btn.textContent='Copiar',2000);}catch{btn.textContent='Selecione o código';}});code.append(btn);}else code.append(element('span',null,'Cupom no link'));
-    code.append(link('Pegar',item.url,''));body.append(code);const d=element('button','details','Condições');d.type='button';d.addEventListener('click',()=>details(item));body.append(d);card.append(body);return card;
+    code.append(link('Pegar',item.url,''));body.append(code);card.append(body);return card;
   }
   function renderCoupons() {
     const coupons=items.filter(i=>i.kind==='coupon');
@@ -84,7 +78,6 @@
   document.querySelectorAll('[data-sort]').forEach(b=>b.addEventListener('click',()=>{order=b.dataset.sort;document.querySelectorAll('[data-sort]').forEach(x=>x.classList.toggle('on',x===b));renderOffers();}));
   document.querySelectorAll('[data-coupon-store]').forEach(b=>b.addEventListener('click',()=>{couponStore=b.dataset.couponStore;document.querySelectorAll('[data-coupon-store]').forEach(x=>x.classList.toggle('on',x===b));renderCoupons();}));
   $('#product-search').addEventListener('input',()=>{limit=16;renderOffers();});$('#load-more').addEventListener('click',()=>{limit+=16;renderOffers();});
-  $('.dialog-close').addEventListener('click',()=>$('#deal-dialog').close());
   window.addEventListener('hashchange',route);route();loadFeed();setInterval(()=>{if(!document.hidden)loadFeed();},60000);
 })();
 

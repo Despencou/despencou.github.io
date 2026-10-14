@@ -38,7 +38,7 @@
     const prices=el('div','offer-detail-prices');if(item.old_price)prices.append(el('span','old',money(item.old_price)));prices.append(el('strong','offer-detail-price',money(item.price)));card.append(prices);
     card.append(el('p','offer-detail-store','Loja: '+item.store));
     card.append(el('p','muted','Preços, estoque e cupons podem mudar. Confira as condições na loja antes de comprar.'));
-    const conditions=el('section','offer-conditions');conditions.append(el('h2',null,'Condições da publicação'),el('p',null,item.description));card.append(conditions);root.replaceChildren(card);
+    root.replaceChildren(card);
   }catch{unavailable('Não foi possível carregar esta oferta agora. Tente novamente em instantes.');}
   finally{clearTimeout(timer);}
 })();
