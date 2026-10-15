@@ -10,7 +10,7 @@
     let codes=[], instructions=[], redeemUrl=null;
     for(let i=0;i<lines.length;i++){
       const line=lines[i];let lineHasCode=false;
-      const match=line.match(/(?:use|resgate|aplique)\s+(?:o\s+)?cupom\s*[:：]\s*(.*)$/i);
+      const match=line.match(/(?:(?:use|resgate|aplique)\s+(?:o\s+)?)?cupom\s*[:：]\s*(.*)$/i);
       if(match){
         const raw=match[1] || lines[i+1] || '';
         if(!/^https?:/i.test(raw)){
@@ -36,8 +36,14 @@
       productUrl:productUrls[0] || (safeRetailer(item.url)?item.url:null),
       hasCoupon:!!(codes.length||instructions.length||redeemUrl)};
   }
-  const api={parse,safeRetailer};
+  const normalizeCode=code=>String(code||'').trim().toUpperCase();
+  function matchesCoupon(item,code,store){
+    const target=normalizeCode(code);
+    return !!target&&item.kind==='offer'&&item.store===store&&parse(item).codes.some(c=>normalizeCode(c)===target);
+  }
+  const api={parse,safeRetailer,normalizeCode,matchesCoupon};
   if(typeof module!=='undefined' && module.exports)module.exports=api;
   else root.DespencouCoupons=api;
 })(typeof window!=='undefined'?window:globalThis);
+
 

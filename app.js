@@ -3,6 +3,12 @@
   const API = 'https://midia.despencou.com';
   const WPP = 'https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt';
   const ML=window.DespencouMLCoupons;
+  const params=new URLSearchParams(location.search);
+  const requestedCode=params.get('cupom')||'';
+  const couponCode=/^[A-Za-z0-9_-]{2,40}$/.test(requestedCode)?DespencouCoupons.normalizeCode(requestedCode):'';
+  const offerCouponStore=['Mercado Livre','Shopee','Amazon'].includes(params.get('loja'))?params.get('loja'):'';
+  const couponFilter=!!(couponCode&&offerCouponStore);
+  let archiveItems=[],archiveLoaded=false,archiveError=false;
   let mlTab='today',mlOrder='recent';
   const shopCouponTabs={Shopee:'today',Amazon:'today'};
   let pageMap={};
@@ -32,6 +38,7 @@
     const coupon=DespencouCoupons.parse(item);
     if(coupon.hasCoupon){const a=element('a','btn offer-link','Ver oferta e cupom');a.href=pageMap[item.id]==='/oferta/'+item.id+'/'?pageMap[item.id]:'/oferta/?id='+encodeURIComponent(item.id);card.append(a);}else card.append(link('Ver oferta',item.url,'btn offer-link'));
     if(!coupon.hasCoupon){const details=element('a','details','Detalhes do produto');details.href=pageMap[item.id]==='/oferta/'+item.id+'/'?pageMap[item.id]:'/oferta/?id='+encodeURIComponent(item.id);card.append(details);}
+    if(item.ended)card.append(element('strong','offer-ended-label','Oferta encerrada · preço da publicação'));
     card.append(element('span','t',age(item.published_at)));
     return card;
   }
@@ -41,13 +48,15 @@
   }
   function renderOffers() {
     const query=normalize($('#product-search').value);
-    const filtered=items.filter(i=>i.kind==='offer' && (store==='all'||i.store===store) && normalize(i.title+' '+i.description).includes(query));
+    const source=couponFilter?archiveItems:items;
+    const filtered=source.filter(i=>i.kind==='offer' && (!couponFilter||DespencouCoupons.matchesCoupon(i,couponCode,offerCouponStore)) && (store==='all'||i.store===store) && normalize(i.title+' '+i.description).includes(query));
     filtered.sort(order==='price' ? (a,b)=>a.price-b.price : (a,b)=>new Date(b.published_at)-new Date(a.published_at));
     const grid=$('#g1');grid.replaceChildren();
     filtered.slice(0,limit).forEach((i,n)=>{grid.append(offerCard(i));if(n===3)grid.append(groupCard());});
-    if(loaded&&!filtered.length)grid.append(element('p','empty','Nenhuma oferta encontrada. Experimente outra busca ou loja.'));
+    if((couponFilter?archiveLoaded:loaded)&&!filtered.length)grid.append(element('p','empty',couponFilter?'Nenhuma oferta publicada com esse cupom foi encontrada nesta busca.':'Nenhuma oferta encontrada. Experimente outra busca ou loja.'));
     $('#load-more').hidden=filtered.length<=limit;
-    if(loaded)$('#feed-status').textContent=`${filtered.length} oferta(s) recente(s) · Preços e estoque podem mudar; confirme na loja.`;
+    if(couponFilter)$('#feed-status').textContent=archiveLoaded?`${filtered.length} oferta(s) publicada(s) com esse cupom · Publicações antigas podem estar encerradas. Confira preço, estoque e validade na loja.`:archiveError?'Não foi possível consultar o histórico. Tente novamente em instantes.':'Buscando ofertas publicadas com esse cupom…';
+    else if(loaded)$('#feed-status').textContent=`${filtered.length} oferta(s) recente(s) · Preços e estoque podem mudar; confirme na loja.`;
   }
   function couponCard(item) {
     const card=element('article','cp');
@@ -75,7 +84,13 @@
       }
       window.location.assign(destination);
     });
-    code.append(action);body.append(code,status);card.append(body);return card;
+    code.append(action);body.append(code,status);
+    if(/^[A-Za-z0-9_-]{2,40}$/.test(item.code||'')){
+      const offers=element('a','coupon-offers-link','Ofertas publicadas com esse cupom');
+      offers.href='/?'+new URLSearchParams({cupom:DespencouCoupons.normalizeCode(item.code),loja:item.store})+'#ofertas';
+      body.append(offers);
+    }
+    card.append(body);return card;
   }
   function renderCoupons() {
     const coupons=items.filter(i=>i.kind==='coupon'&&!ML.removed(i));
@@ -105,7 +120,7 @@
       items=data.items.filter(i=>safeRetailer(i.url) && ['offer','coupon'].includes(i.kind) && typeof i.title==='string' && !isNaN(new Date(i.published_at)) && (i.kind==='coupon'||(Number.isFinite(i.price)&&i.price>0)));
       loaded=true;renderOffers();renderCoupons();
     }catch{
-      $('#feed-status').textContent=loaded?'Não foi possível atualizar agora. Mostrando as últimas ofertas carregadas.':'Não foi possível carregar as ofertas agora. Tente novamente em instantes ou entre no Telegram.';
+      if(!couponFilter)$('#feed-status').textContent=loaded?'Não foi possível atualizar agora. Mostrando as últimas ofertas carregadas.':'Não foi possível carregar as ofertas agora. Tente novamente em instantes ou entre no Telegram.';
     }finally{clearTimeout(timeout);}
   }
   function route() {
@@ -119,6 +134,24 @@
   document.querySelectorAll('[data-ml-coupon-tab]').forEach(b=>b.addEventListener('click',()=>{if(couponStore==='Mercado Livre')mlTab=b.dataset.mlCouponTab;else shopCouponTabs[couponStore]=b.dataset.mlCouponTab;renderCoupons();}));
   $('#ml-coupon-sort').addEventListener('change',e=>{mlOrder=e.target.value;renderCoupons();});
   $('#product-search').addEventListener('input',()=>{limit=16;renderOffers();});$('#load-more').addEventListener('click',()=>{limit+=16;renderOffers();});
+  async function loadCouponOffers(){
+    if(!couponFilter)return;
+    const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),15000);
+    try{
+      const response=await fetch(API+'/site-offers',{signal:controller.signal});
+      if(!response.ok)throw Error('Archive unavailable');
+      const data=await response.json();if(!Array.isArray(data.items))throw Error('Invalid archive');
+      archiveItems=data.items.filter(i=>/^tg-\d+$/.test(i.id||'')&&i.kind==='offer'&&typeof i.title==='string'&&safeRetailer(i.url)&&Number.isFinite(i.price)&&i.price>0&&!isNaN(new Date(i.published_at)));
+      archiveLoaded=true;archiveError=false;
+    }catch{archiveError=true;}finally{clearTimeout(timeout);renderOffers();}
+  }
+  if(couponFilter){
+    const notice=$('#offer-coupon-filter');notice.hidden=false;
+    notice.append(element('h2',null,'Ofertas publicadas com o cupom '+couponCode),element('p',null,'Loja: '+offerCouponStore));
+    const clear=element('a','btn ghost','Ver todas as ofertas');clear.href='/#ofertas';notice.append(clear);
+    document.title='Ofertas com o cupom '+couponCode+' | Despencou';
+    let robots=document.querySelector('meta[name="robots"]');if(!robots){robots=document.createElement('meta');robots.name='robots';document.head.append(robots);}robots.content='noindex,follow';
+  }
   async function loadPages(){try{pageMap=await(await fetch('/site-page-map.json')).json();if(loaded)renderOffers();}catch{}}
   async function loadBlog(){try{const posts=await(await fetch('/blog-posts.json')).json();if(!Array.isArray(posts)||!posts.length)return;for(const selector of ['#home-blog','#blog-list']){const target=$(selector);if(!target)continue;target.replaceChildren();for(const p of posts){if(!/^\/blog\/[a-z0-9-]+\/$/.test(p.url))continue;const card=element('article','post'),body=element('div','b'),heading=element('h3'),a=element('a',null,p.title);a.href=p.url;heading.append(a);body.append(heading,element('p','t',p.description));card.append(body);target.append(card);}}}catch{}}
   // Reapply the calendar filter even if a feed update fails or a background tab resumes.
@@ -127,8 +160,9 @@
   setInterval(refreshCouponDay,1000);
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshCouponDay();});
   window.addEventListener('focus',refreshCouponDay);
-  window.addEventListener('hashchange',route);route();loadPages();loadBlog();loadFeed();setInterval(()=>{if(!document.hidden)loadFeed();},60000);
+  window.addEventListener('hashchange',route);route();loadPages();loadBlog();loadFeed();loadCouponOffers();setInterval(()=>{if(!document.hidden){loadFeed();loadCouponOffers();}},60000);
 })();
+
 
 
 
