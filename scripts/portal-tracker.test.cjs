@@ -1,0 +1,12 @@
+const {test}=require('node:test');const assert=require('node:assert/strict');const vm=require('node:vm');const fs=require('node:fs');
+const source=fs.readFileSync(require('node:path').join(__dirname,'../portal-tracker.js'),'utf8');
+function run(options={}){
+ const events={},calls=[],storage=options.storage||new Map();let serial=0;
+ const ctx={location:{hostname:'despencou.com',pathname:'/',hash:'',search:'',...options.location},navigator:{userAgent:'Mobile Safari',...options.navigator},document:{readyState:'complete',visibilityState:'visible',referrer:'https://www.google.com.br/search?q=private',addEventListener:(k,f)=>events[k]=f},window:{addEventListener:(k,f)=>events[k]=f},crypto:{randomUUID:()=>String(++serial).padStart(32,'0')},localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},sessionStorage:{getItem:()=>null,setItem:()=>{}},URL,URLSearchParams,Uint8Array,fetch:(url,o)=>{calls.push(JSON.parse(o.body));return Promise.resolve();}};
+ vm.runInNewContext(source,ctx);return {ctx,calls,events,storage};
+}
+test('tracks portal tabs but not repeated visibility changes',()=>{const t=run();assert.equal(t.calls.length,1);t.events.visibilitychange();assert.equal(t.calls.length,1);t.ctx.location.hash='#cupons';t.events.hashchange();assert.equal(t.calls.length,2);assert.equal(t.calls[1].section,'cupons');assert.equal(t.calls[0].visitor,t.calls[1].visitor);assert.notEqual(t.calls[0].event_id,t.calls[1].event_id);});
+test('does not instrument landing pages, short redirects or bots',()=>{for(const pathname of ['/entrar/','/teste/','/whatsapp/','/oferta/'])assert.equal(run({location:{pathname}}).calls.length,0);assert.equal(run({navigator:{userAgent:'Googlebot'}}).calls.length,0);});
+test('respects browser privacy preferences',()=>{assert.equal(run({navigator:{doNotTrack:'1'}}).calls.length,0);assert.equal(run({navigator:{globalPrivacyControl:true}}).calls.length,0);});
+test('only hostname and allowed campaign fields leave browser',()=>{const t=run({location:{search:'?q=private&fbclid=private-id&utm_source=telegram'}});assert.equal(t.calls[0].referrer_host,'www.google.com.br');assert.equal(t.calls[0].fbclid,true);assert.equal(t.calls[0].utm_source,'telegram');assert.equal(JSON.stringify(t.calls).includes('private'),false);});
+test('visits to permanent products are recorded',()=>{const t=run({location:{pathname:'/oferta/tg-14840/'}});assert.equal(t.calls[0].path,'/oferta/tg-14840/');});
