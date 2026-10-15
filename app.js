@@ -1,7 +1,7 @@
 'use strict';
 (() => {
   const API = 'https://midia.despencou.com';
-  const WPP = 'https://chat.whatsapp.com/Fuf1CMjvycwK7P695VPTof?mode=wwt';
+  const WPP = 'https://entrar.despencou.com/zaphome';
   const ML=window.DespencouMLCoupons;
   const params=new URLSearchParams(location.search);
   const requestedCode=params.get('cupom')||'';
@@ -162,6 +162,7 @@
   window.addEventListener('focus',refreshCouponDay);
   window.addEventListener('hashchange',route);route();loadPages();loadBlog();loadFeed();loadCouponOffers();setInterval(()=>{if(!document.hidden){loadFeed();loadCouponOffers();}},60000);
 })();
+
 
 
 
