@@ -3,6 +3,7 @@
 const fs=require('node:fs/promises'),path=require('node:path');
 const coupons=require('../coupon-parser.js');
 const payments=require('../payment-parser.js');
+const blog=require('./blog-render.cjs');
 const BASE='https://despencou.com',API='https://midia.despencou.com';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(n);
@@ -55,9 +56,12 @@ async function build(root,output,archive,feed,generatedOnly=false){
  const published=posts.filter(p=>p.published===true&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(p.slug||'')&&p.title&&p.description&&p.author&&!isNaN(new Date(p.published_at))&&new Date(p.published_at)<=new Date()&&Array.isArray(p.paragraphs)&&p.paragraphs.length&&p.paragraphs.every(s=>typeof s==='string'&&s.trim()));
  const blogLinks=[];
  for(const p of published){const url='/blog/'+p.slug+'/';links.push(url);blogLinks.push({title:p.title,description:p.description,url});
-  const body=`<article class="institution-page"><h1>${esc(p.title)}</h1><p class="page-meta">Por ${esc(p.author)} · ${date(p.published_at)}</p>${p.paragraphs.map(s=>`<p>${esc(s)}</p>`).join('')}<a href="/blog/">Voltar ao blog</a></article>`;
-  const schema={'@context':'https://schema.org','@type':'BlogPosting',headline:p.title,description:p.description,datePublished:p.published_at,author:{'@type':'Person',name:p.author},mainEntityOfPage:BASE+url};
-  await write('blog/'+p.slug+'/index.html',shell(template,p.title,p.description,url,body,`<script type="application/ld+json">${jsonScript(schema)}</script>`).replace(/<script src="\/oferta.js[^>]*><\/script>/,'').replace('<span>Detalhes da oferta</span>','<a href="/blog/">Blog</a>'));
+  const body=blog.articleBody(p,date(p.published_at));
+  const schema={'@context':'https://schema.org','@type':'BlogPosting',headline:p.title,description:p.description,datePublished:p.published_at,author:{'@type':p.author_type==='Organization'?'Organization':'Person',name:p.author},publisher:{'@type':'Organization',name:'Despencou',url:BASE},mainEntityOfPage:BASE+url};
+  let html=shell(template,p.title,p.description,url,body,`<link rel="stylesheet" href="/blog.css?v=20261016"><script type="application/ld+json">${jsonScript(schema)}</script>`).replace(/<script src="\/(?:oferta|coupon-parser|payment-parser).js[^>]*><\/script>/g,'').replace('<span>Detalhes da oferta</span>','<a href="/blog/">Blog</a>').replace('class="offer-detail-page"','class="offer-detail-page blog-page"');
+  const group=blog.groupLinks(p);
+  if(group){html=html.replaceAll('href="https://entrar.despencou.com/zaphome"',()=>`href="${blog.link(group.whatsapp)}"`).replaceAll('href="https://t.me/despencou"',()=>`href="${blog.link(group.telegram)}"`);}
+  await write('blog/'+p.slug+'/index.html',html);
  }
  const blogBody=`<section class="institution-page"><h1>Dicas do blog</h1>${published.length?blogLinks.map(p=>`<article><h2><a href="${p.url}">${esc(p.title)}</a></h2><p>${esc(p.description)}</p></article>`).join(''):'<p>Em breve, dicas para escolher produtos e aproveitar descontos. Os artigos aparecerão aqui quando estiverem prontos.</p>'}</section>`;
  await write('blog/index.html',shell(template,'Dicas do blog','Dicas e guias de produtos do Despencou.','/blog/',blogBody,'',!!published.length).replace(/<script src="\/oferta.js[^>]*><\/script>/,'').replace('<span>Detalhes da oferta</span>','<span>Blog</span>'));
@@ -71,4 +75,5 @@ async function build(root,output,archive,feed,generatedOnly=false){
 }
 module.exports={build,offerBody};
 if(require.main===module)(async()=>{const root=path.resolve(__dirname,'..'),out=path.resolve(arg('--output',path.join(root,'_site')));await build(root,out,await source(arg('--archive',null),API+'/site-offers'),await source(arg('--feed',null),API+'/site-feed'),process.argv.includes('--generated-only'));})().catch(e=>{console.error(e.message);process.exit(1);});
+
 

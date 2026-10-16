@@ -2,6 +2,38 @@ const {test}=require('node:test'),assert=require('node:assert/strict'),fs=requir
 const {build,offerBody}=require('./build-site.cjs');
 require('./payment-parser.test.cjs');
 require('./ml-coupon-tabs.test.cjs');
+const blog=require('./blog-render.cjs');
+test('Blog renderer keeps editorial text escaped and rejects unsafe link protocols',()=>{
+ const post={title:'Guia <teste>',author:'Equipe',paragraphs:['<script>alert(1)</script>'],blocks:[{type:'section',title:'Resumo',source:{label:'Fonte',url:'javascript:alert(1)'}}]};
+ assert.throws(()=>blog.articleBody(post,'16/10/2026'),/HTTPS/);
+ for(const url of ['https://user:pass@example.com','https://example.com/\nfoo','data:text/html,x'])assert.throws(()=>blog.link(url));
+ post.blocks=[];
+ const html=blog.articleBody(post,'16/10/2026');assert.match(html,/&lt;script&gt;/);assert.doesNotMatch(html,/<script>/);
+});
+test('Creatine article publishes five products, all exact affiliate URLs and article-specific group links',async()=>{
+ const root=await fs.mkdtemp(path.join(os.tmpdir(),'despencou-blog-')),out=path.join(root,'output');
+ try{
+  await fs.mkdir(path.join(root,'oferta'));await fs.mkdir(path.join(root,'content'));
+  await fs.copyFile(path.join(__dirname,'../oferta/index.html'),path.join(root,'oferta/index.html'));
+  const articles=JSON.parse(await fs.readFile(path.join(__dirname,'../content/articles.json'),'utf8'));
+  const post=articles.find(p=>p.slug==='melhores-creatinas-2026');assert.ok(post);
+  await fs.writeFile(path.join(root,'content/articles.json'),JSON.stringify([post]));
+  await build(root,out,{items:[]},{items:[]},true);
+  const url='/blog/melhores-creatinas-2026/',html=await fs.readFile(path.join(out,url,'index.html'),'utf8');
+  const products=post.blocks.find(b=>b.type==='products').items;
+  assert.equal(products.length,5);assert.equal((html.match(/class="blog-product"/g)||[]).length,5);
+  assert.equal(products.flatMap(p=>p.links).length,14);
+  for(const p of products){assert.ok(html.includes(p.price_range));for(const l of p.links)assert.ok(html.includes('href="'+l.url+'" target="_blank" rel="sponsored noopener noreferrer"'));}
+  assert.match(html,/content="index,follow"/);assert.match(html,/BlogPosting/);assert.match(html,/"@type":"Organization","name":"Equipe Despencou"/);
+  assert.match(html,/href="\/blog.css\?v=20261016"/);assert.doesNotMatch(html,/src="\/(oferta|coupon-parser|payment-parser).js/);
+  assert.doesNotMatch(html,/zaphome|https:\/\/t.me\/despencou"|Carregando oferta/);
+  assert.equal((html.match(/href="https:\/\/entrar.despencou.com\/blogcreatina"/g)||[]).length,3);
+  assert.equal((html.match(/href="https:\/\/t.me\/\+YdlsNvv9AbBjZTgx"/g)||[]).length,4);
+  assert.match(html,/portal-tracker.js/);assert.ok(html.includes('https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-Consumer/'));
+  assert.ok((await fs.readFile(path.join(out,'sitemap.xml'),'utf8')).includes('https://despencou.com'+url));
+  assert.ok((await fs.readFile(path.join(out,'blog-posts.json'),'utf8')).includes(url));
+ }finally{await fs.rm(root,{recursive:true,force:true});}
+});
 test('Static product HTML includes only payment terms present in the post',()=>{
  const item={title:'Produto',price:187.34,store:'Mercado Livre',url:'https://meli.la/a',published_at:'2026-10-14',description:'por 187,34 em 6x sem juros'};
  assert.match(offerBody(item),/Em 6x sem juros/);
@@ -34,5 +66,6 @@ test('Product-page instruction and Shopee redemption URL stay distinct from prod
  const instruction=offerBody({...item,store:'Amazon',url:'https://amzn.to/a',description:'🎟️Resgate o cupom na página do produto (próximo ao preço), desconto na finalização.'});
  assert.match(instruction,/próximo ao preço/);assert.doesNotMatch(instruction,/data-copy-coupon/);
 });
+
 
 

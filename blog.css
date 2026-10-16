@@ -1,0 +1,54 @@
+.blog-page{max-width:860px;padding:28px 24px 54px}
+.blog-article{font-size:16px;line-height:1.7;overflow-wrap:anywhere}
+.blog-hero{border-bottom:1px solid var(--line);padding:4px 0 25px}
+.blog-kicker{font:700 12px/1.4 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin:0 0 12px}
+.blog-hero h1{font-size:clamp(36px,6vw,54px);line-height:1.04;letter-spacing:-.02em;max-width:18ch;margin:0 0 14px}
+.blog-hero .page-meta{margin:0 0 18px}
+.blog-lead{font-size:18px;color:var(--mut);line-height:1.65;margin:0}
+.blog-section{margin:30px 0}
+.blog-section h2,.blog-group h2{font-size:clamp(26px,4.5vw,32px);line-height:1.15;margin:0 0 12px}
+.blog-section p{margin:10px 0}
+.blog-section ul{padding-left:22px;margin:12px 0}
+.blog-section li{margin:7px 0}
+.blog-article a:not(.btn){color:var(--red);text-underline-offset:3px}
+.blog-source,.blog-disclosure{font-size:13px;color:var(--mut)}
+.blog-price-note{color:var(--mut);font-size:14px;line-height:1.6}
+.blog-products{display:grid;gap:18px;margin-top:20px}
+.blog-product{display:grid;grid-template-columns:42px minmax(0,1fr);gap:14px;padding:24px;background:var(--card);border:1px solid var(--line);border-radius:20px}
+.blog-number{display:grid;place-items:center;width:42px;height:42px;background:#ffc928;color:#17120f;border-radius:12px;font:800 26px/1 'Baloo 2',sans-serif}
+.blog-product h3{font-size:25px;line-height:1.15;margin:3px 0 10px}
+.blog-product p{font-size:15px;line-height:1.65;margin:8px 0;color:var(--mut)}
+.blog-product .blog-price{display:flex;flex-direction:column;margin:16px 0 14px;gap:2px}
+.blog-price span{font-size:12px}
+.blog-price strong{color:var(--ink);font:800 29px/1.2 'Baloo 2',sans-serif}
+.blog-store-links{display:flex;flex-wrap:wrap;gap:8px}
+.blog-shop{background:var(--ink);color:var(--bg);font-size:13px;justify-content:center;line-height:1.4;padding:11px 14px;min-height:44px}
+.blog-shop:hover{background:var(--red);color:#fff}
+.blog-group{background:#fff3c9;color:#241b10;border:1px solid #ebd585;border-radius:20px;padding:28px;margin:32px 0}
+.blog-group .blog-kicker{color:#a62713}
+.blog-group p{margin:12px 0 18px}
+.blog-group .cta{margin:20px 0 12px}
+.blog-group .btn{justify-content:center;text-align:center}
+.blog-group .wa{background:#137d3c;color:#fff}
+.blog-group .tg{background:#07709f;color:#fff}
+.blog-group small{display:block;font-size:12px;color:#655121;line-height:1.6}
+.blog-disclosure{border-top:1px solid var(--line);padding-top:18px;margin-top:28px}
+.blog-back{display:inline-flex;align-items:center;min-height:44px;font-size:14px;font-weight:700}
+.blog-page .breadcrumb{margin-bottom:22px}
+.top .header-brand{position:relative;z-index:0}
+.top .header-brand img,.top::before{pointer-events:none}
+.top .nav{position:relative;z-index:1}
+@media(max-width:640px){
+ .blog-page{padding:22px 16px 38px}
+ .blog-hero h1{font-size:38px}
+ .blog-lead{font-size:16px}
+ .blog-product{padding:18px 16px;grid-template-columns:32px minmax(0,1fr);gap:10px;border-radius:16px}
+ .blog-number{width:32px;height:32px;font-size:22px;border-radius:10px}
+ .blog-product h3{font-size:23px;margin-top:2px}
+ .blog-store-links{flex-direction:column}
+ .blog-shop{width:100%;font-size:14px}
+ .blog-group{padding:23px 20px}
+ .blog-group .cta{flex-direction:column}
+ .blog-group .btn{width:100%;font-size:15px}
+ .top .nav a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:72px;touch-action:manipulation}
+}
