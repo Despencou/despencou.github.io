@@ -25,7 +25,7 @@ test('Creatine article publishes five products, all exact affiliate URLs and art
   assert.equal(products.flatMap(p=>p.links).length,14);
   for(const p of products){assert.ok(html.includes(p.price_range));for(const l of p.links)assert.ok(html.includes('href="'+l.url+'" target="_blank" rel="sponsored noopener noreferrer"'));}
   assert.match(html,/content="index,follow"/);assert.match(html,/BlogPosting/);assert.match(html,/"@type":"Organization","name":"Equipe Despencou"/);
-  assert.match(html,/href="\/blog.css\?v=20261016"/);assert.doesNotMatch(html,/src="\/(oferta|coupon-parser|payment-parser).js/);
+  assert.match(html,/href="\/blog.css\?v=20261016b"/);assert.doesNotMatch(html,/src="\/(oferta|coupon-parser|payment-parser).js/);
   assert.doesNotMatch(html,/zaphome|https:\/\/t.me\/despencou"|Carregando oferta/);
   assert.equal((html.match(/href="https:\/\/entrar.despencou.com\/blogcreatina"/g)||[]).length,3);
   assert.equal((html.match(/href="https:\/\/t.me\/\+YdlsNvv9AbBjZTgx"/g)||[]).length,4);

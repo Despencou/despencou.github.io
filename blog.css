@@ -1,4 +1,4 @@
-body{overflow-x:clip}
+html,body{overflow-x:hidden}
 .blog-page{max-width:860px;padding:28px 24px 54px}
 .blog-article{font-size:16px;line-height:1.7;overflow-wrap:anywhere}
 .blog-hero{border-bottom:1px solid var(--line);padding:4px 0 25px}
