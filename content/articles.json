@@ -9,41 +9,29 @@
     "published": true,
     "published_at": "2026-10-16T12:50:00-03:00",
     "paragraphs": [
-      "Quer comprar creatina e aproveitar um bom desconto? Separamos cinco opções para comparar em 2026, com embalagens de 250 g a 1 kg e links nas principais lojas."
+      "A creatina pode ajudar na força e no desempenho em exercícios curtos e intensos; confira cinco opções para comparar preços e economizar."
     ],
     "blocks": [
       {
-        "type": "section",
-        "title": "Para que serve a creatina?",
-        "paragraphs": [
-          "A creatina ajuda os músculos a fornecer energia em esforços curtos e intensos. A suplementação pode melhorar força, potência e desempenho em séries repetidas, como na musculação. A resposta varia de pessoa para pessoa, e a creatina monohidratada é a forma mais estudada.",
-          "Ela complementa a rotina de treino e alimentação. Para avaliar se faz sentido para você, converse com um nutricionista ou médico, especialmente se tiver alguma condição de saúde ou usar medicamentos."
-        ],
-        "source": {
-          "label": "NIH — creatina e desempenho físico (em inglês)",
-          "url": "https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-Consumer/"
-        }
-      },
-      {
         "type": "products",
-        "title": "5 creatinas para colocar na sua lista",
-        "note": "As faixas abaixo são referências para procurar uma boa oferta, sem garantia de preço atual. Cupons, frete, vendedor e forma de pagamento podem alterar o total. Confira o peso e a composição da versão selecionada no anúncio. A ordem da lista não representa um teste de qualidade entre as marcas.",
+        "title": "As melhores opções para comparar",
+        "note": "Preços de referência: o valor final pode variar com frete e cupons.",
         "items": [
           {
             "name": "Creatina 100% Pura 250 g Growth",
             "price_range": "R$ 35 a R$ 60",
-            "description": "A monohidratada tradicional da Growth vem no pote de 250 g com rótulo verde. Sua composição traz creatina monohidratada, sem outros tipos de creatina na fórmula. É a opção em pó sem sabor da marca, com uma embalagem menor que os refis de 1 kg desta lista.",
+            "description": "Monohidratada sem sabor em pote de 250 g, a versão tradicional da Growth traz creatina como único ingrediente.",
             "links": [
               {
-                "label": "Ver no Mercado Livre",
+                "label": "Mercado Livre",
                 "url": "https://meli.la/1vRe4ab"
               },
               {
-                "label": "Ver na Shopee",
+                "label": "Shopee",
                 "url": "https://s.shopee.com.br/4fwtS9SnRt"
               },
               {
-                "label": "Ver na Amazon",
+                "label": "Amazon",
                 "url": "https://link.amazon/B0b5VV0HR"
               }
             ],
@@ -56,14 +44,14 @@
           {
             "name": "Creatina Dux Nutrition 300 g",
             "price_range": "R$ 40 a R$ 90",
-            "description": "A DUX de 300 g é feita com creatina monohidratada como único ingrediente, sem adição de outros componentes à fórmula. A linha tradicional se diferencia das opções Creapure e Crealive da própria DUX pela origem e pelo processamento da matéria-prima. O pote sem sabor apresenta 60 porções de 5 g, conforme a embalagem.",
+            "description": "A monohidratada tradicional da DUX tem fórmula com ingrediente único e pote de 300 g com 60 porções declaradas.",
             "links": [
               {
-                "label": "Ver na Amazon",
+                "label": "Amazon",
                 "url": "https://link.amazon/B003Q9kmf"
               },
               {
-                "label": "Ver no Mercado Livre",
+                "label": "Mercado Livre",
                 "url": "https://meli.la/2vGPFUL"
               }
             ],
@@ -76,18 +64,18 @@
           {
             "name": "Creatina 100% Pura Dark Lab 1 kg",
             "price_range": "R$ 55 a R$ 80",
-            "description": "A Dark Lab de 1 kg vem em embalagem refil e tem creatina monohidratada como único ingrediente. Segundo o fabricante, não contém glúten. O destaque desta apresentação é reunir uma quantidade maior do suplemento em um único pacote, para quem prefere comprar o refil em vez de potes menores.",
+            "description": "Com creatina monohidratada como único ingrediente, a Dark Lab reúne 1 kg de suplemento em embalagem refil.",
             "links": [
               {
-                "label": "Ver no Mercado Livre",
+                "label": "Mercado Livre",
                 "url": "https://meli.la/1d8LtVy"
               },
               {
-                "label": "Ver na Amazon",
+                "label": "Amazon",
                 "url": "https://link.amazon/B05qyk9k6"
               },
               {
-                "label": "Ver na Shopee",
+                "label": "Shopee",
                 "url": "https://s.shopee.com.br/W7TQgX4ZF"
               }
             ],
@@ -100,18 +88,18 @@
           {
             "name": "Creatina Max Titanium 300 g",
             "price_range": "R$ 30 a R$ 75",
-            "description": "A Max Titanium de 300 g é a creatina monohidratada tradicional da marca em pote. Sua lista de ingredientes inclui creatina monohidratada e o antiumectante dióxido de silício. Segundo o fabricante, o produto não contém glúten; essa apresentação é diferente das opções saborizadas e da linha Creapure da Max.",
+            "description": "A versão tradicional da Max Titanium vem em pote de 300 g e combina creatina monohidratada com antiumectante dióxido de silício.",
             "links": [
               {
-                "label": "Ver na Shopee",
+                "label": "Shopee",
                 "url": "https://s.shopee.com.br/20wHDei2UG"
               },
               {
-                "label": "Ver na Amazon",
+                "label": "Amazon",
                 "url": "https://link.amazon/B09QMn9fv"
               },
               {
-                "label": "Ver no Mercado Livre",
+                "label": "Mercado Livre",
                 "url": "https://meli.la/1Hz95Cw"
               }
             ],
@@ -124,18 +112,18 @@
           {
             "name": "Creatina Soldiers Nutrition em pó 1 kg",
             "price_range": "R$ 50 a R$ 80",
-            "description": "A Soldiers Nutrition de 1 kg é apresentada em refil, com sabor natural e creatina monohidratada como único ingrediente. Segundo a marca, a fórmula não contém glúten e a porção declarada é de 5 g. Nessa apresentação, a embalagem equivale a 200 porções, um dos maiores rendimentos da lista.",
+            "description": "O refil de 1 kg da Soldiers contém creatina monohidratada sem misturas e rende 200 porções de 5 g, conforme o fabricante.",
             "links": [
               {
-                "label": "Ver no Mercado Livre",
+                "label": "Mercado Livre",
                 "url": "https://meli.la/2iHqgB7"
               },
               {
-                "label": "Ver na Amazon",
+                "label": "Amazon",
                 "url": "https://link.amazon/B0h0rMoUL"
               },
               {
-                "label": "Ver na Shopee",
+                "label": "Shopee",
                 "url": "https://s.shopee.com.br/8fTBA88T2z"
               }
             ],
@@ -148,6 +136,18 @@
         ]
       },
       {
+        "type": "section",
+        "title": "Como usar",
+        "paragraphs": [
+          "Misture a creatina em água ou na bebida de sua preferência e siga a porção indicada no rótulo, com orientação de um nutricionista ou médico.",
+          "Em estudos com adultos, a manutenção costuma usar de 3 a 5 g por dia; a regularidade ao longo dos dias importa mais que uma dose isolada. A quantidade adequada para você deve ser individualizada."
+        ],
+        "source": {
+          "label": "NIH — creatina e desempenho físico (em inglês)",
+          "url": "https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-Consumer/"
+        }
+      },
+      {
         "type": "group",
         "title": "Sua próxima creatina pode sair ainda mais barata",
         "text": "No grupo do Despencou, mandamos as melhores promoções de suplementos e de outros produtos com cupons para economizar ainda mais. Entre para acompanhar as oportunidades assim que forem publicadas.",
@@ -157,6 +157,12 @@
       }
     ],
     "seo_title": "Quais são as melhores creatinas de 2026? Veja a lista.",
-    "updated_at": "2026-10-16T13:10:00-03:00"
+    "updated_at": "2026-10-16T16:45:23Z",
+    "layout": "editorial",
+    "cover": {
+      "src": "/assets/blog/creatinas-2026/capa-preparo-creatina.webp",
+      "alt": "Imagem ilustrativa de um adulto preparando um suplemento em uma coqueteleira",
+      "caption": "Imagem ilustrativa."
+    }
   }
 ]
