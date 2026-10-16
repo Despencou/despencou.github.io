@@ -24,8 +24,13 @@ test('Creatine article publishes five products, all exact affiliate URLs and art
   assert.equal(products.length,5);assert.equal((html.match(/class="blog-product"/g)||[]).length,5);
   assert.equal(products.flatMap(p=>p.links).length,14);
   for(const p of products){assert.ok(html.includes(p.price_range));for(const l of p.links)assert.ok(html.includes('href="'+l.url+'" target="_blank" rel="sponsored noopener noreferrer"'));}
+  assert.equal((html.match(/class="blog-product-photo"/g)||[]).length,5);
+  assert.match(html,/<title>Quais são as melhores creatinas de 2026\? Veja a lista\.<\/title>/);
+  assert.doesNotMatch(html,/Antes de comprar, confira estes detalhes|Participação gratuita\. Preços e disponibilidade podem mudar/);
+  assert.match(html,/<small>Participação gratuita<\/small>/);
+  assert.match(html,/de outros produtos com cupons para economizar ainda mais/);
   assert.match(html,/content="index,follow"/);assert.match(html,/BlogPosting/);assert.match(html,/"@type":"Organization","name":"Equipe Despencou"/);
-  assert.match(html,/href="\/blog.css\?v=20261016b"/);assert.doesNotMatch(html,/src="\/(oferta|coupon-parser|payment-parser).js/);
+  assert.match(html,/href="\/blog.css\?v=creatinas-fotos-20261016"/);assert.doesNotMatch(html,/src="\/(oferta|coupon-parser|payment-parser).js/);
   assert.doesNotMatch(html,/zaphome|https:\/\/t.me\/despencou"|Carregando oferta/);
   assert.equal((html.match(/href="https:\/\/entrar.despencou.com\/blogcreatina"/g)||[]).length,3);
   assert.equal((html.match(/href="https:\/\/t.me\/\+YdlsNvv9AbBjZTgx"/g)||[]).length,4);

@@ -53,3 +53,11 @@ html,body{overflow-x:hidden}
  .blog-group .btn{width:100%;font-size:15px}
  .top .nav a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:72px;touch-action:manipulation}
 }
+
+/* Fotos reais dos produtos, com fundo branco também no modo escuro. */
+.blog-product-layout{display:grid;grid-template-columns:190px minmax(0,1fr);gap:20px;align-items:start}
+.blog-product-photo{margin:6px 0 0;background:#fff;border:1px solid #eee;border-radius:14px;overflow:hidden;aspect-ratio:1;display:grid;place-items:center}
+.blog-product-photo img{display:block;width:100%;height:100%;object-fit:contain;padding:10px}
+.blog-product-details{min-width:0}
+.blog-product .blog-source{font-size:12px;line-height:1.5;margin:10px 0}
+@media(max-width:640px){.blog-product-layout{grid-template-columns:1fr;gap:10px}.blog-product-photo{width:100%;max-width:250px;justify-self:center}}

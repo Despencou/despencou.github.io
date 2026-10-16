@@ -57,8 +57,9 @@ async function build(root,output,archive,feed,generatedOnly=false){
  const blogLinks=[];
  for(const p of published){const url='/blog/'+p.slug+'/';links.push(url);blogLinks.push({title:p.title,description:p.description,url});
   const body=blog.articleBody(p,date(p.published_at));
-  const schema={'@context':'https://schema.org','@type':'BlogPosting',headline:p.title,description:p.description,datePublished:p.published_at,author:{'@type':p.author_type==='Organization'?'Organization':'Person',name:p.author},publisher:{'@type':'Organization',name:'Despencou',url:BASE},mainEntityOfPage:BASE+url};
-  let html=shell(template,p.title,p.description,url,body,`<link rel="stylesheet" href="/blog.css?v=20261016b"><script type="application/ld+json">${jsonScript(schema)}</script>`).replace(/<script src="\/(?:oferta|coupon-parser|payment-parser).js[^>]*><\/script>/g,'').replace('<span>Detalhes da oferta</span>','<a href="/blog/">Blog</a>').replace('class="offer-detail-page"','class="offer-detail-page blog-page"');
+  const schema={'@context':'https://schema.org','@type':'BlogPosting',headline:p.title,description:p.description,datePublished:p.published_at,...(p.updated_at?{dateModified:p.updated_at}:{}),author:{'@type':p.author_type==='Organization'?'Organization':'Person',name:p.author},publisher:{'@type':'Organization',name:'Despencou',url:BASE},mainEntityOfPage:BASE+url};
+  let html=shell(template,p.seo_title||p.title,p.description,url,body,`<link rel="stylesheet" href="/blog.css?v=creatinas-fotos-20261016"><script type="application/ld+json">${jsonScript(schema)}</script>`).replace(/<script src="\/(?:oferta|coupon-parser|payment-parser).js[^>]*><\/script>/g,'').replace('<span>Detalhes da oferta</span>','<a href="/blog/">Blog</a>').replace('class="offer-detail-page"','class="offer-detail-page blog-page"');
+  if(p.seo_title)html=html.replace(/<title>.*?<\/title>/,()=>`<title>${esc(p.seo_title)}</title>`);
   const group=blog.groupLinks(p);
   if(group){html=html.replaceAll('href="https://entrar.despencou.com/zaphome"',()=>`href="${blog.link(group.whatsapp)}"`).replaceAll('href="https://t.me/despencou"',()=>`href="${blog.link(group.telegram)}"`);}
   await write('blog/'+p.slug+'/index.html',html);
