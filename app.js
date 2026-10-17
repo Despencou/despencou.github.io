@@ -92,6 +92,12 @@
     }
     card.append(body);return card;
   }
+  function shopeeDailyCard(){
+    const card=element('article','cp home-shopee-daily');card.append(element('b',null,'Cupons'));
+    const body=element('div');body.append(element('strong',null,'Shopee'),element('p','coupon-title','Confira os cupons do dia na Shopee'),element('small',null,'Resgate os cupons disponíveis diretamente na Shopee.'));
+    const action=link('Conferir cupons do dia',ML.shopeeDailyDestination,'coupon-daily-link');action.rel='sponsored noopener noreferrer';
+    const code=element('div','code');code.append(action);body.append(code);card.append(body);return card;
+  }
   function renderCoupons() {
     const coupons=items.filter(i=>i.kind==='coupon'&&!ML.removed(i));
     const ml=couponStore==='Mercado Livre';
@@ -107,10 +113,11 @@
     $('#ml-coupon-status').textContent=`${shown.length} cupom(ns)${description?' · '+description:''}`;
     $('#ml-sort-note').hidden=!ml||mlTab!=='all'||mlOrder!=='discount';
     document.querySelectorAll('[data-ml-coupon-tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.mlCouponTab===activeTab?'true':'false'));
-    for(const [selector,data] of [['#home-coupons',coupons.filter(i=>!ML.telegram(i)).slice(0,3)],['#coupon-list',shown]]){
-      const target=$(selector);target.replaceChildren(...data.map(couponCard));
-      if(loaded&&!data.length)target.append(element('p','empty',ml||shop?'Nenhum cupom disponível nesta aba agora.':'Ainda não há cupons recentes para esta loja. Acompanhe as novidades no Telegram.'));
-    }
+    const home=$('#home-coupons'),todayML=ML.homeSection(coupons);
+    home.replaceChildren(...todayML.map(couponCard),shopeeDailyCard());
+    if(loaded&&!todayML.length)home.prepend(element('p','empty','Nenhum cupom do Mercado Livre lançado hoje por aqui. Confira os cupons do dia na Shopee abaixo.'));
+    const target=$('#coupon-list');target.replaceChildren(...shown.map(couponCard));
+    if(loaded&&!shown.length)target.append(element('p','empty','Nenhum cupom disponível nesta aba agora.'));
   }
   async function loadFeed() {
     const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),12000);

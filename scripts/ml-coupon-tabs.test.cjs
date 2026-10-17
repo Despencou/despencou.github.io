@@ -22,3 +22,27 @@ test('The three sort choices use percentage, minimum purchase and maximum discou
  assert.deepEqual(ml.order([source,cash,old,unknown],'maximum').map(i=>i.id),['cash','old','source','unknown']);
  assert.equal(new URL(ml.destination).searchParams.get('matt_tool'),'32116382');assert.equal(new URL(ml.destination).searchParams.get('forceInApp'),'true');
 });
+
+test('Home coupons include only today ML launches and group posts, never older Shopee coupons',()=>{
+ const shopee={...telegram,id:'shopee-old',store:'Shopee',published_at:'2026-10-13T20:00:00Z'};
+ const amazon={...telegram,id:'amazon-today',store:'Amazon'};
+ const shopeeToday={...shopee,id:'shopee-today',published_at:telegram.published_at};
+ const data=[shopee,old,yesterday,source,telegram,amazon,shopeeToday,first];
+ assert.deepEqual(new Set(ml.homeSection(data,'2026-10-14').map(i=>i.id)),new Set(['source','tg-1']));
+ assert.deepEqual(ml.homeSection(data,'2026-10-15'),[]);
+ const midnight={...telegram,id:'midnight',published_at:'2026-10-15T02:59:59Z'};
+ assert.deepEqual(ml.homeSection([midnight],'2026-10-14').map(i=>i.id),['midnight']);
+ assert.deepEqual(ml.homeSection([midnight],'2026-10-15'),[]);
+});
+test('Home and Shopee tab share the exact daily-coupons affiliate destination',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
+ const app=fs.readFileSync(path.join(__dirname,'../app.js'),'utf8');
+ const url="https://shopee.com.br/m/cupom-de-desconto?mmp_pid=an_18383820308&uls_trackid=56tagngk00jl&utm_campaign=id_4nuHsmrDJHB&utm_content=----&utm_medium=affiliates&utm_source=an_18383820308&utm_term=fpq999xi8yuy";
+ assert.equal(ml.shopeeDailyDestination,url);
+ assert.ok(html.includes('href="'+url.replaceAll('&','&amp;')+'"'));
+ assert.ok(app.includes("link('Conferir cupons do dia',ML.shopeeDailyDestination"));
+ assert.ok(app.includes('ML.homeSection(coupons)'));
+ assert.ok(app.includes('today!==couponDay'));
+ assert.doesNotMatch(app,/coupons\.filter\(i=>!ML\.telegram\(i\)\)\.slice\(0,3\)/);
+});

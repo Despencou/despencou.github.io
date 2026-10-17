@@ -1,6 +1,7 @@
 'use strict';
 (function(root){
   const destination='https://www.mercadolivre.com.br/social/kotinhapromo/lists/772cb2ed-b061-4357-aacc-06ec436c641e?matt_tool=32116382&forceInApp=true';
+  const shopeeDailyDestination='https://shopee.com.br/m/cupom-de-desconto?mmp_pid=an_18383820308&uls_trackid=56tagngk00jl&utm_campaign=id_4nuHsmrDJHB&utm_content=----&utm_medium=affiliates&utm_source=an_18383820308&utm_term=fpq999xi8yuy';
   function day(value=new Date()){
     const date=new Date(value);if(!Number.isFinite(date.getTime()))return '';
     const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date);
@@ -33,7 +34,9 @@
       return String(b.valid_from||b.published_at||'').localeCompare(String(a.valid_from||a.published_at||''));
     });
   }
-  const api={destination,day,imported,telegram,removed,section,storeSection,order};
+  // The home preview uses the same São Paulo calendar rules as the daily ML tab.
+  function homeSection(items,today=day()){return order(section(items,'today',today),'recent');}
+  const api={destination,shopeeDailyDestination,homeSection,day,imported,telegram,removed,section,storeSection,order};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.DespencouMLCoupons=api;
 })(typeof window!=='undefined'?window:globalThis);
 
