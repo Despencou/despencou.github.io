@@ -9,8 +9,8 @@ const items=[source,old,telegram,yesterday,first];
 test('Brazilian calendar day is used around midnight',()=>{
  assert.equal(ml.day('2026-10-15T01:00:00Z'),'2026-10-14');assert.equal(ml.day('2026-10-15T04:00:00Z'),'2026-10-15');
 });
-test('Daily tab preserves same-code coupons from the page and Telegram and hides older Telegram posts',()=>{
- assert.deepEqual(ml.section(items,'today','2026-10-14').map(i=>i.id),['source','tg-1']);
+test('Mercado Livre excludes Telegram coupons from every tab and the home',()=>{
+ assert.deepEqual(ml.section(items,'today','2026-10-14').map(i=>i.id),['source']);
  assert.deepEqual(ml.section(items,'expires','2026-10-14').map(i=>i.id),['old']);
  assert.deepEqual(ml.section(items,'all','2026-10-14').map(i=>i.id),['source','old']);
 });
@@ -23,15 +23,15 @@ test('The three sort choices use percentage, minimum purchase and maximum discou
  assert.equal(new URL(ml.destination).searchParams.get('matt_tool'),'32116382');assert.equal(new URL(ml.destination).searchParams.get('forceInApp'),'true');
 });
 
-test('Home coupons include only today ML launches and group posts, never older Shopee coupons',()=>{
+test('Home coupons include only today imported ML launches',()=>{
  const shopee={...telegram,id:'shopee-old',store:'Shopee',published_at:'2026-10-13T20:00:00Z'};
  const amazon={...telegram,id:'amazon-today',store:'Amazon'};
  const shopeeToday={...shopee,id:'shopee-today',published_at:telegram.published_at};
  const data=[shopee,old,yesterday,source,telegram,amazon,shopeeToday,first];
- assert.deepEqual(new Set(ml.homeSection(data,'2026-10-14').map(i=>i.id)),new Set(['source','tg-1']));
+ assert.deepEqual(new Set(ml.homeSection(data,'2026-10-14').map(i=>i.id)),new Set(['source']));
  assert.deepEqual(ml.homeSection(data,'2026-10-15'),[]);
  const midnight={...telegram,id:'midnight',published_at:'2026-10-15T02:59:59Z'};
- assert.deepEqual(ml.homeSection([midnight],'2026-10-14').map(i=>i.id),['midnight']);
+ assert.deepEqual(ml.homeSection([midnight],'2026-10-14').map(i=>i.id),[]);
  assert.deepEqual(ml.homeSection([midnight],'2026-10-15'),[]);
 });
 test('Home and Shopee tab share the exact daily-coupons affiliate destination',()=>{
@@ -45,4 +45,17 @@ test('Home and Shopee tab share the exact daily-coupons affiliate destination',(
  assert.ok(app.includes('ML.homeSection(coupons)'));
  assert.ok(app.includes('today!==couponDay'));
  assert.doesNotMatch(app,/coupons\.filter\(i=>!ML\.telegram\(i\)\)\.slice\(0,3\)/);
+});
+
+test('Shopee coupons disappear from both tabs at midnight in Sao Paulo; Amazon keeps its existing all tab',()=>{
+ const before={kind:'coupon',store:'Shopee',id:'last-minute',published_at:'2026-10-15T02:59:59Z'};
+ const after={...before,id:'next-day',published_at:'2026-10-15T03:00:00Z'};
+ const invalid={...before,id:'no-date',published_at:'invalid'};
+ for(const tab of ['today','all']){
+  assert.deepEqual(ml.storeSection([before,after,invalid],'Shopee',tab,'2026-10-14').map(i=>i.id),['last-minute']);
+  assert.deepEqual(ml.storeSection([before,after,invalid],'Shopee',tab,'2026-10-15').map(i=>i.id),['next-day']);
+ }
+ const amazon={...before,store:'Amazon'};
+ assert.equal(ml.storeSection([amazon],'Amazon','all','2026-10-15').length,1);
+ assert.equal(ml.storeSection([amazon],'Amazon','today','2026-10-15').length,0);
 });

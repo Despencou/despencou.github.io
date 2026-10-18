@@ -109,7 +109,7 @@
     document.querySelector('[data-ml-coupon-tab="expires"]').hidden=!ml;
     const filtered=ML.storeSection(coupons,couponStore,activeTab);
     const shown=ml?ML.order(filtered,mlTab==='all'?mlOrder:'recent'):filtered;
-    const description=activeTab==='today'?'Lançados hoje e publicados hoje no grupo':activeTab==='expires'?'Com validade até hoje':'';
+    const description=activeTab==='today'?(ml?'Lançados hoje':'Lançados hoje e publicados hoje no grupo'):activeTab==='expires'?'Com validade até hoje':'';
     $('#ml-coupon-status').textContent=`${shown.length} cupom(ns)${description?' · '+description:''}`;
     $('#ml-sort-note').hidden=!ml||mlTab!=='all'||mlOrder!=='discount';
     document.querySelectorAll('[data-ml-coupon-tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.mlCouponTab===activeTab?'true':'false'));

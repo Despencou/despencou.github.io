@@ -16,14 +16,13 @@
   }
   const removed=i=>imported(i)&&discount(i)===50&&/primeira compra|new buyers/i.test((i.category||'')+' '+i.title);
   function section(items,tab,today=day()){
-    return items.filter(i=>i.kind==='coupon'&&i.store==='Mercado Livre'&&!removed(i)&&
-      (tab==='today'?(imported(i)?i.valid_from===today:day(i.published_at)===today):
-       imported(i)&&(tab!=='expires'||i.valid_until===today)));
+    return items.filter(i=>i.kind==='coupon'&&i.store==='Mercado Livre'&&imported(i)&&!removed(i)&&
+      (tab==='today'?i.valid_from===today:(tab!=='expires'||i.valid_until===today)));
   }
   function storeSection(items,store,tab,today=day()){
     if(store==='Mercado Livre')return section(items,tab,today);
     if(!['Shopee','Amazon'].includes(store))return [];
-    return items.filter(i=>i.kind==='coupon'&&i.store===store&&(tab!=='today'||day(i.published_at)===today));
+    return items.filter(i=>i.kind==='coupon'&&i.store===store&&((store!=='Shopee'&&tab!=='today')||day(i.published_at)===today));
   }
   function order(items,mode){
     const missing=(value,fallback)=>Number.isFinite(value)?value:fallback;
