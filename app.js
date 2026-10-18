@@ -43,7 +43,7 @@
     return card;
   }
   function groupCard() {
-    const c=element('div','feedcta');c.append(element('h3',null,'Receba isso antes de acabar'),element('div',null,'As ofertas mais quentes saem primeiro no grupo.'));
+    const c=element('div','feedcta');c.append(element('h3',null,'Receba antes de acabar'),element('div',null,'As ofertas mais quentes saem primeiro no grupo.'));
     const buttons=element('div','cta');buttons.append(link('WhatsApp',WPP,'btn wa'),link('Telegram','https://t.me/despencou','btn tg'));c.append(buttons);return c;
   }
   function renderOffers() {
