@@ -1,7 +1,7 @@
 'use strict';
 (function(root) {
   function safeRetailer(url) {
-    try { const u=new URL(url);return u.protocol==='https:' && ['shopee.com.br','amazon.com.br','amzn.to','mercadolivre.com.br','mercadolivre.com','meli.la','mercadolibre.com'].some(d=>u.hostname===d||u.hostname.endsWith('.'+d)); } catch {return false;}
+    try { const u=new URL(url);return u.protocol==='https:' && ['shopee.com.br','amazon.com.br','amzn.to','link.amazon','mercadolivre.com.br','mercadolivre.com','meli.la','mercadolibre.com'].some(d=>u.hostname===d||u.hostname.endsWith('.'+d)); } catch {return false;}
   }
   const clean = s => String(s||'').replace(/[*`]/g,'').trim();
   const urls = s => (String(s||'').match(/https?:\/\/[^\s<>]+/gi)||[]).map(u=>u.replace(/[.,;!?)"'\]]+$/g,'')).filter(safeRetailer);

@@ -25,3 +25,15 @@ test('instructions and coupon redemption links do not invent coupon codes',()=>{
 test('historical ended offers retain their coupon association',()=>{
  assert.equal(matchesCoupon({...offer,ended:true,code:'FULL1510'},'FULL1510','Mercado Livre'),true);
 });
+
+test('accepts link.amazon offers and preserves product-page coupon instructions',()=>{
+ const {safeRetailer}=require('../coupon-parser.js');
+ const url='https://link.amazon/B0hi1MX9O';
+ assert.equal(safeRetailer(url),true);
+ assert.equal(safeRetailer('https://link.amazon.evil.test/product'),false);
+ const coupon=parse({kind:'offer',store:'Amazon',url,description:'Garrafa Térmica Stanley Quick Flip 710ml\nPor R$ 109 em 3x\n🎟️Resgate o cupom na página do produto (próximo ao preço), desconto na finalização.\n'+url});
+ assert.equal(coupon.productUrl,url);
+ assert.equal(coupon.hasCoupon,true);
+ assert.equal(coupon.instructions.length,1);
+ assert.deepEqual(coupon.codes,[]);
+});
