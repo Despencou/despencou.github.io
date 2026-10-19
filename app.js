@@ -18,7 +18,7 @@
   const money = n => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(n);
   function element(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
   function safeRetailer(url) {
-    try { const u = new URL(url); return u.protocol === 'https:' && ['shopee.com.br','amazon.com.br','amzn.to','mercadolivre.com.br','mercadolivre.com','meli.la','mercadolibre.com'].some(d => u.hostname === d || u.hostname.endsWith('.'+d)); } catch { return false; }
+    return DespencouCoupons.safeRetailer(url);
   }
   function link(label, url, cls='btn') { const a = element('a',cls,label); a.href=url; a.target='_blank'; a.rel='noopener noreferrer'; return a; }
   function age(stamp) {

@@ -2,6 +2,13 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const {parse,matchesCoupon}=require('../coupon-parser.js');
 const offer={kind:'offer',store:'Mercado Livre',url:'https://meli.la/example'};
+test('catalog accepts Amazon short links through the same retailer validation as product pages',()=>{
+ const source=require('node:fs').readFileSync(require('node:path').join(__dirname,'../app.js'),'utf8');
+ const validator=source.match(/function safeRetailer\(url\) \{[\s\S]*?\n  \}/)[0];
+ const safe=require('node:vm').runInNewContext('('+validator+')',{DespencouCoupons:require('../coupon-parser.js')});
+ const rows=[{id:'tg-15432',url:'https://link.amazon/B0hi1MX9O'},{id:'unsafe',url:'https://link.amazon.evil.test/product'}];
+ assert.deepEqual(rows.filter(i=>safe(i.url)).map(i=>i.id),['tg-15432']);
+});
 test('recognizes plain or instructed coupon lines and optional ticket emoji',()=>{
  for(const line of ['🎟️Cupom: VALEMAIS','Use o cupom: VALEMAIS','🎟️ Cupom: VALEMAIS','Cupom：VALEMAIS','Cupom:\nVALEMAIS']){
   assert.equal(matchesCoupon({...offer,description:line},'valemais','Mercado Livre'),true,line);
