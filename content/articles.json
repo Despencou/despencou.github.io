@@ -20,7 +20,6 @@
           {
             "name": "Creatina 100% Pura 250 g Growth",
             "price_range": "R$ 35 a R$ 60",
-            "description": "Monohidratada sem sabor em pote de 250 g, a versão tradicional da Growth traz creatina como único ingrediente.",
             "links": [
               {
                 "label": "Mercado Livre",
@@ -44,15 +43,10 @@
           {
             "name": "Creatina Dux Nutrition 300 g",
             "price_range": "R$ 40 a R$ 90",
-            "description": "A monohidratada tradicional da DUX tem fórmula com ingrediente único e pote de 300 g com 60 porções declaradas.",
             "links": [
               {
                 "label": "Amazon",
                 "url": "https://link.amazon/B003Q9kmf"
-              },
-              {
-                "label": "Mercado Livre",
-                "url": "https://meli.la/2vGPFUL"
               }
             ],
             "image": "/assets/blog/creatinas-2026/dux.webp",
@@ -64,7 +58,6 @@
           {
             "name": "Creatina 100% Pura Dark Lab 1 kg",
             "price_range": "R$ 55 a R$ 80",
-            "description": "Com creatina monohidratada como único ingrediente, a Dark Lab reúne 1 kg de suplemento em embalagem refil.",
             "links": [
               {
                 "label": "Mercado Livre",
@@ -88,7 +81,6 @@
           {
             "name": "Creatina Max Titanium 300 g",
             "price_range": "R$ 30 a R$ 75",
-            "description": "A versão tradicional da Max Titanium vem em pote de 300 g e combina creatina monohidratada com antiumectante dióxido de silício.",
             "links": [
               {
                 "label": "Shopee",
@@ -97,10 +89,6 @@
               {
                 "label": "Amazon",
                 "url": "https://link.amazon/B09QMn9fv"
-              },
-              {
-                "label": "Mercado Livre",
-                "url": "https://meli.la/1Hz95Cw"
               }
             ],
             "image": "/assets/blog/creatinas-2026/max-titanium.webp",
@@ -112,7 +100,6 @@
           {
             "name": "Creatina Soldiers Nutrition em pó 1 kg",
             "price_range": "R$ 50 a R$ 80",
-            "description": "O refil de 1 kg da Soldiers contém creatina monohidratada sem misturas e rende 200 porções de 5 g, conforme o fabricante.",
             "links": [
               {
                 "label": "Mercado Livre",
