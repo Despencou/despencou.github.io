@@ -10,7 +10,7 @@ test('Blog renderer keeps editorial text escaped and rejects unsafe link protoco
  post.blocks=[];
  const html=blog.articleBody(post,'16/10/2026');assert.match(html,/&lt;script&gt;/);assert.doesNotMatch(html,/<script>/);
 });
-test('Creatine article publishes five products, all exact affiliate URLs and article-specific group links',async()=>{
+test('Creatine article publishes five products, selected store links and article-specific group links',async()=>{
  const root=await fs.mkdtemp(path.join(os.tmpdir(),'despencou-blog-')),out=path.join(root,'output');
  try{
   await fs.mkdir(path.join(root,'oferta'));await fs.mkdir(path.join(root,'content'));
@@ -22,7 +22,8 @@ test('Creatine article publishes five products, all exact affiliate URLs and art
   const url='/blog/melhores-creatinas-2026/',html=await fs.readFile(path.join(out,url,'index.html'),'utf8');
   const products=post.blocks.find(b=>b.type==='products').items;
   assert.equal(products.length,5);assert.equal((html.match(/class="blog-product"/g)||[]).length,5);
-  assert.equal(products.flatMap(p=>p.links).length,14);
+  assert.equal(products.flatMap(p=>p.links).length,12);
+  assert.deepEqual(products.filter(p=>p.links.some(l=>l.label==='Mercado Livre')).map(p=>p.name),['Creatina 100% Pura 250 g Growth','Creatina 100% Pura Dark Lab 1 kg','Creatina Soldiers Nutrition em pó 1 kg']);
   for(const p of products){assert.ok(html.includes(p.price_range));for(const l of p.links)assert.ok(html.includes('href="'+l.url+'" target="_blank" rel="sponsored noopener noreferrer"'));}
   assert.equal((html.match(/class="blog-product-photo"/g)||[]).length,5);
   assert.match(html,/class="blog-cover"/);assert.match(html,/fetchpriority="high"/);
@@ -30,7 +31,8 @@ test('Creatine article publishes five products, all exact affiliate URLs and art
   const coverAt=html.indexOf('class="blog-cover"'),introAt=html.indexOf('class="blog-lead"'),listAt=html.indexOf('class="blog-section blog-selection"'),useAt=html.indexOf('<h2>Como usar</h2>'),groupAt=html.indexOf('class="blog-group"');
   assert.ok(coverAt<introAt&&introAt<listAt&&listAt<useAt&&useAt<groupAt);
   assert.doesNotMatch(html,/<h2>Para que serve a creatina/);
-  assert.ok(products.every(p=>p.description.split(/[.!?](?: |$)/).filter(Boolean).length===1));
+  assert.ok(products.every(p=>!p.description));
+  assert.doesNotMatch(html,/<div class="blog-product-details"><p>/);
   assert.match(html,/<title>Quais são as melhores creatinas de 2026\? Veja a lista\.<\/title>/);
   assert.doesNotMatch(html,/Antes de comprar, confira estes detalhes|Participação gratuita\. Preços e disponibilidade podem mudar/);
   assert.match(html,/<small>Participação gratuita<\/small>/);
