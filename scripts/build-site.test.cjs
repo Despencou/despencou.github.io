@@ -38,7 +38,7 @@ test('Creatine article publishes five products, selected store links and article
   assert.match(html,/<small>Participação gratuita<\/small>/);
   assert.match(html,/de outros produtos com cupons para economizar ainda mais/);
   assert.match(html,/content="index,follow"/);assert.match(html,/BlogPosting/);assert.match(html,/"@type":"Organization","name":"Equipe Despencou"/);
-  assert.match(html,/href="\/blog.css\?v=creatinas-editorial-20261016"/);assert.doesNotMatch(html,/src="\/(oferta|coupon-parser|payment-parser).js/);
+  assert.match(html,/href="\/blog.css\?v=blog-guides-20261102"/);assert.doesNotMatch(html,/src="\/(oferta|coupon-parser|payment-parser).js/);
   assert.doesNotMatch(html,/zaphome|https:\/\/t.me\/despencou"|Carregando oferta/);
   assert.equal((html.match(/href="https:\/\/entrar.despencou.com\/blogcreatina"/g)||[]).length,3);
   assert.equal((html.match(/href="https:\/\/t.me\/\+YdlsNvv9AbBjZTgx"/g)||[]).length,4);
@@ -82,3 +82,18 @@ test('Product-page instruction and Shopee redemption URL stay distinct from prod
 
 
 
+
+test('Coupon guide keeps two checkout screenshots in step four and escapes guide text',async()=>{
+ const {articleBody}=require('./blog-render.cjs');
+ const articles=JSON.parse(await fs.readFile(path.join(__dirname,'../content/articles.json'),'utf8'));
+ const p=articles.find(p=>p.slug==='como-usar-cupons-shopee-mercado-livre');
+ const ml=p.blocks.find(b=>b.type==='steps'&&b.title.includes('Mercado Livre'));
+ assert.equal(ml.items.length,5);assert.match(ml.items[0].text,/copie o código/i);
+ assert.equal(ml.items[3].images.length,2);
+ const html=articleBody(p,'02/11/2026');assert.match(html,/mercado-livre-pagamento.png/);
+ assert.equal((html.match(/class="blog-guide-images"/g)||[]).length,5);
+ const fake={...p,blocks:[{type:'steps',title:'<script>',items:[{title:'<img>',text:'<script>',images:[]}]}]};
+ assert.doesNotMatch(articleBody(fake,'hoje'),/<script>/);
+ fake.blocks[0].items[0].images=[{src:'https://example.com/private.png',alt:'x'}];
+ assert.throws(()=>articleBody(fake,'hoje'),/Invalid guide image/);
+});

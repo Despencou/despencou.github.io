@@ -111,3 +111,14 @@ html,body{overflow-x:hidden}
  .editorial .blog-shop{flex:1 1 auto;font-size:12px;padding:9px 10px}
  .editorial .blog-group{padding:22px 18px}
 }
+
+/* Guias ilustrados de cupons. */
+.blog-steps{list-style:none;counter-reset:guide;padding:0!important;margin:22px 0}
+.blog-steps>li{counter-increment:guide;border-top:1px solid var(--line);padding:24px 0;margin:0!important}
+.blog-steps h3{font-size:23px;line-height:1.3;margin:0 0 12px;display:flex;gap:12px;align-items:center}
+.blog-steps h3:before{content:counter(guide);display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:#ffd329;color:#17120f;font-weight:800}
+.blog-guide-images{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;margin:22px 0}
+.blog-guide-images figure{flex:1 1 240px;max-width:330px;margin:0}
+.blog-guide-images img{display:block;width:100%;height:auto;border:1px solid #ddd;border-radius:14px;background:white}
+.blog-guide-images figcaption{font-size:12px;color:var(--mut);line-height:1.5;margin-top:8px}
+@media(max-width:640px){.blog-guide-images{gap:24px}.blog-guide-images figure{flex-basis:100%;max-width:360px}.blog-steps h3{font-size:21px}}
