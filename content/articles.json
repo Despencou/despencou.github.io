@@ -18,24 +18,10 @@
         "type": "steps",
         "title": "Como usar cupons na Shopee",
         "intro": "Se a oferta trouxer um link para resgatar o cupom, abra esse link primeiro. Se trouxer um código, copie-o para usar na compra.",
-        "source": {
-          "label": "Guia oficial de cupons da Shopee",
-          "url": "https://shopee.com.br/m/guia-de-cupons"
-        },
         "items": [
           {
-            "title": "Encontre o cupom",
-            "text": "No app, abra “Cupons” na página inicial ou use o link de resgate enviado com a oferta.",
-            "images": [
-              {
-                "src": "/assets/blog/como-usar-cupons/shopee-passo-2.webp",
-                "alt": "Atalho Cupons na página inicial da Shopee"
-              }
-            ]
-          },
-          {
             "title": "Resgate antes de comprar",
-            "text": "Toque em “Quero” para guardar o benefício. Os cupons resgatados ficam em “Eu” → “Cupons”.",
+            "text": "Clique no primeiro link que enviamos no post do produto para resgatar os cupons ofertados.",
             "images": [
               {
                 "src": "/assets/blog/como-usar-cupons/shopee-passo-3.webp",
@@ -45,7 +31,7 @@
           },
           {
             "title": "Selecione o desconto no carrinho",
-            "text": "Escolha o produto e toque em “Cupom de Desconto”. Selecione um cupom disponível ou insira o código da oferta no campo correspondente. Cupons da loja têm uma opção própria.",
+            "text": "Volte pro grupo/post do produto e agora clique no link do produto. Coloque-o no carrinho. Na tela de pagamento, procure por “Cupom de Desconto”.",
             "images": [
               {
                 "src": "/assets/blog/como-usar-cupons/shopee-passo-5.webp",
@@ -55,7 +41,7 @@
           },
           {
             "title": "Confira o total antes de pagar",
-            "text": "Veja se o desconto entrou no resumo. Confira também o cupom de frete, quando disponível, e só então conclua o pedido.",
+            "text": "Encontre a oferta que você resgatou entre os cupons disponíveis. Veja se o desconto entrou no resumo. Confira também o cupom de frete, quando disponível, e só então conclua o pedido.",
             "images": [
               {
                 "src": "/assets/blog/como-usar-cupons/shopee-passo-1.webp",
@@ -72,22 +58,22 @@
         "items": [
           {
             "title": "Copie o cupom e abra o link do produto",
-            "text": "Primeiro, copie o código de desconto enviado na publicação. Depois, clique no link do produto para abrir a oferta no Mercado Livre.",
+            "text": "",
             "images": []
           },
           {
             "title": "Toque em “Ir para produto”",
-            "text": "Se aparecer uma página intermediária com esse botão, toque nele para acessar o anúncio. Se o link já abrir o produto, siga para o próximo passo.",
+            "text": "",
             "images": []
           },
           {
             "title": "Adicione ao carrinho ou compre agora",
-            "text": "Confira modelo, tamanho, cor e quantidade. Toque em “Adicionar ao carrinho” ou em “Comprar agora” para avançar.",
+            "text": "",
             "images": []
           },
           {
             "title": "Abra a área de cupons",
-            "text": "Na tela de pagamento ou no carrinho, procure “Cupons” ou “Inserir código do cupom”. Nas imagens abaixo, a primeira tela mostra onde tocar; a segunda mostra o campo para colar o código. Mesmo que apareça “Você não tem cupons disponíveis”, o campo de código pode estar disponível no rodapé.",
+            "text": "Na tela de pagamento ou no carrinho, procure “Inserir código do cupom”. A primeira imagem abaixo mostra a opção no final da tela; a segunda mostra o campo para colar o código, também no final da tela. Mesmo que apareça “Você não tem cupons disponíveis”, o campo de código está disponível no rodapé.",
             "images": [
               {
                 "src": "/assets/blog/como-usar-cupons/mercado-livre-pagamento.png",
@@ -101,7 +87,7 @@
           },
           {
             "title": "Cole o código e confirme",
-            "text": "Cole o cupom copiado no primeiro passo e toque em “Inserir” ou “Aplicar”. Confira se o desconto foi aplicado e revise o total antes de finalizar o pagamento.",
+            "text": "Cole ou digite o cupom e toque em “Inserir”. Confira se o desconto foi aplicado e revise o total antes de finalizar o pagamento.",
             "images": []
           }
         ]
