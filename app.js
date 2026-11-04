@@ -35,9 +35,10 @@
     photo.append(element('span','st',item.store));card.append(photo,element('h3',null,item.title));
     const prices=element('div');prices.append(element('span','old',item.old_price?money(item.old_price):''),element('div','pr',money(item.price)));card.append(prices);
     const payment=window.DespencouPayments?.label(item);if(payment)prices.append(element('div','t',payment));
-    const coupon=DespencouCoupons.parse(item);
-    if(coupon.hasCoupon){const a=element('a','btn offer-link','Ver oferta e cupom');a.href=pageMap[item.id]==='/oferta/'+item.id+'/'?pageMap[item.id]:'/oferta/?id='+encodeURIComponent(item.id);card.append(a);}else card.append(link('Ver oferta',item.url,'btn offer-link'));
-    if(!coupon.hasCoupon){const details=element('a','details','Detalhes do produto');details.href=pageMap[item.id]==='/oferta/'+item.id+'/'?pageMap[item.id]:'/oferta/?id='+encodeURIComponent(item.id);card.append(details);}
+    const detailsUrl = pageMap[item.id] === '/oferta/'+item.id+'/' ? pageMap[item.id] : '/oferta/?id='+encodeURIComponent(item.id);
+    const offerLink = element('a','btn offer-link','Ver oferta');
+    offerLink.href = detailsUrl;
+    card.append(offerLink);
     if(item.ended)card.append(element('strong','offer-ended-label','Oferta encerrada · preço da publicação'));
     if (/^tg-\d+$/.test(item.id)) {
       const actions = element('div','offer-card-community');
@@ -47,8 +48,7 @@
       heart.disabled = true;
       heart.setAttribute('aria-label','Curtir oferta');
       const comments = element('a',null,'💬');
-      const details = pageMap[item.id] === '/oferta/'+item.id+'/' ? pageMap[item.id] : '/oferta/?id='+encodeURIComponent(item.id);
-      comments.href = details + '#comentarios';
+      comments.href = detailsUrl + '#comentarios';
       comments.setAttribute('aria-label','Ver comentários da oferta');
       actions.append(heart,comments);
       card.append(actions);

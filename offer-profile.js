@@ -203,7 +203,27 @@
                 toggle.disabled = false;
             }
         });
+        const removeAccount = node('button', 'Excluir minha conta', 'profile-delete-account');
+        removeAccount.type = 'button';
+        const deletionStatus = node('p', '', 'profile-note');
+        deletionStatus.setAttribute('role', 'status');
+        removeAccount.addEventListener('click', async () => {
+            if (!window.confirm('Excluir sua conta do Despencou? Seu perfil, comentários e curtidas vinculadas serão apagados. Esta ação é definitiva.')) return;
+            removeAccount.disabled = true;
+            try {
+                await request('delete-account', {confirm:true});
+                sessionVersion++;
+                bell.open = false;
+                renderSession({googleReady:session.googleReady});
+                window.dispatchEvent(new Event('despencou-session-change'));
+                page.replaceChildren(node('p', 'Sua conta do Despencou foi excluída.'));
+            } catch (error) {
+                deletionStatus.textContent = error.message || 'Não foi possível excluir sua conta.';
+                removeAccount.disabled = false;
+            }
+        });
         identity.append(picture, node('h2', data.name), node('p', 'Membro desde ' + month.format(data.joined*1000), 'member-badge'), photoLabel, photoStatus);
+        identity.append(removeAccount, deletionStatus);
         const activity = node('section', '', 'profile-activities');
         activity.append(node('h2', 'Atividades'));
         const list = node('ol');
