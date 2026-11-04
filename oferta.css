@@ -8,7 +8,7 @@
 .offer-community h2{margin:0 0 12px}
 .offer-community form{display:flex;flex-wrap:wrap;gap:8px}
 .offer-community form label,.offer-community textarea{width:100%}
-.offer-community textarea{min-height:96px;resize:vertical;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.offer-community textarea{box-sizing:border-box;height:100px;min-height:100px;max-height:100px;resize:none;overflow-y:auto;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
 .offer-community button{border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);padding:8px 12px;min-height:44px;font:inherit;cursor:pointer}
 .offer-community button[aria-pressed="true"]{color:var(--ink);background:var(--soft)}
 .offer-community button:disabled{opacity:.55;cursor:wait}

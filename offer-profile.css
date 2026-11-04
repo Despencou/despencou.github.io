@@ -99,3 +99,22 @@
 .profile-bell-icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .profile-label{display:block;max-width:105px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:640px){.profile-label{max-width:48px}}
+
+/* Keep account menus above the page content, including positioned offer cards. */
+.top:has(.offer-account-controls) {
+    position: relative;
+    z-index: 12;
+    overflow: visible;
+}
+.offer-profile-menu {
+    box-sizing: border-box;
+    background-color: var(--card, #fff);
+}
+@media (max-width: 640px) {
+    .profile-bell-icon { width: 15px; height: 15px; }
+    .offer-account-controls .profile-notifications summary {
+        position: relative;
+        border-color: transparent;
+    }
+    .profile-notifications .profile-badge { top: 3px; right: 3px; }
+}
