@@ -129,17 +129,22 @@
         try {
             const result = await request('notifications');
             notifications.replaceChildren(node('strong', 'Notificações'));
-            if (!result.notifications.length) notifications.append(node('p', 'Nenhuma resposta por enquanto.'));
+            if (!result.notifications.length) notifications.append(node('p', 'Nenhuma notificação por enquanto.'));
+            let through = result.seen;
+            let throughHeart = result.seenHeart || 0;
             for (const item of result.notifications) {
-                const link = node('a', item.name + ' respondeu em ' + item.title);
-                link.href = '/oferta/' + item.offer + '/#comentario-' + item.id;
-                if (item.id > result.seen) link.className = 'unread-reply';
+                const isHeart = item.kind === 'heart';
+                const message = isHeart ? ' curtiu seu comentário em ' : ' respondeu ao seu comentário em ';
+                const link = node('a', item.name + message + item.title);
+                link.href = '/oferta/' + item.offer + '/#comentario-' + (item.comment_id || item.id);
+                if (item.id > (isHeart ? result.seenHeart : result.seen)) link.className = 'unread-reply';
+                if (isHeart) throughHeart = Math.max(throughHeart, Number(item.id));
+                else through = Math.max(through, Number(item.id));
                 notifications.append(link);
             }
-            const latest = Number(result.notifications[0]?.id || 0);
-            if (latest > result.seen) {
-                await request('notifications-read', {through:latest});
-                showUnread(0);
+            if (through > result.seen || throughHeart > (result.seenHeart || 0)) {
+                await request('notifications-read', {through, throughHeart});
+                await loadSession();
             }
         } catch {
             notifications.textContent = 'Não foi possível carregar as notificações.';
@@ -179,7 +184,7 @@
         toggle.checked = data.showPicture;
         toggle.disabled = !data.hasPicture;
         const photoLabel = node('label', '', 'profile-photo-option');
-        photoLabel.append(toggle, node('span', 'Usar minha foto do Google'));
+        photoLabel.append(toggle, node('span', 'Mostrar minha foto do Google no perfil e nos comentários'));
         const photoStatus = node('p', data.hasPicture ? '' : 'Para carregar sua foto, saia e entre novamente com Google.', 'profile-note');
         photoStatus.setAttribute('role', 'status');
         toggle.addEventListener('change', async () => {

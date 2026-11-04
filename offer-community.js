@@ -130,6 +130,18 @@ window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
             time.dateTime = new Date(comment.created * 1000).toISOString();
             time.title = new Date(comment.created * 1000).toLocaleString('pt-BR');
             const author = node('header');
+            if (comment.picture) {
+                const photo = node('img');
+                photo.className = 'comment-avatar';
+                photo.src = comment.picture;
+                photo.alt = '';
+                photo.width = 30;
+                photo.height = 30;
+                photo.loading = 'lazy';
+                photo.referrerPolicy = 'no-referrer';
+                photo.addEventListener('error', () => photo.remove(), {once:true});
+                author.append(photo);
+            }
             author.append(node('strong', comment.name), time);
             article.append(author);
             if (comment.parent_id) {

@@ -26,3 +26,5 @@
 .comment-replies>article::before{content:"";position:absolute;top:17px;left:-18px;width:15px;height:8px;border-left:2px solid var(--line);border-bottom:2px solid var(--line);border-radius:0 0 0 7px}
 .comment-replies .comment-replies .comment-replies{margin-left:0;padding-left:9px}
 .comment-replies .comment-replies .comment-replies>article::before{left:-11px;width:8px}
+
+.offer-community .comment-avatar{flex:none;width:30px;height:30px;border-radius:50%;object-fit:cover;background:var(--bg)}
