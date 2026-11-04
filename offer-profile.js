@@ -34,7 +34,15 @@
     profile.append(button, menu);
     const bell = node('details', '', 'offer-profile profile-notifications');
     bell.hidden = true;
-    const bellButton = node('summary', '🔔');
+    const bellButton = node('summary');
+    const bellIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    bellIcon.setAttribute('viewBox', '0 0 24 24');
+    bellIcon.setAttribute('class', 'profile-bell-icon');
+    bellIcon.setAttribute('aria-hidden', 'true');
+    const bellPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    bellPath.setAttribute('d', 'M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4');
+    bellIcon.append(bellPath);
+    bellButton.append(bellIcon);
     bellButton.setAttribute('aria-label', 'Notificações');
     const badge = node('span', '', 'profile-badge');
     badge.hidden = true;
@@ -75,7 +83,9 @@
 
     function renderSession(next) {
         session = next;
-        button.replaceChildren(avatar(session.picture), node('span', 'Perfil'));
+        const name = session.name?.trim().split(/\s+/)[0] || 'Perfil';
+        button.replaceChildren(avatar(session.picture), node('span', name, 'profile-label'));
+        button.setAttribute('aria-label', session.name ? 'Perfil de ' + session.name : 'Perfil');
         bell.hidden = !session.name;
         showUnread(session.unread);
         menu.replaceChildren();

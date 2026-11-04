@@ -90,8 +90,11 @@
 @media (max-width: 640px) {
     .top .offer-account-controls { position: absolute; right: 9px; top: 21px; gap: 4px; }
     .offer-profile summary { padding: 0 6px; min-height: 36px; }
-    .offer-profile:not(.profile-notifications) summary > span:nth-child(2) {
-        position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden;
-    }
+    .offer-profile:not(.profile-notifications) summary { flex-direction: column; justify-content: center; gap: 0; }
+    .profile-label { max-width: 48px; font-size: 10px; line-height: 12px; }
     #my-profile { grid-template-columns: 1fr; }
 }
+
+.profile-bell-icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.profile-label{display:block;max-width:105px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:640px){.profile-label{max-width:48px}}
