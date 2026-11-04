@@ -184,8 +184,6 @@ window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
         label.htmlFor = message.id;
         const send = node('button', 'Enviar comentário');
         send.type = 'submit';
-        const logout = node('button', 'Sair');
-        logout.type = 'button';
         let parent = null;
         const cancel = node('button', 'Cancelar resposta');
         cancel.type = 'button';
@@ -201,7 +199,7 @@ window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
             cancel.hidden = false;
             message.focus();
         };
-        form.append(label, message, send, cancel, logout);
+        form.append(label, message, send, cancel);
         account.append(node('p', 'Comentando como ' + data.name), form);
         form.addEventListener('submit', async event => {
             event.preventDefault();
@@ -214,16 +212,6 @@ window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
                 status.textContent = error.message || 'Não foi possível enviar o comentário.';
             } finally {
                 send.disabled = false;
-            }
-        });
-        logout.addEventListener('click', async () => {
-            logout.disabled = true;
-            try {
-                await request('logout', {});
-                render(await request('read'));
-            } catch {
-                status.textContent = 'Não foi possível sair. Tente novamente.';
-                logout.disabled = false;
             }
         });
     }
@@ -239,7 +227,11 @@ window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
             heart.disabled = false;
         }
     });
-    request('read').then(render).catch(() => {
-        status.textContent = 'Comentários e curtidas indisponíveis no momento.';
-    });
+    function refreshCommunity() {
+        return request('read').then(render).catch(() => {
+            status.textContent = 'Comentários e curtidas indisponíveis no momento.';
+        });
+    }
+    window.addEventListener('despencou-session-change', refreshCommunity);
+    refreshCommunity();
 };
