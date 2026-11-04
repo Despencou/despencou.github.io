@@ -83,9 +83,9 @@ window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
             event.preventDefault();
             send.disabled = true;
             try {
-                await request('comment', {body: message.value});
-                message.value = '';
-                status.textContent = 'Comentário enviado para aprovação.';
+                const updated = await request('comment', {body: message.value});
+                render(updated);
+                status.textContent = 'Comentário publicado.';
             } catch (error) {
                 status.textContent = error.message || 'Não foi possível enviar o comentário.';
             } finally {
