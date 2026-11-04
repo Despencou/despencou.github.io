@@ -120,3 +120,5 @@
 }
 
 .profile-delete-account{display:block;margin-top:20px;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;cursor:pointer;text-decoration:underline}.profile-delete-account:disabled{opacity:.55;cursor:wait}
+
+.profile-login-controls{display:grid;gap:9px}.profile-remember{display:flex;align-items:center;gap:6px;font:inherit;cursor:pointer}.profile-remember input{margin:0;accent-color:var(--red)}.profile-page .profile-login-controls{max-width:260px}.profile-page .profile-login-controls a{color:var(--ink)}

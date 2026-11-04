@@ -69,11 +69,23 @@
     }
 
     function loginLink() {
+        const controls = node('div', '', 'profile-login-controls');
         const login = node('a', 'Entrar com Google');
-        const search = /^\?id=tg-[0-9]+$/.test(location.search) ? location.search : '';
-        const hash = /^#(?:ofertas|cupons|blog|comentarios|comentario-[0-9]+)$/.test(location.hash) ? location.hash : '';
-        login.href = endpoint + '?' + new URLSearchParams({action:'login',return_to:location.pathname+search+hash});
-        return login;
+        const remember = node('input');
+        remember.type = 'checkbox';
+        const label = node('label', '', 'profile-remember');
+        label.append(remember, node('span', 'Lembrar de mim'));
+        const updateLink = () => {
+            const search = /^\?id=tg-[0-9]+$/.test(location.search) ? location.search : '';
+            const hash = /^#(?:ofertas|cupons|blog|comentarios|comentario-[0-9]+)$/.test(location.hash) ? location.hash : '';
+            const params = new URLSearchParams({action:'login',return_to:location.pathname+search+hash});
+            if (remember.checked) params.set('remember', '1');
+            login.href = endpoint + '?' + params;
+        };
+        remember.addEventListener('change', updateLink);
+        updateLink();
+        controls.append(login, label);
+        return controls;
     }
 
     function showUnread(count) {
