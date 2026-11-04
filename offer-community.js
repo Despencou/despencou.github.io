@@ -122,6 +122,7 @@ window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
                 status.textContent = 'Entre com Google para responder.';
             }
         };
+        const threads = new Map();
         for (const comment of data.comments) {
             const article = node('article');
             article.id = 'comentario-' + comment.id;
@@ -227,7 +228,27 @@ window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
             });
             actions.append(reply, reaction);
             article.append(actions);
-            list.append(article);
+            threads.set(Number(comment.id), {article, comment, replies:[]});
+        }
+        const roots = [];
+        for (const thread of threads.values()) {
+            const id = Number(thread.comment.id);
+            const parentId = Number(thread.comment.parent_id);
+            const parent = parentId > 0 && parentId < id ? threads.get(parentId) : null;
+            if (parent) parent.replies.push(thread);
+            else roots.push(thread);
+        }
+        roots.sort((a,b) => b.comment.id - a.comment.id);
+        for (const root of roots) list.append(root.article);
+        for (const thread of threads.values()) {
+            if (!thread.replies.length) continue;
+            const replies = node('div');
+            replies.className = 'comment-replies';
+            replies.setAttribute('role', 'group');
+            replies.setAttribute('aria-label', 'Respostas a ' + thread.comment.name);
+            thread.replies.sort((a,b) => a.comment.id - b.comment.id);
+            for (const child of thread.replies) replies.append(child.article);
+            thread.article.append(replies);
         }
         if (initialRender && focus) {
             document.getElementById('comentario-' + focus)?.scrollIntoView({block:'center'});

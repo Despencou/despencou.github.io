@@ -19,3 +19,10 @@
 .offer-community article header,.comment-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.offer-community time,.offer-community .comment-context{color:var(--mut);font-size:13px}.comment-actions button{min-height:36px;font-size:13px}.offer-community button[hidden]{display:none}
 
 .comment-menu{position:relative;margin-left:auto}.comment-menu summary{cursor:pointer;list-style:none;padding:2px 8px;font-size:22px;line-height:1}.comment-menu summary::-webkit-details-marker{display:none}.comment-menu div{position:absolute;right:0;z-index:2;min-width:118px;padding:6px;border:1px solid var(--line);border-radius:10px;background:var(--card);box-shadow:0 4px 12px #0003}.comment-menu button{display:block;width:100%;margin:2px 0}.comment-edit{margin:9px 0}
+
+.comment-replies{position:relative;margin:10px 0 0 10px;padding-left:16px;border-left:2px solid var(--line)}
+.offer-community .comment-replies>article{position:relative;padding:9px 0;border-top:1px solid var(--line)}
+.offer-community .comment-replies>article:first-child{border-top:0}
+.comment-replies>article::before{content:"";position:absolute;top:17px;left:-18px;width:15px;height:8px;border-left:2px solid var(--line);border-bottom:2px solid var(--line);border-radius:0 0 0 7px}
+.comment-replies .comment-replies .comment-replies{margin-left:0;padding-left:9px}
+.comment-replies .comment-replies .comment-replies>article::before{left:-11px;width:8px}
