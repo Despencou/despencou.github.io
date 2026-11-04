@@ -1,7 +1,82 @@
 'use strict';
+const offerCommunityApi = 'https://painel.despencou.com/offer-community.php';
+
+async function offerCommunityRequest(parameters, body) {
+    const options = {credentials: 'include', signal: AbortSignal.timeout(10000)};
+    if (body !== undefined) {
+        options.method = 'POST';
+        options.headers = {'Content-Type': 'application/json'};
+        options.body = JSON.stringify(body);
+    }
+    const response = await fetch(offerCommunityApi + '?' + new URLSearchParams(parameters), options);
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error);
+    return data;
+}
+
+function communityHeart(button, data, label) {
+    button.textContent = (data.liked ? '♥ ' : '♡ ') + data.hearts;
+    button.setAttribute('aria-label', (data.liked ? 'Descurtir ' : 'Curtir ') + label + ' · ' + data.hearts);
+    button.setAttribute('aria-pressed', String(Boolean(data.liked)));
+}
+
+let cardSummaryQueue = Promise.resolve();
+window.loadOfferCardCommunity = function loadOfferCardCommunity(grid) {
+    const rows = [...grid.querySelectorAll('[data-community-offer]')];
+    cardSummaryQueue = cardSummaryQueue.catch(() => {}).then(async () => {
+        const current = rows.filter(row => row.isConnected);
+        for (let i = 0; i < current.length; i += 40) {
+            const batch = current.slice(i, i + 40).filter(row => row.isConnected);
+            if (!batch.length) continue;
+            const offers = batch.map(row => row.dataset.communityOffer).join(',');
+            let data;
+            try {
+                data = await offerCommunityRequest({action:'summary', offers});
+            } catch {
+                for (const row of batch) row.querySelector('button').title = 'Curtidas indisponíveis no momento';
+                continue;
+            }
+            const summaries = new Map(data.offers.map(item => [item.offer, item]));
+            for (const row of batch) {
+                if (!row.isConnected) continue;
+                const offer = row.dataset.communityOffer;
+                const summary = summaries.get(offer);
+                if (!summary) continue;
+                const heart = row.querySelector('button');
+                const comments = row.querySelector('a');
+                communityHeart(heart, summary, 'oferta');
+                heart.disabled = false;
+                comments.textContent = '💬 ' + summary.comments;
+                comments.setAttribute('aria-label', 'Ver comentários da oferta (' + summary.comments + ')');
+                heart.addEventListener('click', async () => {
+                    heart.disabled = true;
+                    try {
+                        const result = await offerCommunityRequest({offer,action:'heart'}, {
+                            liked: heart.getAttribute('aria-pressed') !== 'true'
+                        });
+                        communityHeart(heart, result, 'oferta');
+                        heart.title = '';
+                    } catch {
+                        heart.title = 'Não foi possível registrar a curtida';
+                    } finally {
+                        heart.disabled = false;
+                    }
+                });
+            }
+        }
+    });
+};
+
+function communityAge(timestamp) {
+    const minutes = Math.max(0, Math.floor((Date.now()/1000 - timestamp)/60));
+    if (minutes < 1) return 'agora';
+    if (minutes < 60) return 'há ' + minutes + ' min';
+    if (minutes < 1440) return 'há ' + Math.floor(minutes/60) + ' h';
+    return 'há ' + Math.floor(minutes/1440) + ' d';
+}
+
 window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
-    const api = 'https://painel.despencou.com/offer-community.php';
-    const url = action => api + '?' + new URLSearchParams({offer, action});
+    const url = action => offerCommunityApi + '?' + new URLSearchParams({offer, action});
     const node = (tag, text) => {
         const item = document.createElement(tag);
         if (text) item.textContent = text;
@@ -24,18 +99,7 @@ window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
     if (location.hash === "#comentarios") section.scrollIntoView({block: "start"});
     let liked = false;
 
-    async function request(action, body) {
-        const options = {credentials: 'include', signal: AbortSignal.timeout(10000)};
-        if (body !== undefined) {
-            options.method = 'POST';
-            options.headers = {'Content-Type': 'application/json'};
-            options.body = JSON.stringify(body);
-        }
-        const response = await fetch(url(action), options);
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error);
-        return data;
-    }
+    const request = (action, body) => offerCommunityRequest({offer, action}, body);
 
     function renderHeart(data) {
         liked = data.liked;
@@ -49,9 +113,54 @@ window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
         status.textContent = '';
         list.replaceChildren();
         if (!data.comments.length) list.append(node('p', 'Ainda não há comentários publicados.'));
+        let chooseParent = () => {
+            const login = account.querySelector('a');
+            if (login) {
+                login.focus();
+                status.textContent = 'Entre com Google para responder.';
+            }
+        };
         for (const comment of data.comments) {
             const article = node('article');
-            article.append(node('strong', comment.name), node('p', comment.body));
+            article.id = 'comentario-' + comment.id;
+            const time = node('time', communityAge(comment.created));
+            time.dateTime = new Date(comment.created * 1000).toISOString();
+            time.title = new Date(comment.created * 1000).toLocaleString('pt-BR');
+            const author = node('header');
+            author.append(node('strong', comment.name), time);
+            article.append(author);
+            if (comment.parent_id) {
+                const context = node('p', comment.parent_name
+                    ? 'Em resposta a ' + comment.parent_name
+                    : 'Em resposta a um comentário anterior');
+                context.className = 'comment-context';
+                article.append(context);
+            }
+            article.append(node('p', comment.body));
+            const actions = node('div');
+            actions.className = 'comment-actions';
+            const reply = node('button', 'Responder');
+            reply.type = 'button';
+            reply.addEventListener('click', () => chooseParent(comment));
+            const reaction = node('button');
+            reaction.type = 'button';
+            communityHeart(reaction, comment, 'comentário');
+            reaction.addEventListener('click', async () => {
+                reaction.disabled = true;
+                try {
+                    const result = await request('comment-heart', {
+                        comment: Number(comment.id),
+                        liked: reaction.getAttribute('aria-pressed') !== 'true'
+                    });
+                    communityHeart(reaction, result, 'comentário');
+                } catch (error) {
+                    status.textContent = error.message || 'Não foi possível registrar a curtida.';
+                } finally {
+                    reaction.disabled = false;
+                }
+            });
+            actions.append(reply, reaction);
+            article.append(actions);
             list.append(article);
         }
         account.replaceChildren();
@@ -77,13 +186,28 @@ window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
         send.type = 'submit';
         const logout = node('button', 'Sair');
         logout.type = 'button';
-        form.append(label, message, send, logout);
+        let parent = null;
+        const cancel = node('button', 'Cancelar resposta');
+        cancel.type = 'button';
+        cancel.hidden = true;
+        cancel.addEventListener('click', () => {
+            parent = null;
+            label.textContent = 'Seu comentário';
+            cancel.hidden = true;
+        });
+        chooseParent = comment => {
+            parent = Number(comment.id);
+            label.textContent = 'Responder a ' + comment.name;
+            cancel.hidden = false;
+            message.focus();
+        };
+        form.append(label, message, send, cancel, logout);
         account.append(node('p', 'Comentando como ' + data.name), form);
         form.addEventListener('submit', async event => {
             event.preventDefault();
             send.disabled = true;
             try {
-                const updated = await request('comment', {body: message.value});
+                const updated = await request('comment', {body: message.value, parent});
                 render(updated);
                 status.textContent = 'Comentário publicado.';
             } catch (error) {

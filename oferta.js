@@ -13,7 +13,7 @@
   if(!id || !/^tg-\d+$/.test(id)){unavailable('Abra uma oferta pelo catálogo para consultar os detalhes.');return;}
   const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12000);
   try{
-    if(!staticPage){try{const map=await (await fetch('/site-page-map.json',{signal:controller.signal})).json();if(map[id]==='/oferta/'+id+'/'){location.replace(map[id]);return;}}catch{}}
+    if(!staticPage){try{const map=await (await fetch('/site-page-map.json',{signal:controller.signal})).json();if(map[id]==='/oferta/'+id+'/'){location.replace(map[id] + location.hash);return;}}catch{}}
     const response=await fetch(API+'/site-offers/'+encodeURIComponent(id),{signal:controller.signal});
     if(response.status===404){document.title='Oferta indisponível | Despencou';const robots=document.querySelector('meta[name="robots"]');if(robots)robots.content='noindex,follow';unavailable('Esta oferta não está disponível no site. Confira as ofertas recentes.');return;}
     if(!response.ok)throw Error('feed');

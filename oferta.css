@@ -15,3 +15,5 @@
 .offer-community a{color:var(--ink)}
 .offer-community article{border-top:1px solid var(--line);padding:12px 0;overflow-wrap:anywhere}
 .offer-community article p{margin:6px 0;white-space:pre-wrap}
+
+.offer-community article header,.comment-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.offer-community time,.offer-community .comment-context{color:var(--mut);font-size:13px}.comment-actions button{min-height:36px;font-size:13px}.offer-community button[hidden]{display:none}

@@ -39,6 +39,20 @@
     if(coupon.hasCoupon){const a=element('a','btn offer-link','Ver oferta e cupom');a.href=pageMap[item.id]==='/oferta/'+item.id+'/'?pageMap[item.id]:'/oferta/?id='+encodeURIComponent(item.id);card.append(a);}else card.append(link('Ver oferta',item.url,'btn offer-link'));
     if(!coupon.hasCoupon){const details=element('a','details','Detalhes do produto');details.href=pageMap[item.id]==='/oferta/'+item.id+'/'?pageMap[item.id]:'/oferta/?id='+encodeURIComponent(item.id);card.append(details);}
     if(item.ended)card.append(element('strong','offer-ended-label','Oferta encerrada · preço da publicação'));
+    if (/^tg-\d+$/.test(item.id)) {
+      const actions = element('div','offer-card-community');
+      actions.dataset.communityOffer = item.id;
+      const heart = element('button',null,'♡');
+      heart.type = 'button';
+      heart.disabled = true;
+      heart.setAttribute('aria-label','Curtir oferta');
+      const comments = element('a',null,'💬');
+      const details = pageMap[item.id] === '/oferta/'+item.id+'/' ? pageMap[item.id] : '/oferta/?id='+encodeURIComponent(item.id);
+      comments.href = details + '#comentarios';
+      comments.setAttribute('aria-label','Ver comentários da oferta');
+      actions.append(heart,comments);
+      card.append(actions);
+    }
     card.append(element('span','t',age(item.published_at)));
     return card;
   }
@@ -53,6 +67,7 @@
     filtered.sort(order==='price' ? (a,b)=>a.price-b.price : (a,b)=>new Date(b.published_at)-new Date(a.published_at));
     const grid=$('#g1');grid.replaceChildren();
     filtered.slice(0,limit).forEach((i,n)=>{grid.append(offerCard(i));if(n===3)grid.append(groupCard());});
+    window.loadOfferCardCommunity?.(grid);
     if((couponFilter?archiveLoaded:loaded)&&!filtered.length)grid.append(element('p','empty',couponFilter?'Nenhuma oferta publicada com esse cupom foi encontrada nesta busca.':'Nenhuma oferta encontrada. Experimente outra busca ou loja.'));
     $('#load-more').hidden=filtered.length<=limit;
     if(couponFilter)$('#feed-status').textContent=archiveLoaded?`${filtered.length} oferta(s) publicada(s) com esse cupom · Publicações antigas podem estar encerradas. Confira preço, estoque e validade na loja.`:archiveError?'Não foi possível consultar o histórico. Tente novamente em instantes.':'Buscando ofertas publicadas com esse cupom…';
