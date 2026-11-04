@@ -3,3 +3,15 @@
 
 
 .offer-state{font-weight:700;color:#178448;background:#e7f7ed;border-radius:10px;padding:10px 14px}.offer-state.ended{color:#8a4210;background:#fff0d9}
+
+.offer-community{margin-top:16px;scroll-margin-top:20px}
+.offer-community h2{margin:0 0 12px}
+.offer-community form{display:flex;flex-wrap:wrap;gap:8px}
+.offer-community form label,.offer-community textarea{width:100%}
+.offer-community textarea{min-height:96px;resize:vertical;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.offer-community button{border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);padding:8px 12px;min-height:44px;font:inherit;cursor:pointer}
+.offer-community button[aria-pressed="true"]{color:var(--ink);background:var(--soft)}
+.offer-community button:disabled{opacity:.55;cursor:wait}
+.offer-community a{color:var(--ink)}
+.offer-community article{border-top:1px solid var(--line);padding:12px 0;overflow-wrap:anywhere}
+.offer-community article p{margin:6px 0;white-space:pre-wrap}

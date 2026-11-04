@@ -47,6 +47,7 @@
     card.append(el('p','muted','Publicado em '+new Date(item.published_at).toLocaleDateString('pt-BR',{timeZone:'America/Sao_Paulo'})+'. Preços, estoque e cupons podem mudar. Confira as condições na loja antes de comprar.'));
     const recent=el('a',null,'Ver ofertas recentes');recent.href='/';card.append(recent);
     root.replaceChildren(card);
+    window.mountOfferCommunity?.(root, id);
   }catch{if(!staticPage)unavailable('Não foi possível carregar esta oferta agora. Tente novamente em instantes.');}
   finally{clearTimeout(timer);}
 })();
