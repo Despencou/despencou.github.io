@@ -88,9 +88,10 @@
 .profile-activities a { display: block; color: var(--ink); }
 .profile-activities p { margin: 5px 0 0; white-space: pre-wrap; }
 @media (max-width: 640px) {
-    .top .offer-account-controls { position: absolute; right: 9px; top: 21px; gap: 4px; }
-    .offer-profile summary { padding: 0 6px; min-height: 36px; }
-    .offer-profile:not(.profile-notifications) summary { flex-direction: column; justify-content: center; gap: 0; }
+    .top .offer-account-controls { position: absolute; right: 9px; top: 20px; align-items: center; gap: 2px; }
+    .offer-account-controls summary { box-sizing: border-box; width: 44px; min-height: 44px; padding: 0; justify-content: center; }
+    .offer-profile:not(.profile-notifications) summary { flex-direction: column; gap: 2px; border: 0; border-radius: 8px; }
+    .offer-profile:not(.profile-notifications) .profile-label { max-width: 44px; }
     .profile-label { max-width: 48px; font-size: 10px; line-height: 12px; }
     #my-profile { grid-template-columns: 1fr; }
 }

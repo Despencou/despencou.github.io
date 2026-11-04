@@ -53,6 +53,7 @@
     header.append(group);
     let session = {};
     let sessionVersion = 0;
+    let markingNotifications = false;
 
     async function request(action, body) {
         const options = {credentials:'include', signal:AbortSignal.timeout(10000)};
@@ -87,7 +88,7 @@
         button.replaceChildren(avatar(session.picture), node('span', name, 'profile-label'));
         button.setAttribute('aria-label', session.name ? 'Perfil de ' + session.name : 'Perfil');
         bell.hidden = !session.name;
-        showUnread(session.unread);
+        showUnread(bell.open || markingNotifications ? 0 : session.unread);
         menu.replaceChildren();
         if (session.name) {
             const mine = node('a', 'Meu perfil');
@@ -125,29 +126,29 @@
     bell.addEventListener('toggle', async () => {
         if (!bell.open) return;
         profile.open = false;
+        markingNotifications = true;
+        showUnread(0);
         notifications.textContent = 'Carregando notificações…';
         try {
             const result = await request('notifications');
             notifications.replaceChildren(node('strong', 'Notificações'));
             if (!result.notifications.length) notifications.append(node('p', 'Nenhuma notificação por enquanto.'));
-            let through = result.seen;
-            let throughHeart = result.seenHeart || 0;
             for (const item of result.notifications) {
                 const isHeart = item.kind === 'heart';
                 const message = isHeart ? ' curtiu seu comentário em ' : ' respondeu ao seu comentário em ';
                 const link = node('a', item.name + message + item.title);
                 link.href = '/oferta/' + item.offer + '/#comentario-' + (item.comment_id || item.id);
                 if (item.id > (isHeart ? result.seenHeart : result.seen)) link.className = 'unread-reply';
-                if (isHeart) throughHeart = Math.max(throughHeart, Number(item.id));
-                else through = Math.max(through, Number(item.id));
                 notifications.append(link);
             }
-            if (through > result.seen || throughHeart > (result.seenHeart || 0)) {
-                await request('notifications-read', {through, throughHeart});
-                await loadSession();
-            }
+            await request('notifications-read', {all:true});
+            sessionVersion++;
+            session.unread = 0;
         } catch {
             notifications.textContent = 'Não foi possível carregar as notificações.';
+        } finally {
+            markingNotifications = false;
+            if (!bell.open) showUnread(session.unread);
         }
     });
 
