@@ -99,7 +99,9 @@ window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
     if (location.hash === "#comentarios") section.scrollIntoView({block: "start"});
     let liked = false;
 
-    const request = (action, body) => offerCommunityRequest({offer, action}, body);
+    const focus = location.hash.match(/^#comentario-([0-9]+)$/)?.[1] || '';
+    const request = (action, body) => offerCommunityRequest({offer, action, focus}, body);
+    let initialRender = true;
 
     function renderHeart(data) {
         liked = data.liked;
@@ -136,7 +138,71 @@ window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
                 context.className = 'comment-context';
                 article.append(context);
             }
-            article.append(node('p', comment.body));
+            const content = node('p', comment.body);
+            article.append(content);
+            if (comment.mine) {
+                const tools = node('details');
+                tools.className = 'comment-menu';
+                const open = node('summary', '⋯');
+                open.setAttribute('aria-label', 'Opções do seu comentário');
+                const menu = node('div');
+                const edit = node('button', 'Editar');
+                edit.type = 'button';
+                const remove = node('button', 'Excluir');
+                remove.type = 'button';
+                menu.append(edit, remove);
+                tools.append(open, menu);
+                author.append(tools);
+                edit.addEventListener('click', () => {
+                    tools.open = false;
+                    if (article.querySelector('.comment-edit')) return;
+                    const form = node('form');
+                    form.className = 'comment-edit';
+                    const input = node('textarea');
+                    input.setAttribute('aria-label', 'Editar comentário');
+                    input.required = true;
+                    input.maxLength = 400;
+                    input.value = content.textContent;
+                    const save = node('button', 'Salvar');
+                    save.type = 'submit';
+                    const cancelEdit = node('button', 'Cancelar');
+                    cancelEdit.type = 'button';
+                    const close = () => { form.remove(); content.hidden = false; };
+                    cancelEdit.addEventListener('click', close);
+                    form.append(input, save, cancelEdit);
+                    content.after(form);
+                    content.hidden = true;
+                    input.focus();
+                    form.addEventListener('submit', async event => {
+                        event.preventDefault();
+                        save.disabled = true;
+                        cancelEdit.disabled = true;
+                        try {
+                            await request('comment-edit', {comment:Number(comment.id), body:input.value});
+                            content.textContent = input.value.trim();
+                            close();
+                            status.textContent = 'Comentário editado.';
+                        } catch (error) {
+                            status.textContent = error.message || 'Não foi possível salvar a edição.';
+                            save.disabled = false;
+                            cancelEdit.disabled = false;
+                        }
+                    });
+                });
+                remove.addEventListener('click', async () => {
+                    if (!window.confirm('Excluir seu comentário?')) return;
+                    remove.disabled = true;
+                    try {
+                        await request('comment-delete', {comment:Number(comment.id)});
+                        await refreshCommunity();
+                        status.textContent = 'Comentário excluído.';
+                    } catch (error) {
+                        status.textContent = error.message || 'Não foi possível excluir o comentário.';
+                    } finally {
+                        remove.disabled = false;
+                    }
+                });
+            }
             const actions = node('div');
             actions.className = 'comment-actions';
             const reply = node('button', 'Responder');
@@ -163,12 +229,16 @@ window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
             article.append(actions);
             list.append(article);
         }
+        if (initialRender && focus) {
+            document.getElementById('comentario-' + focus)?.scrollIntoView({block:'center'});
+        }
+        initialRender = false;
         account.replaceChildren();
         if (!data.name) {
             if (data.googleReady) {
                 const login = node('a', 'Entrar com Google para comentar');
                 login.href = url('login');
-                account.append(login, node('p', 'Seu nome acompanha o comentário publicado. Seu e-mail fica visível apenas para a moderação.'));
+                account.append(login);
             } else {
                 account.append(node('p', 'Comentários em breve.'));
             }

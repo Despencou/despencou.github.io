@@ -1,15 +1,19 @@
-.top .offer-profile {
+.top .offer-account-controls {
     position: relative;
+    display: flex;
+    gap: 6px;
     z-index: 3;
     margin-left: auto;
     font: 700 14px "DM Sans", sans-serif;
 }
-
+.offer-profile { position: relative; }
+.offer-account-controls [hidden] { display: none; }
 .offer-profile summary {
     display: flex;
     align-items: center;
+    gap: 5px;
     min-height: 40px;
-    padding: 0 13px;
+    padding: 0 9px;
     border: 1px solid #ffffffa0;
     border-radius: 999px;
     color: #fff;
@@ -17,12 +21,33 @@
     list-style: none;
 }
 .offer-profile summary::-webkit-details-marker { display: none; }
-
+.profile-avatar {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #fff5e6;
+    color: #382219;
+    overflow: hidden;
+}
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.profile-badge {
+    position: absolute;
+    top: -5px;
+    right: -4px;
+    background: #ffc928;
+    color: #231714;
+    font-size: 10px;
+    border-radius: 12px;
+    padding: 2px 5px;
+}
 .offer-profile-menu {
     position: absolute;
     inset: calc(100% + 8px) 0 auto auto;
     display: grid;
-    gap: 10px;
+    gap: 9px;
     width: min(230px, calc(100vw - 30px));
     padding: 14px;
     border: 1px solid var(--line);
@@ -32,13 +57,14 @@
     box-shadow: 0 8px 24px #0003;
     overflow-wrap: anywhere;
 }
-
+.profile-notifications .offer-profile-menu { width: min(290px, calc(100vw - 85px)); max-height: 55vh; overflow: auto; }
 .offer-profile-menu a,
 .offer-profile-menu button {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 42px;
+    padding: 5px 9px;
     border: 1px solid var(--line);
     border-radius: 8px;
     background: var(--bg);
@@ -47,8 +73,25 @@
     cursor: pointer;
     text-decoration: none;
 }
-
+.profile-notifications .offer-profile-menu a { justify-content: flex-start; font-size: 13px; }
+.offer-profile-menu a.unread-reply { border-left: 4px solid var(--red); }
+.profile-page { max-width: 1100px; margin: auto; padding: 24px 16px; color: var(--ink); }
+#my-profile { display: grid; grid-template-columns: minmax(230px, 300px) minmax(0, 1fr); gap: 16px; align-items: start; }
+.profile-identity,.profile-activities { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; overflow-wrap: anywhere; }
+.profile-identity .profile-avatar { width: 64px; height: 64px; font-size: 32px; }
+.member-badge { display: inline-block; padding: 6px 10px; background: var(--soft); border-radius: 999px; font-size: 13px; }
+.profile-photo-option { display: flex; gap: 8px; align-items: center; margin-top: 12px; }
+.profile-note,.profile-activities time { color: var(--mut); font-size: 13px; }
+.profile-activities ol { margin: 8px 0 0; padding: 0; list-style: none; }
+.profile-activities li { border-top: 1px solid var(--line); padding: 12px 0; }
+.profile-activities time { margin-left: 12px; }
+.profile-activities a { display: block; color: var(--ink); }
+.profile-activities p { margin: 5px 0 0; white-space: pre-wrap; }
 @media (max-width: 640px) {
-    .top .offer-profile { position: absolute; right: 12px; top: 20px; }
-    .offer-profile summary { padding: 0 10px; }
+    .top .offer-account-controls { position: absolute; right: 9px; top: 21px; gap: 4px; }
+    .offer-profile summary { padding: 0 6px; min-height: 36px; }
+    .offer-profile:not(.profile-notifications) summary > span:nth-child(2) {
+        position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden;
+    }
+    #my-profile { grid-template-columns: 1fr; }
 }
