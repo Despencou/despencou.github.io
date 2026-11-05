@@ -90,8 +90,8 @@ test('Coupon guide keeps two checkout screenshots in step four and escapes guide
  const ml=p.blocks.find(b=>b.type==='steps'&&b.title.includes('Mercado Livre'));
  assert.equal(ml.items.length,5);assert.match(ml.items[0].title,/Copie o cupom/);
  assert.equal(ml.items[3].images.length,2);
- const html=articleBody(p,'02/11/2026');assert.match(html,/mercado-livre-pagamento.png/);
- assert.equal((html.match(/class="blog-guide-images"/g)||[]).length,4);
+ const html=articleBody(p,'02/11/2026');assert.match(html,/mercado-livre-pagamento-seta.jpg/);
+ assert.equal((html.match(/class="blog-guide-images"/g)||[]).length,6);
  const fake={...p,blocks:[{type:'steps',title:'<script>',items:[{title:'<img>',text:'<script>',images:[]}]}]};
  assert.doesNotMatch(articleBody(fake,'hoje'),/<script>/);
  fake.blocks[0].items[0].images=[{src:'https://example.com/private.png',alt:'x'}];

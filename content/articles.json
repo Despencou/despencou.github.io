@@ -16,6 +16,57 @@
     "blocks": [
       {
         "type": "steps",
+        "title": "Como usar cupons no Mercado Livre",
+        "intro": "Siga estes cinco passos para aplicar o código que acompanha a oferta do grupo.",
+        "items": [
+          {
+            "title": "Copie o cupom e abra o link do produto",
+            "text": "",
+            "images": []
+          },
+          {
+            "title": "Toque em “Ir para produto”",
+            "text": "",
+            "images": [
+              {
+                "src": "/assets/blog/como-usar-cupons/mercado-livre-ir-para-produto.jpg",
+                "alt": "Página da oferta no Mercado Livre com o botão Ir para produto"
+              }
+            ]
+          },
+          {
+            "title": "Adicione ao carrinho ou compre agora",
+            "text": "",
+            "images": [
+              {
+                "src": "/assets/blog/como-usar-cupons/mercado-livre-comprar-ou-carrinho.jpg",
+                "alt": "Anúncio no Mercado Livre com os botões Comprar agora e Adicionar ao carrinho"
+              }
+            ]
+          },
+          {
+            "title": "Abra a área de cupons",
+            "text": "Na tela de pagamento ou no carrinho, procure “Inserir código do cupom”. A primeira imagem abaixo mostra a opção no final da tela; a segunda mostra o campo para colar o código, também no final da tela. Mesmo que apareça “Você não tem cupons disponíveis”, o campo de código está disponível no rodapé.",
+            "images": [
+              {
+                "src": "/assets/blog/como-usar-cupons/mercado-livre-pagamento-seta.jpg",
+                "alt": "Seta destaca a opção Inserir código do cupom na tela de pagamento"
+              },
+              {
+                "src": "/assets/blog/como-usar-cupons/mercado-livre-inserir-cupom-seta.jpg",
+                "alt": "Seta destaca o campo para inserir o código na tela de cupons"
+              }
+            ]
+          },
+          {
+            "title": "Cole o código e confirme",
+            "text": "Cole ou digite o cupom e toque em “Inserir”. Confira se o desconto foi aplicado e revise o total antes de finalizar o pagamento.",
+            "images": []
+          }
+        ]
+      },
+      {
+        "type": "steps",
         "title": "Como usar cupons na Shopee",
         "intro": "Se a oferta trouxer um link para resgatar o cupom, abra esse link primeiro. Se trouxer um código, copie-o para usar na compra.",
         "items": [
@@ -48,47 +99,6 @@
                 "alt": "Resumo da compra na Shopee com cupom aplicado"
               }
             ]
-          }
-        ]
-      },
-      {
-        "type": "steps",
-        "title": "Como usar cupons no Mercado Livre",
-        "intro": "Siga estes cinco passos para aplicar o código que acompanha a oferta do grupo.",
-        "items": [
-          {
-            "title": "Copie o cupom e abra o link do produto",
-            "text": "",
-            "images": []
-          },
-          {
-            "title": "Toque em “Ir para produto”",
-            "text": "",
-            "images": []
-          },
-          {
-            "title": "Adicione ao carrinho ou compre agora",
-            "text": "",
-            "images": []
-          },
-          {
-            "title": "Abra a área de cupons",
-            "text": "Na tela de pagamento ou no carrinho, procure “Inserir código do cupom”. A primeira imagem abaixo mostra a opção no final da tela; a segunda mostra o campo para colar o código, também no final da tela. Mesmo que apareça “Você não tem cupons disponíveis”, o campo de código está disponível no rodapé.",
-            "images": [
-              {
-                "src": "/assets/blog/como-usar-cupons/mercado-livre-pagamento.png",
-                "alt": "Tela de pagamento: toque em Inserir código do cupom. Dados pessoais e financeiros ocultados."
-              },
-              {
-                "src": "/assets/blog/como-usar-cupons/mercado-livre-inserir-cupom.png",
-                "alt": "Tela Cupons: campo Inserir código na parte inferior"
-              }
-            ]
-          },
-          {
-            "title": "Cole o código e confirme",
-            "text": "Cole ou digite o cupom e toque em “Inserir”. Confira se o desconto foi aplicado e revise o total antes de finalizar o pagamento.",
-            "images": []
           }
         ]
       },

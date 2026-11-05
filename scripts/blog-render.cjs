@@ -18,7 +18,7 @@ function cover(c){
 }
 function guideImages(images=[]){
  return images.length?`<div class="blog-guide-images">${images.map(p=>{
-  if(!/^\/assets\/blog\/[a-z0-9/-]+\.(webp|png)$/.test(p.src))throw Error('Invalid guide image');
+  if(!/^\/assets\/blog\/[a-z0-9/-]+\.(webp|png|jpg)$/.test(p.src))throw Error('Invalid guide image');
   return `<figure><a href="${esc(p.src)}" target="_blank" rel="noopener" aria-label="Ampliar: ${esc(p.alt)}"><img src="${esc(p.src)}" alt="${esc(p.alt)}" loading="lazy" decoding="async"></a><figcaption>${esc(p.caption||p.alt)}</figcaption></figure>`;
  }).join('')}</div>`:'';
 }
