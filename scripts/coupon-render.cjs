@@ -29,7 +29,7 @@ function render(template,feed,store='',now=new Date()){
     .replace(/<script src="\/(?:oferta|payment-parser|offer-community).js[^>]*><\/script>/g,'')
     .replace(/href="\/#cupons"/g,'href="/cupons/"')
     .replace('<a href="/cupons/" data-tab="cupons">','<a class="on" href="/cupons/" data-tab="cupons" aria-current="page">')
-    .replace('</body>',()=>`<script id="coupon-page-data" type="application/json">${seed}</script><script src="/ml-coupon-tabs.js?v=cupons-relevantes-20261104"></script><script src="/coupon-pages.js?v=cupons-todos-20261105"></script></body>`);
+    .replace('</body>',()=>`<script id="coupon-page-data" type="application/json">${seed}</script><script src="/ml-coupon-tabs.js?v=cupons-relevantes-20261104"></script><script src="/coupon-pages.js?v=shopee-card-20261105"></script></body>`);
   return {url,html};
 }
 module.exports={render};
