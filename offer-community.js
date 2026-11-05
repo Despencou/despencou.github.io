@@ -216,6 +216,32 @@ window.mountOfferCommunity = function mountOfferCommunity(root, offer) {
                     }
                 });
             }
+            if (data.name && !comment.mine) {
+                const tools = node('details');
+                tools.className = 'comment-menu';
+                const open = node('summary', '⋯');
+                open.setAttribute('aria-label', 'Denunciar comentário');
+                const menu = node('div');
+                for (const [reason,label] of [['spam','SPAM'],['offensive','Comentário ofensivo']]) {
+                    const report = node('button', label);
+                    report.type = 'button';
+                    report.addEventListener('click', async () => {
+                        for (const button of menu.children) button.disabled = true;
+                        try {
+                            const result = await request('comment-report', {comment:Number(comment.id),reason});
+                            status.textContent = result.duplicate ? 'Você já denunciou este comentário.' : 'Denúncia enviada para análise.';
+                            tools.open = false;
+                        } catch (error) {
+                            status.textContent = error.message || 'Não foi possível denunciar o comentário.';
+                        } finally {
+                            for (const button of menu.children) button.disabled = false;
+                        }
+                    });
+                    menu.append(report);
+                }
+                tools.append(open, menu);
+                author.append(tools);
+            }
             const actions = node('div');
             actions.className = 'comment-actions';
             const reply = node('button', 'Responder');
