@@ -29,7 +29,7 @@
   function highlights(){return `<div class="coupon-highlights"><a href="${esc(ML.shopeeDailyDestination)}" rel="sponsored noopener noreferrer"><strong>Confira os cupons do dia na Shopee</strong><span>Conferir cupons →</span></a><a href="https://s.shopee.com.br/50ZpuvznP6" rel="sponsored noopener noreferrer"><strong>CUPOM DE TECNOLOGIA</strong><span>Ver cupom de tecnologia →</span></a><a href="https://s.shopee.com.br/3VlGPvA29x" rel="sponsored noopener noreferrer"><strong>OFERTAS RELÂMPAGO NA SHOPEE</strong><span>Ver ofertas relâmpago →</span></a></div>`;}
   function nav(store){return `<nav class="coupon-store-links" aria-label="Cupons por loja">${stores.map(([name,slug])=>`<a class="chip${name===store?' on':''}" href="/cupons/${slug}/"${name===store?' aria-current="page"':''}>${name}</a>`).join('')}</nav>`;}
   function group(){return '<aside class="coupon-group-callout"><div><strong>Receba os cupons na hora no nosso grupo</strong><p>Entre grátis e acompanhe os novos cupons assim que forem publicados.</p></div><div class="cta"><a class="btn wa" href="https://entrar.despencou.com/zaphome" target="_blank" rel="noopener noreferrer">Entrar no WhatsApp</a><a class="btn tg" href="https://t.me/despencou" target="_blank" rel="noopener noreferrer">Entrar no Telegram</a></div></aside>';}
-  function preview(items,today){return stores.map(([store,slug])=>{const shown=select(items,store,'today','recent',today).slice(0,3);return `<section class="coupon-preview"><h2><a href="/cupons/${slug}/">Cupons ${store} de hoje</a></h2>${store==='Shopee'?`<p><a class="coupon-inline" href="${esc(ML.shopeeDailyDestination)}" rel="sponsored noopener noreferrer">Confira os cupons do dia diretamente na Shopee →</a></p>`:''}<div class="cps">${shown.length?shown.map(card).join(''):'<p class="coupon-empty">Nenhum cupom novo publicado hoje por aqui. Veja a página da loja para outras opções e orientações.</p>'}</div><p><a class="coupon-inline" href="/cupons/${slug}/">Ver cupons ${store} →</a></p></section>`;}).join('');}
+  function preview(items,today){return stores.map(([store,slug])=>{const shown=select(items,store,'today','recent',today).slice(0,3);return `<section class="coupon-preview"><h2><a href="/cupons/${slug}/">Cupons ${store} de hoje</a></h2>${store==='Shopee'?`<p><a class="coupon-inline" href="${esc(ML.shopeeDailyDestination)}" rel="sponsored noopener noreferrer">Confira os cupons do dia diretamente na Shopee →</a></p>`:''}<div class="cps">${shown.length?shown.map(card).join(''):'<p class="coupon-empty">Nenhum cupom novo publicado hoje por aqui.</p>'}</div><p><a class="coupon-inline" href="/cupons/${slug}/#todos-os-cupons">Ver todos os cupons ${store==='Mercado Livre'?'do':'da'} ${store} disponíveis</a></p></section>`;}).join('');}
   function listing(items,store,tab='today',order='recent',today=ML.day()){
     const shown=select(items,store,tab,order,today);
     return {count:shown.length,html:shown.length?shown.map(card).join(''):'<p class="coupon-empty">Nenhum cupom disponível nesta aba agora. Acompanhe o grupo para receber os próximos.</p>'};
@@ -41,7 +41,8 @@
   if(typeof module!=='undefined'&&module.exports){module.exports=api;return;}
   root.DespencouCouponPages=api;
   const page=document.querySelector('[data-coupon-page]');if(!page)return;
-  let items=[],tab='today',order='recent',stamp='',day=ML.day();
+  const requestedTab=()=>location.hash==='#todos-os-cupons'?'all':location.hash==='#esgota-hoje'?'expires':'today';
+  let items=[],tab=requestedTab(),order='recent',stamp='',day=ML.day();
   const store=page.dataset.couponPage;
   try{const seed=JSON.parse(document.getElementById('coupon-page-data').textContent);items=seed.items;stamp=seed.updated_at||'';}catch{}
   function render(){
@@ -58,7 +59,8 @@
     try{const r=await fetch('https://midia.despencou.com/site-feed',{signal:AbortSignal.timeout(12000)});if(!r.ok)throw Error();const feed=await r.json();if(!Array.isArray(feed.items))throw Error();items=valid(feed.items);stamp=feed.updated_at||'';render();document.getElementById('coupon-page-feedback').textContent='';}
     catch{render();document.getElementById('coupon-page-feedback').textContent='Não foi possível atualizar agora. Confira os dados e a validade na loja.';}
   }
-  document.querySelectorAll('[data-coupon-tab]').forEach(b=>b.addEventListener('click',()=>{tab=b.dataset.couponTab;render();}));
+  document.querySelectorAll('[data-coupon-tab]').forEach(b=>b.addEventListener('click',()=>{tab=b.dataset.couponTab;history.replaceState(null,'',tab==='all'?'#todos-os-cupons':tab==='expires'?'#esgota-hoje':'#saiu-hoje');render();}));
+  window.addEventListener('hashchange',()=>{tab=requestedTab();render();});
   document.getElementById('coupon-page-sort')?.addEventListener('change',e=>{order=e.target.value;render();});
   page.addEventListener('click',async e=>{
     const action=e.target.closest('[data-coupon-code]');if(!action||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey||e.button>0)return;
