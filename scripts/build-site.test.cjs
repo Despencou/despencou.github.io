@@ -3,6 +3,7 @@ const {build,offerBody}=require('./build-site.cjs');
 require('./payment-parser.test.cjs');
 require('./ml-coupon-tabs.test.cjs');
 require('./coupon-pages.test.cjs');
+require('./home-render.test.cjs');
 const blog=require('./blog-render.cjs');
 test('Blog renderer keeps editorial text escaped and rejects unsafe link protocols',()=>{
  const post={title:'Guia <teste>',author:'Equipe',paragraphs:['<script>alert(1)</script>'],blocks:[{type:'section',title:'Resumo',source:{label:'Fonte',url:'javascript:alert(1)'}}]};

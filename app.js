@@ -13,6 +13,10 @@
   const shopCouponTabs={Shopee:'today',Amazon:'today'};
   let pageMap={};
   let items = [], store = 'all', couponStore = 'Mercado Livre', order = 'recent', limit = 16, loaded = false;
+  try{
+    const initial=JSON.parse(document.getElementById('home-initial-data')?.textContent||'null');
+    if(initial&&Array.isArray(initial.items)){items=initial.items;pageMap=initial.pageMap||{};}
+  }catch{}
   const $ = s => document.querySelector(s);
   const normalize = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const money = n => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(n);
@@ -144,7 +148,7 @@
       items=data.items.filter(i=>safeRetailer(i.url) && ['offer','coupon'].includes(i.kind) && typeof i.title==='string' && !isNaN(new Date(i.published_at)) && (i.kind==='coupon'||(Number.isFinite(i.price)&&i.price>0)));
       loaded=true;renderOffers();renderCoupons();
     }catch{
-      if(!couponFilter)$('#feed-status').textContent=loaded?'Não foi possível atualizar agora. Mostrando as últimas ofertas carregadas.':'Não foi possível carregar as ofertas agora. Tente novamente em instantes ou entre no Telegram.';
+      if(!couponFilter)$('#feed-status').textContent=(loaded||items.length)?'Não foi possível atualizar agora. Mostrando as ofertas da última publicação do site.':'Não foi possível carregar as ofertas agora. Tente novamente em instantes ou entre no Telegram.';
     }finally{clearTimeout(timeout);}
   }
   function route() {
@@ -170,6 +174,7 @@
     }catch{archiveError=true;}finally{clearTimeout(timeout);renderOffers();}
   }
   if(couponFilter){
+    $('#g1').replaceChildren();
     const notice=$('#offer-coupon-filter');notice.hidden=false;
     notice.append(element('h2',null,'Ofertas publicadas com o cupom '+couponCode),element('p',null,'Loja: '+offerCouponStore));
     const clear=element('a','btn ghost','Ver todas as ofertas');clear.href='/#ofertas';notice.append(clear);
