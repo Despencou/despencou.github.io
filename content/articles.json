@@ -72,7 +72,7 @@
         "items": [
           {
             "title": "Resgate antes de comprar",
-            "text": "Clique no primeiro link que enviamos no post do produto para resgatar os cupons ofertados.",
+            "text": "",
             "images": [
               {
                 "src": "/assets/blog/como-usar-cupons/shopee-passo-3.webp",
@@ -82,7 +82,7 @@
           },
           {
             "title": "Selecione o desconto no carrinho",
-            "text": "Volte pro grupo/post do produto e agora clique no link do produto. Coloque-o no carrinho. Na tela de pagamento, procure por “Cupom de Desconto”.",
+            "text": "",
             "images": [
               {
                 "src": "/assets/blog/como-usar-cupons/shopee-passo-5.webp",
@@ -92,7 +92,7 @@
           },
           {
             "title": "Confira o total antes de pagar",
-            "text": "Encontre a oferta que você resgatou entre os cupons disponíveis. Veja se o desconto entrou no resumo. Confira também o cupom de frete, quando disponível, e só então conclua o pedido.",
+            "text": "",
             "images": [
               {
                 "src": "/assets/blog/como-usar-cupons/shopee-passo-1.webp",
