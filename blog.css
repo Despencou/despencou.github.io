@@ -122,3 +122,12 @@ html,body{overflow-x:hidden}
 .blog-guide-images img{display:block;width:100%;height:auto;border:1px solid #ddd;border-radius:14px;background:white}
 .blog-guide-images figcaption{font-size:12px;color:var(--mut);line-height:1.5;margin-top:8px}
 @media(max-width:640px){.blog-guide-images{gap:24px}.blog-guide-images figure{flex-basis:100%;max-width:360px}.blog-steps h3{font-size:21px}}
+
+/* Links entre guias, cupons e ofertas do catálogo. */
+.blog-guide[id]{scroll-margin-top:24px}
+.blog-related-links a{font-weight:700;display:inline-block;padding:8px 0}
+.blog-related-offers ul{list-style:none;padding:0;margin:16px 0;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
+.blog-related-offers li{margin:0;padding:15px 18px;border-bottom:1px solid var(--line)}
+.blog-related-offers li:last-child{border-bottom:0}
+.blog-related-offers a{font-weight:700;line-height:1.45}
+.blog-related-offers span{display:block;color:var(--mut);font-size:14px;margin-top:5px}

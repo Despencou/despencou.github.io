@@ -40,7 +40,7 @@ test('Creatine article publishes five products, selected store links and article
   assert.match(html,/<small>Participação gratuita<\/small>/);
   assert.match(html,/de outros produtos com cupons para economizar ainda mais/);
   assert.match(html,/content="index,follow"/);assert.match(html,/BlogPosting/);assert.match(html,/"@type":"Organization","name":"Equipe Despencou"/);
-  assert.match(html,/href="\/blog.css\?v=blog-guides-20261102"/);assert.doesNotMatch(html,/src="\/(oferta|coupon-parser|payment-parser).js/);
+  assert.match(html,/href="\/blog.css\?v=internal-links-20261105"/);assert.doesNotMatch(html,/src="\/(oferta|coupon-parser|payment-parser).js/);
   assert.doesNotMatch(html,/zaphome|https:\/\/t.me\/despencou"|Carregando oferta/);
   assert.equal((html.match(/href="https:\/\/entrar.despencou.com\/blogcreatina"/g)||[]).length,3);
   assert.equal((html.match(/href="https:\/\/t.me\/\+YdlsNvv9AbBjZTgx"/g)||[]).length,4);
@@ -99,4 +99,33 @@ test('Coupon guide keeps two checkout screenshots in step four and escapes guide
  assert.doesNotMatch(articleBody(fake,'hoje'),/<script>/);
  fake.blocks[0].items[0].images=[{src:'https://example.com/private.png',alt:'x'}];
  assert.throws(()=>articleBody(fake,'hoje'),/Invalid guide image/);
+});
+
+test('Guides and store coupons link to the correct sections; related creatine offers use only the current catalog',async()=>{
+ const root=await fs.mkdtemp(path.join(os.tmpdir(),'despencou-internal-links-')),out=path.join(root,'out');
+ try{
+  await fs.mkdir(path.join(root,'oferta'));await fs.mkdir(path.join(root,'content'));
+  await fs.copyFile(path.join(__dirname,'../oferta/index.html'),path.join(root,'oferta/index.html'));
+  await fs.copyFile(path.join(__dirname,'../content/articles.json'),path.join(root,'content/articles.json'));
+  const active={id:'tg-991',kind:'offer',title:'Creatina Dux 300g',price:50,store:'Amazon',url:'https://amzn.to/creatina',published_at:'2026-11-05T12:00:00Z'};
+  const ended={...active,id:'tg-992',title:'Creatina encerrada'},other={...active,id:'tg-993',title:'Whey 1kg'};
+  await build(root,out,{items:[active,ended,other]},{items:[active,other]},true);
+  const read=p=>fs.readFile(path.join(out,p,'index.html'),'utf8');
+  const guide=await read('blog/como-usar-cupons-shopee-mercado-livre');
+  for(const slug of ['mercado-livre','shopee']){
+   assert.ok(guide.includes('id="'+slug+'"'));
+   assert.ok(guide.includes('href="/cupons/'+slug+'/#todos-os-cupons"'));
+   assert.ok((await read('cupons/'+slug)).includes('href="/blog/como-usar-cupons-shopee-mercado-livre/#'+slug+'"'));
+  }
+  const creatine=await read('blog/melhores-creatinas-2026');
+  assert.match(creatine,/class="blog-section blog-related-offers/);
+  assert.ok(creatine.includes('href="/oferta/tg-991/"'));
+  assert.ok(!creatine.includes('href="/oferta/tg-992/"'));
+  assert.ok(!creatine.includes('href="/oferta/tg-993/"'));
+  assert.ok(creatine.includes('entrar.despencou.com/blogcreatina'));
+  assert.equal((creatine.match(/class="btn blog-shop"/g)||[]).length,12);
+  const post={paragraphs:[],blocks:[{type:'related-offers',topic:'creatina',title:'Recentes'}]};
+  assert.doesNotMatch(blog.articleBody(blog.withCatalog(post,[],{}),''),/blog-related-offers/);
+  for(const bad of ['//evil.test/','javascript:alert(1)','/oferta/../perfil/','https://evil.test/'])assert.throws(()=>blog.internalLink(bad));
+ }finally{await fs.rm(root,{recursive:true,force:true});}
 });
