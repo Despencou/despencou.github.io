@@ -136,7 +136,6 @@
     document.querySelectorAll('[data-ml-coupon-tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.mlCouponTab===activeTab?'true':'false'));
     const home=$('#home-coupons'),todayML=ML.homeSection(coupons);
     home.replaceChildren(...todayML.map(couponCard),shopeeDailyCard());
-    if(loaded&&!todayML.length)home.prepend(element('p','empty','Nenhum cupom do Mercado Livre lançado hoje por aqui. Confira os cupons do dia na Shopee abaixo.'));
     const target=$('#coupon-list');target.replaceChildren(...shown.map(couponCard));
     if(loaded&&!shown.length)target.append(element('p','empty','Nenhum cupom disponível nesta aba agora.'));
   }
