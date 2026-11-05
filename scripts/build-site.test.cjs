@@ -2,6 +2,7 @@ const {test}=require('node:test'),assert=require('node:assert/strict'),fs=requir
 const {build,offerBody}=require('./build-site.cjs');
 require('./payment-parser.test.cjs');
 require('./ml-coupon-tabs.test.cjs');
+require('./coupon-pages.test.cjs');
 const blog=require('./blog-render.cjs');
 test('Blog renderer keeps editorial text escaped and rejects unsafe link protocols',()=>{
  const post={title:'Guia <teste>',author:'Equipe',paragraphs:['<script>alert(1)</script>'],blocks:[{type:'section',title:'Resumo',source:{label:'Fonte',url:'javascript:alert(1)'}}]};
@@ -66,6 +67,7 @@ test('Permanent HTML preserves ended offers, safe coupons, and excludes draft bl
   assert.match(html,/Oferta encerrada/);assert.match(html,/VALEMAIS/);assert.match(html,/Preço da publicação/);assert.match(html,/Produto &lt;teste&gt;/);assert.match(html,/content="index,follow"/);assert.match(html,/https:\/\/despencou.com\/oferta\/tg-1\//);assert.doesNotMatch(html,/@type":"Offer"|Condições da publicação/);
   assert.equal(result.map['tg-3'],undefined);
   const sitemap=await fs.readFile(path.join(out,'sitemap.xml'),'utf8');assert.match(sitemap,/\/oferta\/tg-1\//);assert.doesNotMatch(sitemap,/\/teste\/|rascunho|\/blog\//);
+  for(const slug of ['', 'mercado-livre/','shopee/','amazon/']){assert.ok(sitemap.includes('https://despencou.com/cupons/'+slug));assert.match(await fs.readFile(path.join(out,'cupons',slug,'index.html'),'utf8'),/content="index,follow"/);}
   assert.match(await fs.readFile(path.join(out,'blog/index.html'),'utf8'),/noindex,follow/);
   await fs.writeFile(path.join(root,'content/articles.json'),JSON.stringify([{published:true,slug:'guia-pronto',title:'Guia',description:'Dicas',author:'Despencou',published_at:'2026-10-14',paragraphs:['Artigo revisado.']} ]));
   await build(root,out,{items:[ended]},{items:[]},true);
