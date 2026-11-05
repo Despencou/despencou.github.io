@@ -30,3 +30,42 @@ test('Empty home shows an honest state and keeps existing navigation and group d
  assert.match(html,/entrar.despencou.com\/zaphome/);assert.doesNotMatch(html,/Em breve/);
  assert.equal((html.match(/class="btn offer-link"/g)||[]).length,0);
 });
+
+test('Catalog pages contain distinct offers, self canonical and crawlable links',()=>{
+ const items=Array.from({length:35},(_,i)=>({...offer,id:'tg-'+(i+1)}));
+ const map=Object.fromEntries(items.map(i=>[i.id,'/oferta/'+i.id+'/']));
+ const html=render(template,{items},map,[post],new Date(),2);
+ const data=JSON.parse(html.match(/<script id="home-initial-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+ assert.equal(data.page,2);assert.deepEqual(data.items.map(i=>i.id),items.slice(16,32).map(i=>i.id));
+ assert.match(html,/<link rel="canonical" href="https:\/\/despencou.com\/ofertas\/pagina\/2\/">/);
+ assert.match(html,/href="\/#catalog-start" rel="prev"/);assert.match(html,/href="\/ofertas\/pagina\/3\/#catalog-start" rel="next"/);
+ assert.doesNotMatch(html,/(src|href)="\.\//);
+ assert.equal((html.match(/class="btn offer-link"/g)||[]).length,16);
+ const last=render(template,{items},map,[],new Date(),3);
+ assert.equal((last.match(/class="btn offer-link"/g)||[]).length,3);
+ assert.throws(()=>render(template,{items},map,[],new Date(),4),/Invalid catalog page/);
+});
+test('Pagination counts only complete valid offer rows and skips appended pages for next',()=>{
+ const p=require('../catalog-pagination.js');
+ assert.equal(p.count(0),1);assert.equal(p.count(16),1);assert.equal(p.count(17),2);assert.equal(p.url(1),'/');
+ assert.equal(p.render(16),'');
+ assert.match(p.render(100,2,32),/pagina\/4\/#catalog-start" rel="next"/);
+ assert.doesNotMatch(p.render(100,7),/rel="next"/);
+ assert.match(p.render(1600,50),/pagination-gap/);
+});
+
+test('Build emits exactly all catalog pages and includes them in sitemap',async()=>{
+ const root=await fs.promises.mkdtemp(require('node:os').tmpdir()+'/catalog-pages-'),out=path.join(root,'out');
+ try{
+  await fs.promises.mkdir(path.join(root,'oferta'));await fs.promises.mkdir(path.join(root,'content'));
+  await fs.promises.copyFile(path.join(__dirname,'../oferta/index.html'),path.join(root,'oferta/index.html'));
+  await fs.promises.writeFile(path.join(root,'index.html'),template);await fs.promises.writeFile(path.join(root,'content/articles.json'),'[]');
+  const items=Array.from({length:35},(_,i)=>({...offer,id:'tg-'+(i+1)}));
+  const {build}=require('./build-site.cjs');await build(root,out,{items},{items},true);
+  const sitemap=await fs.promises.readFile(path.join(out,'sitemap.xml'),'utf8');
+  assert.match(sitemap,/https:\/\/despencou.com\/ofertas\/pagina\/2\//);
+  assert.match(sitemap,/https:\/\/despencou.com\/ofertas\/pagina\/3\//);
+  assert.doesNotMatch(sitemap,/ofertas\/pagina\/(?:1|4)\//);
+  assert.equal((await fs.promises.readFile(path.join(out,'ofertas/pagina/3/index.html'),'utf8')).match(/class="btn offer-link"/g).length,3);
+ }finally{await fs.promises.rm(root,{recursive:true,force:true});}
+});
