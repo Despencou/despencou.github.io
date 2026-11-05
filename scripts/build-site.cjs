@@ -7,6 +7,7 @@ const blog=require('./blog-render.cjs');
 const couponPages=require('./coupon-render.cjs');
 const home=require('./home-render.cjs');
 const pagination=require('../catalog-pagination.js');
+const related=require('./related-offers.cjs');
 const BASE='https://despencou.com',API='https://midia.despencou.com';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(n);
@@ -14,7 +15,7 @@ const date=s=>new Date(s).toLocaleDateString('pt-BR',{timeZone:'America/Sao_Paul
 const jsonScript=d=>JSON.stringify(d).replace(/</g,'\\u003c');
 const arg=(key,def)=>{const n=process.argv.indexOf(key);return n<0?def:process.argv[n+1];};
 async function source(file,url){if(file)return JSON.parse(await fs.readFile(file,'utf8'));const r=await fetch(url,{signal:AbortSignal.timeout(30000)});if(!r.ok)throw Error('Public feed unavailable: '+r.status);return r.json();}
-function offerBody(item){
+function offerBody(item,hasRelated=false){
  const age = Date.now() - Date.parse(item.published_at);
  const recent = age >= 0 && age < 24 * 60 * 60 * 1000;
  const coupon=coupons.parse(item),ended=!!item.ended,payment=payments.label(item);
@@ -25,7 +26,7 @@ function offerBody(item){
  for(const text of coupon.instructions)box+=`<p class="offer-coupon-instruction">${esc(text)}</p>`;
  if(coupon.redeemUrl)box+=`<a class="btn redeem-coupon" href="${esc(coupon.redeemUrl)}" target="_blank" rel="sponsored noopener noreferrer">Resgatar cupom</a>`;
  box+='</section>';}
- return `<article class="offer-detail-card"><h1>${esc(item.title)}</h1>${ended?'<p class="offer-state ended">Oferta encerrada</p>':recent?`<p class="offer-state" data-published-at="${esc(item.published_at)}">Oferta publicada recentemente</p>`:''}${ended?'<p class="muted">Esta oferta saiu do catálogo recente. Mantivemos os detalhes como histórico; o preço e o cupom abaixo podem não estar mais disponíveis. Confira a situação atual na loja.</p>':''}<div class="offer-detail-photo">${photo}</div>${box}<a class="btn wa offer-store-button" href="${esc(coupon.productUrl)}" target="_blank" rel="sponsored noopener noreferrer">${ended?'Ver produto na loja':'Ir à loja'}</a><div class="offer-detail-prices"><span class="muted">Preço da publicação</span>${item.old_price?`<span class="old">${money(item.old_price)}</span>`:''}<strong class="offer-detail-price">${money(item.price)}</strong>${payment?`<span class="muted">${esc(payment)}</span>`:''}</div><p class="offer-detail-store">Loja: ${esc(item.store)}</p><p class="muted">Publicado em ${date(item.published_at)}. Preços, estoque e cupons podem mudar. Confira as condições na loja antes de comprar.</p><a class="offer-recent-link" href="/">Ver ofertas recentes</a></article>`;
+ return `<article class="offer-detail-card"><h1>${esc(item.title)}</h1>${ended?'<p class="offer-state ended">Oferta encerrada</p>':recent?`<p class="offer-state" data-published-at="${esc(item.published_at)}">Oferta publicada recentemente</p>`:''}${ended&&hasRelated?'<p><a class="offer-recent-link related-jump" href="#ofertas-relacionadas">Ver alternativas recentes ↓</a></p>':''}${ended?'<p class="muted">Esta oferta saiu do catálogo recente. Mantivemos os detalhes como histórico; o preço e o cupom abaixo podem não estar mais disponíveis. Confira a situação atual na loja.</p>':''}<div class="offer-detail-photo">${photo}</div>${box}<a class="btn wa offer-store-button" href="${esc(coupon.productUrl)}" target="_blank" rel="sponsored noopener noreferrer">${ended?'Ver produto na loja':'Ir à loja'}</a><div class="offer-detail-prices"><span class="muted">Preço da publicação</span>${item.old_price?`<span class="old">${money(item.old_price)}</span>`:''}<strong class="offer-detail-price">${money(item.price)}</strong>${payment?`<span class="muted">${esc(payment)}</span>`:''}</div><p class="offer-detail-store">Loja: ${esc(item.store)}</p><p class="muted">Publicado em ${date(item.published_at)}. Preços, estoque e cupons podem mudar. Confira as condições na loja antes de comprar.</p><a class="offer-recent-link" href="/">Ver ofertas recentes</a></article>`;
 }
 function shell(template,title,description,url,body,extra='',index=true){
  return template.replace(/<title>.*?<\/title>/,`<title>${esc(title)} | Despencou</title>`)
@@ -45,6 +46,10 @@ async function build(root,output,archive,feed,generatedOnly=false){
  const template=await fs.readFile(path.join(root,'oferta/index.html'),'utf8');
  const links=['/','/sobre/','/faq/','/contato/','/privacidade/','/termos/'];
  const map={};
+ for(const i of archive.items){
+  if(i.kind==='offer'&&/^tg-\d+$/.test(i.id||'')&&i.title&&Number.isFinite(i.price)&&i.price>0&&coupons.safeRetailer(i.url)&&Number.isFinite(Date.parse(i.published_at)))map[i.id]='/oferta/'+i.id+'/';
+ }
+ const catalog=related.index(feed.items,map);
  const active=new Set(feed.items.filter(i=>i.kind==='offer').map(i=>i.id));
  async function write(file,text){const dest=path.join(output,file);await fs.mkdir(path.dirname(dest),{recursive:true});await fs.writeFile(dest,text);}
  for(const original of archive.items){
@@ -52,7 +57,8 @@ async function build(root,output,archive,feed,generatedOnly=false){
   const item={...original,ended:!active.has(original.id)},url='/oferta/'+item.id+'/';map[item.id]=url;links.push(url);
   const desc=`${item.title} na ${item.store}. Preço registrado: ${money(item.price)}. ${item.ended?'Oferta encerrada; consulte a loja.':'Confira o produto e os cupons da publicação.'}`;
   const schema={'@context':'https://schema.org','@type':'WebPage',name:item.title,url:BASE+url,description:desc,datePublished:item.published_at};
-  let html=shell(template,item.title,desc,url,offerBody(item),`<script type="application/ld+json">${jsonScript(schema)}</script>`);
+  const suggestions=related.select(item,catalog);
+  let html=shell(template,item.title,desc,url,offerBody(item,suggestions.length>0)+related.render(item,suggestions),`<script type="application/ld+json">${jsonScript(schema)}</script>`);
   html=html.replace('<div id="offer-detail">',`<div id="offer-detail" data-offer-id="${item.id}">`);
   await write('oferta/'+item.id+'/index.html',html);
  }

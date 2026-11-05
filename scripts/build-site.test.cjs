@@ -4,6 +4,7 @@ require('./payment-parser.test.cjs');
 require('./ml-coupon-tabs.test.cjs');
 require('./coupon-pages.test.cjs');
 require('./home-render.test.cjs');
+require('./related-offers.test.cjs');
 const blog=require('./blog-render.cjs');
 test('Blog renderer keeps editorial text escaped and rejects unsafe link protocols',()=>{
  const post={title:'Guia <teste>',author:'Equipe',paragraphs:['<script>alert(1)</script>'],blocks:[{type:'section',title:'Resumo',source:{label:'Fonte',url:'javascript:alert(1)'}}]};
@@ -127,5 +128,22 @@ test('Guides and store coupons link to the correct sections; related creatine of
   const post={paragraphs:[],blocks:[{type:'related-offers',topic:'creatina',title:'Recentes'}]};
   assert.doesNotMatch(blog.articleBody(blog.withCatalog(post,[],{}),''),/blog-related-offers/);
   for(const bad of ['//evil.test/','javascript:alert(1)','/oferta/../perfil/','https://evil.test/'])assert.throws(()=>blog.internalLink(bad));
+ }finally{await fs.rm(root,{recursive:true,force:true});}
+});
+
+test('Ended product HTML links to current related products, including later archive rows',async()=>{
+ const root=await fs.mkdtemp(path.join(os.tmpdir(),'despencou-related-')),out=path.join(root,'output');
+ try{
+  await fs.mkdir(path.join(root,'oferta'));await fs.mkdir(path.join(root,'content'));
+  await fs.copyFile(path.join(__dirname,'../oferta/index.html'),path.join(root,'oferta/index.html'));
+  await fs.writeFile(path.join(root,'content/articles.json'),'[]');
+  const original={id:'tg-1',kind:'offer',title:'Creatina Growth 250g',price:40,store:'Amazon',url:'https://amzn.to/a',published_at:'2020-01-01T00:00:00Z'};
+  const active={...original,id:'tg-2',title:'Creatina Dux 300g',published_at:'2026-11-05T12:00:00Z'},unrelated={...active,id:'tg-3',title:'Monitor Gamer Samsung 27'};
+  await build(root,out,{items:[original,active,unrelated]},{items:[active,unrelated]},true);
+  const ended=await fs.readFile(path.join(out,'oferta/tg-1/index.html'),'utf8');
+  assert.match(ended,/Alternativas para esta oferta encerrada/);assert.match(ended,/href="#ofertas-relacionadas"/);
+  assert.match(ended,/href="\/oferta\/tg-2\/"/);assert.doesNotMatch(ended,/href="\/oferta\/tg-3\/"/);
+  assert.match(ended,/content="index,follow"/);assert.match(ended,/href="https:\/\/despencou.com\/oferta\/tg-1\/"/);
+  const other=await fs.readFile(path.join(out,'oferta/tg-3/index.html'),'utf8');assert.doesNotMatch(other,/class="related-offers"/);
  }finally{await fs.rm(root,{recursive:true,force:true});}
 });
