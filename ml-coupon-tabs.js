@@ -7,6 +7,11 @@
     const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date);
     const part=t=>parts.find(p=>p.type===t).value;return part('year')+'-'+part('month')+'-'+part('day');
   }
+  function publicationLabel(value,today=day()){
+    const published=new Date(value);if(!Number.isFinite(published.getTime()))return '';
+    const publishedDay=day(published),hour=new Intl.DateTimeFormat('pt-BR',{timeZone:'America/Sao_Paulo',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(published);
+    return (publishedDay===today?'Publicado hoje':'Publicado em '+publishedDay.split('-').reverse().join('/'))+' às '+hour;
+  }
   const imported=i=>i.source==='ml-coupon-page';
   const telegram=i=>i.store==='Mercado Livre'&&i.kind==='coupon'&&!imported(i);
   function discount(i){
@@ -41,7 +46,7 @@
   }
   // The home preview uses the same São Paulo calendar rules as the daily ML tab.
   function homeSection(items,today=day()){return order(section(items,'today',today),'recent');}
-  const api={destination,shopeeDailyDestination,homeSection,day,imported,telegram,removed,section,storeSection,categoryLabel,order};
+  const api={destination,shopeeDailyDestination,homeSection,day,publicationLabel,imported,telegram,removed,section,storeSection,categoryLabel,order};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.DespencouMLCoupons=api;
 })(typeof window!=='undefined'?window:globalThis);
 
