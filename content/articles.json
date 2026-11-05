@@ -63,6 +63,13 @@
             "text": "Cole ou digite o cupom e toque em “Inserir”. Confira se o desconto foi aplicado e revise o total antes de finalizar o pagamento.",
             "images": []
           }
+        ],
+        "id": "mercado-livre",
+        "links": [
+          {
+            "label": "Ver cupons disponíveis do Mercado Livre",
+            "url": "/cupons/mercado-livre/#todos-os-cupons"
+          }
         ]
       },
       {
@@ -99,6 +106,13 @@
                 "alt": "Resumo da compra na Shopee com cupom aplicado"
               }
             ]
+          }
+        ],
+        "id": "shopee",
+        "links": [
+          {
+            "label": "Ver cupons disponíveis da Shopee",
+            "url": "/cupons/shopee/#todos-os-cupons"
           }
         ]
       },
@@ -255,6 +269,11 @@
           "label": "NIH — creatina e desempenho físico (em inglês)",
           "url": "https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-Consumer/"
         }
+      },
+      {
+        "type": "related-offers",
+        "topic": "creatina",
+        "title": "Ofertas recentes de creatina no Despencou"
       },
       {
         "type": "group",

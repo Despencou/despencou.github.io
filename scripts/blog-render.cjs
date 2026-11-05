@@ -6,6 +6,22 @@ function link(value){
  if(u.protocol!=='https:'||u.username||u.password)throw Error('Blog links must use HTTPS without credentials');
  return esc(value);
 }
+function internalLink(value){
+ if(typeof value!=='string'||!/^\/(?:cupons\/(?:mercado-livre\/|shopee\/|amazon\/)?(?:#todos-os-cupons)?|oferta\/tg-\d+\/)$/.test(value))throw Error('Invalid internal blog link');
+ return esc(value);
+}
+function withCatalog(post,items,map){
+ return {...post,blocks:(post.blocks||[]).map(b=>{
+  if(b.type!=='related-offers')return b;
+  if(b.topic!=='creatina')throw Error('Unsupported related offers topic');
+  const seen=new Set();
+  const matches=items.filter(i=>{
+   if(!/\bcreatina\b/i.test(String(i.title||'').normalize('NFD').replace(/[\u0300-\u036f]/g,''))||map[i.id]!=='/oferta/'+i.id+'/'||seen.has(i.id))return false;
+   seen.add(i.id);return true;
+  }).slice(0,6);
+  return {...b,items:matches.map(i=>({title:i.title,price:i.price,store:i.store,url:map[i.id]}))};
+ })};
+}
 function photo(p){
  if(!p.image)return '';
  if(!/^\/assets\/blog\/[a-z0-9/-]+\.webp$/.test(p.image))throw Error('Invalid blog product image');
@@ -28,7 +44,8 @@ function articleBody(post,date){
  for(const [i,b] of (post.blocks||[]).entries()){
   if(b.type==='section')body+=`<section class="blog-section"><h2>${esc(b.title)}</h2>${(b.paragraphs||[]).map(s=>`<p>${esc(s)}</p>`).join('')}${b.bullets?.length?`<ul>${b.bullets.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`:''}${b.source?`<p class="blog-source">Fonte: <a href="${link(b.source.url)}" target="_blank" rel="noopener noreferrer">${esc(b.source.label)}</a>.</p>`:''}</section>`;
   else if(b.type==='steps'){
-   body+=`<section class="blog-section blog-guide"><h2>${esc(b.title)}</h2>${b.intro?`<p>${esc(b.intro)}</p>`:''}<ol class="blog-steps">${b.items.map(p=>`<li><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p>${guideImages(p.images)}</li>`).join('')}</ol>${b.source?`<p class="blog-source">Texto adaptado e imagens: <a href="${link(b.source.url)}" target="_blank" rel="noopener noreferrer">${esc(b.source.label)}</a>. Telas ilustrativas; ofertas e condições das imagens não são uma promoção vigente.</p>`:''}</section>`;
+   if(b.id&&!/^[a-z][a-z0-9-]*$/.test(b.id))throw Error('Invalid guide section ID');
+   body+=`<section class="blog-section blog-guide"${b.id?` id="${esc(b.id)}"`:''}><h2>${esc(b.title)}</h2>${b.intro?`<p>${esc(b.intro)}</p>`:''}${b.links?.length?`<p class="blog-related-links">${b.links.map(l=>`<a href="${internalLink(l.url)}">${esc(l.label)} →</a>`).join(' · ')}</p>`:''}<ol class="blog-steps">${b.items.map(p=>`<li><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p>${guideImages(p.images)}</li>`).join('')}</ol>${b.source?`<p class="blog-source">Texto adaptado e imagens: <a href="${link(b.source.url)}" target="_blank" rel="noopener noreferrer">${esc(b.source.label)}</a>. Telas ilustrativas; ofertas e condições das imagens não são uma promoção vigente.</p>`:''}</section>`;
   }
   else if(b.type==='products'){
    body+=`<section class="blog-section blog-selection"><h2>${esc(b.title)}</h2>${b.note?`<p class="blog-price-note">${esc(b.note)}</p>`:''}<div class="blog-products">`;
@@ -37,9 +54,11 @@ function articleBody(post,date){
    if(post.layout==='editorial'&&b.items.some(p=>p.source))body+=`<details class="blog-references"><summary>Fontes das informações dos produtos</summary><ul>${b.items.filter(p=>p.source).map(p=>`<li><a href="${link(p.source.url)}" target="_blank" rel="noopener noreferrer">${esc(p.source.label)}</a></li>`).join('')}</ul></details>`;
    body+='</section>';
 
+  }else if(b.type==='related-offers'){
+   if(b.items?.length)body+=`<section class="blog-section blog-related-offers"><h2>${esc(b.title)}</h2><p>Veja as publicações recentes e confira os detalhes de cada oferta.</p><ul>${b.items.map(p=>`<li><a href="${internalLink(p.url)}">${esc(p.title)}</a><span>${esc(p.store)} · ${esc(new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(p.price))} na publicação</span></li>`).join('')}</ul></section>`;
   }else if(b.type==='group')body+=`<aside class="blog-group"><p class="blog-kicker">Ofertas + cupons</p><h2>${esc(b.title)}</h2><p>${esc(b.text)}</p><div class="cta"><a class="btn wa big" href="${link(b.whatsapp)}" target="_blank" rel="noopener noreferrer">Entrar no WhatsApp</a><a class="btn tg big" href="${link(b.telegram)}" target="_blank" rel="noopener noreferrer">Entrar no Telegram</a></div><small>${esc(b.caption||"Participação gratuita")}</small></aside>`;
   else throw Error('Unsupported blog block: '+b.type);
  }
  return body+'<p class="blog-disclosure">Ao comprar pelos links deste artigo, podemos receber uma comissão, sem custo extra para você.</p><a class="blog-back" href="/blog/">← Ver todos os artigos</a></article>';
 }
-module.exports={articleBody,groupLinks,link};
+module.exports={articleBody,groupLinks,link,internalLink,withCatalog};
