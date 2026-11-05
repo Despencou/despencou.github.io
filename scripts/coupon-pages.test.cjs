@@ -62,3 +62,18 @@ test('Shopee and Amazon show publication time in Brasilia and never label yester
  }
  assert.doesNotMatch(pages.card(ml,'2026-11-05'),/Publicado hoje/);
 });
+
+test('Coupon hub shows available coupons beyond today while preserving expiration and Shopee day rules',()=>{
+ const olderML={...ml,id:'older-available',code:'AINDAATIVO',valid_from:'2026-11-04',valid_until:'2026-11-10'};
+ const expired={...olderML,id:'expired',code:'EXPIRADO',valid_until:'2026-11-04'};
+ const future={...olderML,id:'future',code:'FUTURO',valid_from:'2026-11-06'};
+ const amazon={...shopee,id:'amazon-old',store:'Amazon',title:'15% em Nivea',url:'https://amzn.to/cupom',code:'AMAZON15',published_at:'2026-11-04T15:00:00Z'};
+ const oldShopee={...shopee,id:'shopee-old',code:'SHOPEEANTIGO',published_at:'2026-11-04T15:00:00Z'};
+ const html=pages.preview([olderML,expired,future,amazon,oldShopee],'2026-11-05');
+ assert.match(html,/Cupons Mercado Livre disponíveis/);assert.match(html,/Cupons Amazon disponíveis/);
+ assert.match(html,/AINDAATIVO/);assert.match(html,/AMAZON15/);assert.match(html,/Publicado em 04\/11\/2026 às 12:00/);
+ assert.doesNotMatch(html,/EXPIRADO|FUTURO|SHOPEEANTIGO|de hoje<\/a>/);
+ assert.match(html,/href="\/cupons\/mercado-livre\/#todos-os-cupons"/);
+ assert.doesNotMatch(pages.card(amazon,'2026-11-05'),/Acaba rápido/);
+ assert.match(pages.card(shopee,'2026-11-05'),/Acaba rápido/);
+});

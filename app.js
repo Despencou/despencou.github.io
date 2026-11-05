@@ -100,7 +100,7 @@
       const terms=[];if(Number.isFinite(item.min_purchase)&&item.min_purchase>0)terms.push('Compra mínima: '+money(item.min_purchase));if(Number.isFinite(item.max_discount)&&item.max_discount>0)terms.push('Desconto máximo: '+money(item.max_discount));
       if(/^\d{4}-\d{2}-\d{2}$/.test(item.valid_until||''))terms.push('Válido até '+item.valid_until.split('-').reverse().join('/'));
       body.append(element('small',null,terms.join(' · ')),element('small',null,'Pode esgotar antes da validade. Confira as condições na loja.'));
-    }else body.append(element('small',null,(['Shopee','Amazon'].includes(item.store)?ML.publicationLabel(item.published_at):'Publicado '+age(item.published_at))+' · 🔥 Acaba rápido'));
+    }else body.append(element('small',null,(['Shopee','Amazon'].includes(item.store)?ML.publicationLabel(item.published_at):'Publicado '+age(item.published_at))+(item.store==='Amazon'?'':' · 🔥 Acaba rápido')));
     const code=element('div','code');
     const codeValue=element('span',null,codeText||(imported?'Sem código · confira na loja':'Cupom no link'));code.append(codeValue);
     const action=element('button','coupon-combined',codeText?'Copiar e ir pra loja':'Ir pra loja');action.type='button';
