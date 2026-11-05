@@ -5,6 +5,7 @@ const coupons=require('../coupon-parser.js');
 const payments=require('../payment-parser.js');
 const blog=require('./blog-render.cjs');
 const couponPages=require('./coupon-render.cjs');
+const home=require('./home-render.cjs');
 const BASE='https://despencou.com',API='https://midia.despencou.com';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(n);
@@ -71,6 +72,10 @@ async function build(root,output,archive,feed,generatedOnly=false){
  await write('blog/index.html',shell(template,'Dicas do blog','Dicas e guias de produtos do Despencou.','/blog/',blogBody,'',!!published.length).replace(/<script src="\/oferta.js[^>]*><\/script>/,'').replace('<span>Detalhes da oferta</span>','<span>Blog</span>'));
  if(published.length)links.push('/blog/');
  await write('blog-posts.json',JSON.stringify(blogLinks));
+ try{
+  const homeTemplate=await fs.readFile(path.join(root,'index.html'),'utf8');
+  await write('index.html',home.render(homeTemplate,feed,map,blogLinks));
+ }catch(error){if(error.code!=='ENOENT')throw error;}
  for(const store of ['', 'Mercado Livre','Shopee','Amazon']){
   const page=couponPages.render(template,feed,store);
   await write(page.url.slice(1)+'index.html',page.html);links.push(page.url);
