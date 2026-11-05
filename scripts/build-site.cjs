@@ -6,6 +6,7 @@ const payments=require('../payment-parser.js');
 const blog=require('./blog-render.cjs');
 const couponPages=require('./coupon-render.cjs');
 const home=require('./home-render.cjs');
+const pagination=require('../catalog-pagination.js');
 const BASE='https://despencou.com',API='https://midia.despencou.com';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(n);
@@ -75,6 +76,9 @@ async function build(root,output,archive,feed,generatedOnly=false){
  try{
   const homeTemplate=await fs.readFile(path.join(root,'index.html'),'utf8');
   await write('index.html',home.render(homeTemplate,feed,map,blogLinks));
+  for(let page=2;page<=pagination.count(home.offers(feed).length);page++){
+   const url=pagination.url(page);await write(url.slice(1)+'index.html',home.render(homeTemplate,feed,map,blogLinks,new Date(),page));links.push(url);
+  }
  }catch(error){if(error.code!=='ENOENT')throw error;}
  for(const store of ['', 'Mercado Livre','Shopee','Amazon']){
   const page=couponPages.render(template,feed,store);

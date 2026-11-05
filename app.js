@@ -3,6 +3,7 @@
   const API = 'https://midia.despencou.com';
   const WPP = 'https://entrar.despencou.com/zaphome';
   const ML=window.DespencouMLCoupons;
+  const pagination=window.DespencouPagination;
   const params=new URLSearchParams(location.search);
   const requestedCode=params.get('cupom')||'';
   const couponCode=/^[A-Za-z0-9_-]{2,40}$/.test(requestedCode)?DespencouCoupons.normalizeCode(requestedCode):'';
@@ -11,11 +12,11 @@
   let archiveItems=[],archiveLoaded=false,archiveError=false;
   let mlTab='today',mlOrder='recent';
   const shopCouponTabs={Shopee:'today',Amazon:'today'};
-  let pageMap={};
+  let pageMap={},catalogPage=1;
   let items = [], store = 'all', couponStore = 'Mercado Livre', order = 'recent', limit = 16, loaded = false;
   try{
     const initial=JSON.parse(document.getElementById('home-initial-data')?.textContent||'null');
-    if(initial&&Array.isArray(initial.items)){items=initial.items;pageMap=initial.pageMap||{};}
+    if(initial&&Array.isArray(initial.items)){items=initial.items;pageMap=initial.pageMap||{};catalogPage=Number.isSafeInteger(initial.page)&&initial.page>0?initial.page:1;}
   }catch{}
   const $ = s => document.querySelector(s);
   const normalize = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -64,16 +65,27 @@
     const c=element('div','feedcta');c.append(element('h3',null,'Receba antes de acabar'),element('div',null,'As ofertas mais quentes saem primeiro no grupo.'));
     const buttons=element('div','cta');buttons.append(link('WhatsApp',WPP,'btn wa'),link('Telegram','https://t.me/despencou','btn tg'));c.append(buttons);return c;
   }
+  function resetCatalogPage(){
+    catalogPage=1;limit=pagination.size;
+    if(/^\/ofertas\/pagina\/\d+\/$/.test(location.pathname)){
+      history.replaceState(null,'','/'+location.search+location.hash);document.title='Despencou – Ofertas, cupons e dicas';
+      document.querySelector('link[rel=canonical]').href='https://despencou.com/';
+    }
+  }
   function renderOffers() {
     const query=normalize($('#product-search').value);
     const source=couponFilter?archiveItems:items;
     const filtered=source.filter(i=>i.kind==='offer' && (!couponFilter||DespencouCoupons.matchesCoupon(i,couponCode,offerCouponStore)) && (store==='all'||i.store===store) && normalize(i.title+' '+i.description).includes(query));
     filtered.sort(order==='price' ? (a,b)=>a.price-b.price : (a,b)=>new Date(b.published_at)-new Date(a.published_at));
+    if(loaded&&!couponFilter&&catalogPage>pagination.count(filtered.length))resetCatalogPage();
+    const offset=(catalogPage-1)*pagination.size;
     const grid=$('#g1');grid.replaceChildren();
-    filtered.slice(0,limit).forEach((i,n)=>{grid.append(offerCard(i));if(n===3)grid.append(groupCard());});
+    filtered.slice(offset,offset+limit).forEach((i,n)=>{grid.append(offerCard(i));if(n===3)grid.append(groupCard());});
     window.loadOfferCardCommunity?.(grid);
     if((couponFilter?archiveLoaded:loaded)&&!filtered.length)grid.append(element('p','empty',couponFilter?'Nenhuma oferta publicada com esse cupom foi encontrada nesta busca.':'Nenhuma oferta encontrada. Experimente outra busca ou loja.'));
-    $('#load-more').hidden=filtered.length<=limit;
+    $('#load-more').hidden=filtered.length<=offset+limit;
+    const nav=$('#catalog-pagination');nav.hidden=couponFilter||store!=='all'||order!=='recent'||!!query;
+    nav.innerHTML=nav.hidden?'':pagination.render(filtered.length,catalogPage,limit);
     if(couponFilter)$('#feed-status').textContent=archiveLoaded?`${filtered.length} oferta(s) publicada(s) com esse cupom · Publicações antigas podem estar encerradas. Confira preço, estoque e validade na loja.`:archiveError?'Não foi possível consultar o histórico. Tente novamente em instantes.':'Buscando ofertas publicadas com esse cupom…';
     else if(loaded)$('#feed-status').textContent=`${filtered.length} oferta(s) recente(s) · Preços e estoque podem mudar; confirme na loja.`;
   }
@@ -155,12 +167,12 @@
     $('#home-view').hidden=tab!=='ofertas';$('#coupon-view').hidden=tab!=='cupons';$('#blog-view').hidden=tab!=='blog';
     document.querySelectorAll('[data-tab]').forEach(a=>{a.classList.toggle('on',a.dataset.tab===tab);a.setAttribute('aria-current',a.dataset.tab===tab?'page':'false');});
   }
-  document.querySelectorAll('[data-store]').forEach(b=>b.addEventListener('click',()=>{store=b.dataset.store;limit=16;document.querySelectorAll('[data-store]').forEach(x=>x.classList.toggle('on',x===b));renderOffers();}));
-  document.querySelectorAll('[data-sort]').forEach(b=>b.addEventListener('click',()=>{order=b.dataset.sort;document.querySelectorAll('[data-sort]').forEach(x=>x.classList.toggle('on',x===b));renderOffers();}));
+  document.querySelectorAll('[data-store]').forEach(b=>b.addEventListener('click',()=>{store=b.dataset.store;resetCatalogPage();document.querySelectorAll('[data-store]').forEach(x=>x.classList.toggle('on',x===b));renderOffers();}));
+  document.querySelectorAll('[data-sort]').forEach(b=>b.addEventListener('click',()=>{order=b.dataset.sort;resetCatalogPage();document.querySelectorAll('[data-sort]').forEach(x=>x.classList.toggle('on',x===b));renderOffers();}));
   document.querySelectorAll('[data-coupon-store]').forEach(b=>b.addEventListener('click',()=>{couponStore=b.dataset.couponStore;document.querySelectorAll('[data-coupon-store]').forEach(x=>x.classList.toggle('on',x===b));renderCoupons();}));
   document.querySelectorAll('[data-ml-coupon-tab]').forEach(b=>b.addEventListener('click',()=>{if(couponStore==='Mercado Livre')mlTab=b.dataset.mlCouponTab;else shopCouponTabs[couponStore]=b.dataset.mlCouponTab;renderCoupons();}));
   $('#ml-coupon-sort').addEventListener('change',e=>{mlOrder=e.target.value;renderCoupons();});
-  $('#product-search').addEventListener('input',()=>{limit=16;renderOffers();});$('#load-more').addEventListener('click',()=>{limit+=16;renderOffers();});
+  $('#product-search').addEventListener('input',()=>{resetCatalogPage();renderOffers();});$('#load-more').addEventListener('click',()=>{limit+=pagination.size;renderOffers();});
   async function loadCouponOffers(){
     if(!couponFilter)return;
     const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),15000);
