@@ -28,3 +28,10 @@
 .comment-replies .comment-replies .comment-replies>article::before{left:-11px;width:8px}
 
 .offer-community .comment-avatar{flex:none;width:30px;height:30px;border-radius:50%;object-fit:cover;background:var(--bg)}
+
+.offer-recent-link,.offer-recent-link:visited{color:var(--ink);font-weight:700;text-underline-offset:3px}
+.offer-group-banner{margin-top:18px;background:#201b17;color:#fff;border:1px solid var(--line);border-radius:12px;padding:20px}
+.offer-group-banner h2{font-size:24px;color:#ffc928;margin:0}
+.offer-group-banner p{margin:6px 0 10px}
+.offer-group-banner .cta{margin:0;gap:8px}
+@media(max-width:640px){.offer-group-banner{padding:16px}.offer-group-banner h2{font-size:22px}}

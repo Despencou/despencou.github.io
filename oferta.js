@@ -8,7 +8,35 @@
   const staticPage=!!root.dataset.offerId;
   const id=root.dataset.offerId||new URLSearchParams(location.search).get('id');
   function bindCopy(){root.querySelectorAll('[data-copy-coupon]').forEach(button=>button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(button.dataset.copyCoupon);button.textContent='Copiado!';setTimeout(()=>button.textContent='Copiar cupom',2500);}catch{button.textContent='Selecione o código';}}));}
-  if(staticPage)bindCopy();
+  function expireRecentBadge(badge) {
+    const age = Date.now() - Date.parse(badge.dataset.publishedAt);
+    const day = 24 * 60 * 60 * 1000;
+    if (!Number.isFinite(age) || age < 0 || age >= day) badge.remove();
+    else setTimeout(() => badge.remove(), day - age);
+  }
+  if (staticPage) {
+    bindCopy();
+    const badge = root.querySelector('[data-published-at]');
+    if (badge) expireRecentBadge(badge);
+  }
+  function mountGroupBanner() {
+    if (document.querySelector('.offer-group-banner')) return;
+    const banner = el('aside','offer-group-banner');
+    const buttons = el('div','cta');
+    for (const [label,url,cls] of [
+      ['WhatsApp','https://entrar.despencou.com/zaphome','btn wa'],
+      ['Telegram','https://t.me/despencou','btn tg'],
+    ]) {
+      const button = el('a',cls,label);
+      button.href = url;
+      button.target = '_blank';
+      button.rel = 'noopener noreferrer';
+      buttons.append(button);
+    }
+    banner.append(el('h2',null,'Receba antes de acabar'),
+      el('p',null,'As ofertas mais quentes saem primeiro no grupo.'),buttons);
+    root.after(banner);
+  }
   function unavailable(text){root.replaceChildren(el('h1',null,'Oferta indisponível'),el('p',null,text));const a=el('a','btn wa','Ver ofertas recentes');a.href='/';root.append(a);}
   if(!id || !/^tg-\d+$/.test(id)){unavailable('Abra uma oferta pelo catálogo para consultar os detalhes.');return;}
   const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12000);
@@ -23,7 +51,14 @@
     document.title=item.title+' | Despencou';
     const card=el('article','offer-detail-card');
     card.append(el('h1',null,item.title));
-    card.append(el('p','offer-state'+(item.ended?' ended':''),item.ended?'Oferta encerrada':'Oferta publicada recentemente'));
+    if (item.ended) {
+      card.append(el('p','offer-state ended','Oferta encerrada'));
+    } else {
+      const badge = el('p','offer-state','Oferta publicada recentemente');
+      badge.dataset.publishedAt = item.published_at;
+      card.append(badge);
+      expireRecentBadge(badge);
+    }
     if(item.ended)card.append(el('p','muted','Esta oferta saiu do catálogo recente. Mantivemos os detalhes como histórico; o preço e o cupom abaixo podem não estar mais disponíveis. Confira a situação atual na loja.'));
     const photo=el('div','offer-detail-photo');
     if(/^\/site-images\/tg-\d+\.jpg$/.test(item.image||'')){const img=el('img');img.src=API+item.image;img.alt=item.title;photo.append(img);}else photo.append(el('span',null,'🛍️'));
@@ -45,10 +80,11 @@
     const payment=window.DespencouPayments?.label(item);if(payment)prices.append(el('span','muted',payment));
     card.append(el('p','offer-detail-store','Loja: '+item.store));
     card.append(el('p','muted','Publicado em '+new Date(item.published_at).toLocaleDateString('pt-BR',{timeZone:'America/Sao_Paulo'})+'. Preços, estoque e cupons podem mudar. Confira as condições na loja antes de comprar.'));
-    const recent=el('a',null,'Ver ofertas recentes');recent.href='/';card.append(recent);
+    const recent=el('a','offer-recent-link','Ver ofertas recentes');recent.href='/';card.append(recent);
     root.replaceChildren(card);
     window.mountOfferCommunity?.(root, id);
-  }catch{if(!staticPage)unavailable('Não foi possível carregar esta oferta agora. Tente novamente em instantes.');}
+    mountGroupBanner();
+  }catch{if(staticPage)mountGroupBanner();else unavailable('Não foi possível carregar esta oferta agora. Tente novamente em instantes.');}
   finally{clearTimeout(timer);}
 })();
 
