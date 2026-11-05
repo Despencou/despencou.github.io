@@ -53,6 +53,10 @@
     card.append(el('h1',null,item.title));
     if (item.ended) {
       card.append(el('p','offer-state ended','Oferta encerrada'));
+      if(root.querySelector('.related-offers')){
+        const jump=el('a','offer-recent-link related-jump','Ver alternativas recentes ↓');jump.href='#ofertas-relacionadas';
+        const line=el('p');line.append(jump);card.append(line);
+      }
     } else {
       const badge = el('p','offer-state','Oferta publicada recentemente');
       badge.dataset.publishedAt = item.published_at;
@@ -81,7 +85,12 @@
     card.append(el('p','offer-detail-store','Loja: '+item.store));
     card.append(el('p','muted','Publicado em '+new Date(item.published_at).toLocaleDateString('pt-BR',{timeZone:'America/Sao_Paulo'})+'. Preços, estoque e cupons podem mudar. Confira as condições na loja antes de comprar.'));
     const recent=el('a','offer-recent-link','Ver ofertas recentes');recent.href='/';card.append(recent);
+    const related=root.querySelector('.related-offers');
     root.replaceChildren(card);
+    if(related){
+      related.querySelector('h2').textContent=item.ended?'Alternativas para esta oferta encerrada':'Veja também estas ofertas';
+      root.append(related);
+    }
     window.mountOfferCommunity?.(root, id);
     mountGroupBanner();
   }catch{if(staticPage)mountGroupBanner();else unavailable('Não foi possível carregar esta oferta agora. Tente novamente em instantes.');}
