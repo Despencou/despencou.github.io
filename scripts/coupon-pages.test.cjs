@@ -45,3 +45,20 @@ test('Central and three stores render indexable HTML, self canonical and meaning
  const malicious={...shopee,title:'</script><script>alert(1)</script>'};
  assert.doesNotMatch(renderer.render(template,{items:[malicious]},'Shopee',now).html,/<script>alert/);
 });
+
+test('Shopee and Amazon show publication time in Brasilia and never label yesterday as today',()=>{
+ const mlDates=require('../ml-coupon-tabs.js');
+ assert.equal(mlDates.publicationLabel('2026-11-05T15:00:00Z','2026-11-05'),'Publicado hoje às 12:00');
+ assert.equal(mlDates.publicationLabel('2026-11-06T02:59:00Z','2026-11-05'),'Publicado hoje às 23:59');
+ assert.equal(mlDates.publicationLabel('2026-11-05T15:00:00Z','2026-11-06'),'Publicado em 05/11/2026 às 12:00');
+ assert.equal(mlDates.publicationLabel('2026-11-06T03:00:00Z','2026-11-06'),'Publicado hoje às 00:00');
+ assert.equal(mlDates.publicationLabel('invalid','2026-11-05'),'');
+ for(const store of ['Shopee','Amazon']){
+  const item={...shopee,store,published_at:'2026-11-05T15:00:00Z'};
+  assert.match(pages.card(item,'2026-11-05'),/Publicado hoje às 12:00/);
+  assert.match(pages.preview([item],'2026-11-05'),/Publicado hoje às 12:00/);
+  const html=renderer.render(template,{items:[item]},store,now).html;
+  assert.match(html.split('<script id="coupon-page-data"')[0],/Publicado hoje às 12:00/);
+ }
+ assert.doesNotMatch(pages.card(ml,'2026-11-05'),/Publicado hoje/);
+});

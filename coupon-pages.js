@@ -14,7 +14,7 @@
     return ML.order(filtered,store==='Mercado Livre'&&tab==='all'?order:'recent');
   }
   function code(item){return /^[A-Za-z0-9_-]{2,40}$/.test(item.code||'')?item.code:(item.store==='Shopee'?item.title.match(/[-–:]\s*((?=[A-Z0-9_-]*[A-Z])[A-Z0-9][A-Z0-9_-]{3,29})\s*$/)?.[1]||'':'');}
-  function card(item){
+  function card(item,today=ML.day()){
     const imported=ML.imported(item),value=item.title.match(/\d+\s*%|R\$\s*[\d.,]+/),coupon=code(item);
     const destination=item.store==='Mercado Livre'?ML.destination:item.url;
     const terms=[];
@@ -22,7 +22,7 @@
       if(Number.isFinite(item.min_purchase)&&item.min_purchase>0)terms.push('Compra mínima: '+money(item.min_purchase));
       if(Number.isFinite(item.max_discount)&&item.max_discount>0)terms.push('Desconto máximo: '+money(item.max_discount));
       if(date(item.valid_until))terms.push('Válido até '+date(item.valid_until));
-    }else terms.push('Publicado em '+date(ML.day(item.published_at)));
+    }else terms.push(['Shopee','Amazon'].includes(item.store)?ML.publicationLabel(item.published_at,today):'Publicado em '+date(ML.day(item.published_at)));
     const offers=coupon?'/?'+new URLSearchParams({cupom:coupons.normalizeCode(coupon),loja:item.store})+'#ofertas':'';
     return `<article class="cp"><b>${esc(value?.[0]||'Cupom')}</b><div><strong>${esc(item.store)}</strong><p class="coupon-title">${esc(imported?ML.categoryLabel(item):item.title)}</p><small>${esc(terms.join(' · '))}</small><small>${imported?'Pode esgotar antes da validade. Confira as condições na loja.':'🔥 Acaba rápido'}</small><div class="code"><span class="coupon-value">${esc(coupon||(imported?'Sem código · confira na loja':'Cupom no link'))}</span><a class="coupon-combined" href="${esc(destination)}" rel="sponsored noopener noreferrer"${coupon?` data-coupon-code="${esc(coupon)}"`:''}>${coupon?'Copiar e ir pra loja':'Ir pra loja'}</a></div><small class="coupon-copy-status" role="status"></small>${offers?`<a class="coupon-offers-link" href="${esc(offers)}">Ofertas publicadas com esse cupom</a>`:''}</div></article>`;
   }
@@ -30,10 +30,10 @@
   function highlights(){return `<div class="coupon-highlights">${dailyHighlight()}<a href="https://s.shopee.com.br/50ZpuvznP6" rel="sponsored noopener noreferrer"><strong>CUPOM DE TECNOLOGIA</strong><span>Ver cupom de tecnologia →</span></a><a href="https://s.shopee.com.br/3VlGPvA29x" rel="sponsored noopener noreferrer"><strong>OFERTAS RELÂMPAGO NA SHOPEE</strong><span>Ver ofertas relâmpago →</span></a></div>`;}
   function nav(store){return `<nav class="coupon-store-links" aria-label="Cupons por loja">${stores.map(([name,slug])=>`<a class="chip${name===store?' on':''}" href="/cupons/${slug}/"${name===store?' aria-current="page"':''}>${name}</a>`).join('')}</nav>`;}
   function group(){return '<aside class="coupon-group-callout"><div><strong>Receba os cupons na hora no nosso grupo</strong><p>Entre grátis e acompanhe os novos cupons assim que forem publicados.</p></div><div class="cta"><a class="btn wa" href="https://entrar.despencou.com/zaphome" target="_blank" rel="noopener noreferrer">Entrar no WhatsApp</a><a class="btn tg" href="https://t.me/despencou" target="_blank" rel="noopener noreferrer">Entrar no Telegram</a></div></aside>';}
-  function preview(items,today){return stores.map(([store,slug])=>{const shown=select(items,store,'today','recent',today).slice(0,3);return `<section class="coupon-preview"><h2><a href="/cupons/${slug}/">Cupons ${store} de hoje</a></h2>${store==='Shopee'?`<div class="coupon-highlights">${dailyHighlight()}</div>`:''}<div class="cps">${shown.length?shown.map(card).join(''):'<p class="coupon-empty">Nenhum cupom novo publicado hoje por aqui.</p>'}</div><p><a class="coupon-inline" href="/cupons/${slug}/#todos-os-cupons">Ver todos os cupons ${store==='Mercado Livre'?'do':'da'} ${store} disponíveis</a></p></section>`;}).join('');}
+  function preview(items,today){return stores.map(([store,slug])=>{const shown=select(items,store,'today','recent',today).slice(0,3);return `<section class="coupon-preview"><h2><a href="/cupons/${slug}/">Cupons ${store} de hoje</a></h2>${store==='Shopee'?`<div class="coupon-highlights">${dailyHighlight()}</div>`:''}<div class="cps">${shown.length?shown.map(item=>card(item,today)).join(''):'<p class="coupon-empty">Nenhum cupom novo publicado hoje por aqui.</p>'}</div><p><a class="coupon-inline" href="/cupons/${slug}/#todos-os-cupons">Ver todos os cupons ${store==='Mercado Livre'?'do':'da'} ${store} disponíveis</a></p></section>`;}).join('');}
   function listing(items,store,tab='today',order='recent',today=ML.day()){
     const shown=select(items,store,tab,order,today);
-    return {count:shown.length,html:shown.length?shown.map(card).join(''):'<p class="coupon-empty">Nenhum cupom disponível nesta aba agora. Acompanhe o grupo para receber os próximos.</p>'};
+    return {count:shown.length,html:shown.length?shown.map(item=>card(item,today)).join(''):'<p class="coupon-empty">Nenhum cupom disponível nesta aba agora. Acompanhe o grupo para receber os próximos.</p>'};
   }
   function panels(items,store,tab='today',order='recent',today=ML.day()){
     return (store==='Mercado Livre'?['today','expires','all']:['today','all']).map(t=>`<section id="coupon-panel-${t}" class="cps" aria-label="${t==='today'?'Saiu hoje':t==='expires'?'Esgota hoje':'Todos os cupons'}"${t!==tab?' hidden':''}>${listing(items,store,t,order,today).html}</section>`).join('');

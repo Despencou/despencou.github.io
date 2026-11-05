@@ -24,7 +24,7 @@ function render(template,feed,map,posts,now=new Date(),page=1){
   .replace(/<div class="blog" id="blog-list">[\s\S]*?<\/div><\/section>/,()=>`<div class="blog" id="blog-list">${blogCards(articles)}</div></section>`)
   .replace('Em breve, dicas para escolher produtos e aproveitar descontos.','Dicas para escolher produtos e aproveitar descontos.')
   .replace('href="#blog">Ver blog','href="/blog/">Ver blog')
-  .replace('./app.js?v=cupons-relevantes-20261104','./app.js?v=catalog-pages-20261105')
+  .replace('./app.js?v=cupons-relevantes-20261104','./app.js?v=horario-cupons-20261105')
   .replace('<nav id="catalog-pagination" class="catalog-pagination" aria-label="Páginas de ofertas"></nav>',()=>`<nav id="catalog-pagination" class="catalog-pagination" aria-label="Páginas de ofertas">${pagination.render(all.length,page)}</nav>`);
  const seed=JSON.stringify({items:initial,page,total:all.length,pageMap:Object.fromEntries(initial.filter(i=>map[i.id]).map(i=>[i.id,map[i.id]]))}).replace(/</g,'\\u003c');
  html=html.replace('<script src="./coupon-parser.js',()=>`<script id="home-initial-data" type="application/json">${seed}</script><script src="./coupon-parser.js`);
