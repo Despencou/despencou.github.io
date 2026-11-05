@@ -14,11 +14,14 @@ test('Mercado Livre excludes Telegram coupons from every tab and the home',()=>{
  assert.deepEqual(ml.section(items,'expires','2026-10-14').map(i=>i.id),['old']);
  assert.deepEqual(ml.section(items,'all','2026-10-14').map(i=>i.id),['source','old']);
 });
-test('The three sort choices use percentage, minimum purchase and maximum discount separately',()=>{
+test('The three sort choices use percentage, relevance and maximum discount separately',()=>{
  const cash={...source,id:'cash',discount_type:'reais',discount_value:500,max_discount:500,min_purchase:1000};
  const unknown={...source,id:'unknown',discount_value:null,title:'Cupom',min_purchase:null,max_discount:null};
  assert.deepEqual(ml.order([source,cash,old,unknown],'discount').map(i=>i.id),['old','source','cash','unknown']);
- assert.deepEqual(ml.order([source,cash,old,unknown],'minimum').map(i=>i.id),['old','source','cash','unknown']);
+ const category={...source,id:'category',category:'Tecnologia'};
+ const generic={...source,id:'generic',category:'Seleção Vendedores'};
+ assert.deepEqual(ml.order([generic,category],'relevant').map(i=>i.id),['category','generic']);
+ assert.equal(ml.categoryLabel(generic),'Produtos Selecionados');
  assert.deepEqual(ml.order([source,cash,old,unknown],'maximum').map(i=>i.id),['cash','old','source','unknown']);
  assert.equal(new URL(ml.destination).searchParams.get('matt_tool'),'32116382');assert.equal(new URL(ml.destination).searchParams.get('forceInApp'),'true');
 });
